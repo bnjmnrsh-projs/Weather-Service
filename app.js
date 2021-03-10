@@ -1,6 +1,6 @@
 /**
  * The Weather Service
- * @author bnjmnrsh
+ * @author bnjmnrsh@gmail.com
  *
  * @param {string} [target='#app']
  * @param {string} [units='M'] [M] Metric [I] Imperial (default is metric)
