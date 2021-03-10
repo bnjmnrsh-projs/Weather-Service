@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>The Weather Service</title>
+        <meta
+            name="description"
+            content="The Weather Service: more efficient than the Post Office"
+        />
+        <meta name="author" content="bnjmnrsh" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="./apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="./favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="./favicon-16x16.png"
+        />
+        <link rel="manifest" href="./site.webmanifest" />
+        <link href="./style.css" rel="stylesheet" />
+    </head>
+    <body>
+        <header class="masthead">
+            <a href="./day%2035/">
+                <h1>Weather Service</h1>
+            </a>
+        </header>
+        <main id="app" role="main" class="" aria-live="polite">
+            <header id="hud" class="temp-3">
+                <img
+                    alt=""
+                    class="loading-icon"
+                    src="./icons/weather/svg/wi-day-sunny.svg"
+                />
+                <ul class="unstyled">
+                    <li>Checking the weather near you...</li>
+                </ul>
+            </header>
+            <div id="details">
+                <ul class="local-data unstyled">
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                </ul>
+            </div>
+            <div id="forcast">
+                <ul class="unstyled">
+                    <li class="loading-bg"></li>
+                    <li class="loading-bg"></li>
+                </ul>
+            </div>
+        </main>
+        <footer>
+            The Weather Service: "More efficient than the Post Office"™ <br />
+            APIs: <a href="https://ipapi.co/">IPapi.co</a> &
+            <a href="https://weatherbit.io">Weatherbit.io</a> | Icons:
+            <a href="https://erikflowers.github.io/weather-icons/">Weather</a>
+            &
+            <a href="https://www.flaticon.com/packs/moon-phase-3">
+                Moon Phases
+            </a>
+        </footer>
+        <script src="app.js"></script>
+    </body>
+</html>

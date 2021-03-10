@@ -1,0 +1,491 @@
+@import url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap');
+
+:root {
+    --text: #181a1c;
+    --bg-lt: #f0e9e7;
+    --bg: #e1dbd9;
+    --bg-md: #d8d5d2;
+    --bg-dk: #c9c4c2;
+    --icon-nutral: hsla(0, 0%, 50%, 0.125);
+    --icon-dk: hsla(0, 2%, 11%, 0.564);
+    --sunrise: rgba(227, 227, 32, 0.743);
+    --sunset: rgba(233, 198, 110, 0.68);
+    --moon: rgba(228, 228, 117, 0.345);
+
+    --temp-0: hsla(195, 100%, 50%, 0.235);
+    --temp-1: hsla(176, 100%, 50%, 0.235);
+    --temp-2: hsla(144, 98%, 48%, 0.235);
+    --temp-3: hsla(60, 100%, 50%, 0.235);
+    --temp-4: hsla(41, 100%, 50%, 0.235);
+    --temp-5: hsla(21, 100%, 50%, 0.235);
+
+    --uv-0: var(--icon-nutral);
+    --uv-1: hsla(60, 100%, 50%, 0.262);
+    --uv-2: hsla(42, 100%, 50%, 0.509);
+    --uv-3: hsla(33, 100%, 50%, 0.653);
+    --uv-4: hsla(21, 100%, 50%, 0.714);
+    --uv-5: hsla(9, 100%, 50%, 0.735);
+}
+
+html {
+    font-size: 100%;
+    font-family: 'Ubuntu Mono', monospace;
+    counter-reset: var(--text);
+    background-color: var(--bg);
+    text-align: center;
+}
+body {
+    font-size: 0.95em;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Turret Road', sans-serif;
+}
+h1 {
+    margin-bottom: 0.1em;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+ul.unstyled {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    min-width: 80%;
+    max-width: 10em;
+    margin-bottom: 3em;
+    flex: 1;
+}
+
+.loading-icon {
+    width: 150px;
+    height: 150px;
+    animation: rotating 30s linear infinite;
+}
+
+.inline-icon {
+    display: inline-block;
+    height: 1.5em;
+    width: auto;
+    margin-top: -0.3em;
+    border-radius: 15px;
+    background-color: var(--icon-nutral);
+    padding: 0.1em;
+}
+span.inline-icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.weather-icon {
+    filter: drop-shadow(2px 3px 1px var(--icon-dk));
+}
+
+.inline-icon .north {
+    transform: rotate(0);
+}
+.inline-icon .north-northeast {
+    transform: rotate(22.5deg);
+}
+.inline-icon .northeast {
+    transform: rotate(45deg);
+}
+.inline-icon .east-northeast {
+    transform: rotate(67.5deg);
+}
+.inline-icon .east {
+    transform: rotate(90deg);
+}
+.inline-icon .east-southeast {
+    transform: rotate(112.5deg);
+}
+.inline-icon .southeast {
+    transform: rotate(135deg);
+}
+.inline-icon .south-southeast {
+    transform: rotate(157.5deg);
+}
+.inline-icon .south {
+    transform: rotate(180deg);
+}
+.inline-icon .south-southwest {
+    transform: rotate(202.5deg);
+}
+.inline-icon .southwest {
+    transform: rotate(225deg);
+}
+.inline-icon .west-southwest {
+    transform: rotate(247.5deg);
+}
+.inline-icon .west {
+    transform: rotate(270deg);
+}
+.inline-icon .west-northwest {
+    transform: rotate(292.5deg);
+}
+
+.inline-icon .northwest {
+    transform: rotate(315deg);
+}
+.inline-icon .north-northwest {
+    transform: rotate(337.5deg);
+}
+
+.inline-icon .compass {
+    height: 1.2em;
+    width: auto;
+    margin-bottom: 0.1em;
+    margin-top: 0;
+    padding: 0.1em;
+}
+
+.inline-icon.sunrise {
+    background-color: var(--sunrise);
+    margin-top: 0;
+    margin-bottom: -0.5em;
+}
+.inline-icon.sunset {
+    background-color: var(--sunset);
+    margin-top: 0;
+    margin-bottom: -0.5em;
+}
+.inline-icon.moon {
+    background-color: var(--moon);
+    margin-top: 0;
+    margin-bottom: -0.5em;
+    height: auto;
+    width: 1.4em;
+}
+
+.temp-0 {
+    background-color: var(--temp-0) !important;
+}
+.temp-1 {
+    background-color: var(--temp-1) !important;
+}
+.temp-2 {
+    background-color: var(--temp-2) !important;
+}
+.temp-3 {
+    background-color: var(--temp-3) !important;
+}
+.temp-4 {
+    background-color: var(--temp-4) !important;
+}
+.temp-5 {
+    background-color: var(--temp-5) !important;
+}
+
+.uv-0 {
+    background-color: var(--uv-0) !important;
+}
+.uv-1 {
+    background-color: var(--uv-1) !important;
+}
+.uv-2 {
+    background-color: var(--uv-2) !important;
+}
+.uv-3 {
+    background-color: var(--uv-3) !important;
+}
+.uv-4 {
+    background-color: var(--uv-4) !important;
+}
+.uv-5 {
+    background-color: var(--uv-5) !important;
+}
+
+#hud {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    border-radius: 10px 10px 2px 2px;
+    background-color: var(--bg-lt);
+    margin: 0.3em;
+    box-shadow: var(--bg-dk) 1px 1px 1px;
+    min-height: 13em;
+}
+#hud .weather-icon {
+    height: auto;
+    width: 60%;
+    /* padding-right: 0.5em; */
+}
+#hud h3 {
+    font-size: 1.8em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin: 0;
+}
+#hud ul {
+    /* margin: -10vw 0 3vw 0; */
+    font-family: 'Turret Road', sans-serif;
+}
+
+#hud ul li:first-child {
+    padding-bottom: 0.2em;
+    margin-bottom: 0.2em;
+    font-size: 1.3em;
+    border-bottom: 1px solid var(--bg-dk);
+}
+
+#details ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    min-height: 1em;
+    margin: 0.3em;
+    padding: 0.5em 0.8em;
+    border-radius: 2px;
+    background-color: var(--bg-lt);
+    box-shadow: var(--bg-dk) 1px 1px 2px;
+    min-height: 1.8em;
+}
+
+.left-col {
+    max-width: 70%;
+    display: inline-block;
+}
+
+.sun-up-down {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    line-height: 1.5em;
+    text-align: center;
+}
+.sun-up-down span {
+    border-left: 1px solid var(--icon-dk);
+    padding: 0 2em;
+    display: inline-block;
+    width: 33.33%;
+    text-align: center;
+}
+
+.sun-up-down span:first-of-type {
+    border-left: none;
+}
+
+#forcast {
+    margin: 0.3em;
+}
+#forcast ul {
+    display: flex;
+}
+#forcast ul li {
+    background-color: var(--bg-md);
+    border-radius: 2px;
+    width: 50%;
+    padding: 0.3em;
+    box-shadow: var(--bg-dk) 1px 1px 2px;
+    min-height: 8em;
+}
+#forcast ul li:first-child {
+    margin-right: 0.2em;
+    border-bottom-left-radius: 10px;
+}
+#forcast ul li:last-child {
+    margin-left: 0.2em;
+    border-bottom-right-radius: 10px;
+}
+#forcast h4 {
+    margin: 0.3em;
+    text-align: left;
+}
+#forcast h5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+#forcast .forecast-description {
+    font-size: 0.7em;
+}
+#forcast .weather-icon {
+    width: 5em;
+    height: auto;
+    margin-right: 0.8em;
+}
+
+footer {
+    background-color: var(--text);
+    padding: 0.5em 0;
+    color: var(--bg-lt);
+    width: 100vw;
+}
+
+/* Animations */
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-bg {
+    background: linear-gradient(
+        89deg,
+        var(--bg-lt),
+        var(--bg-md),
+        var(--bg-md),
+        var(--bg-md)
+    );
+    background-size: 200% 100%;
+    animation: loading 10s ease-in-out infinite;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+    .loading-icon {
+        animation: none;
+    }
+}
+
+@keyframes loading {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Errors */
+#ohnos {
+    text-align: center;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+#ohnos h3 {
+    display: inline-block;
+    wrap-inside: 100%;
+    font-size: 3em;
+}
+@media screen and (min-width: 1500px) {
+    #app {
+        width: 50em;
+        min-width: 50em;
+        max-width: 50em;
+    }
+}
+
+@media screen and (max-width: 545px) {
+    #app {
+        width: 100%;
+        max-width: inherit;
+    }
+    #details ul li.sun-up-down {
+        flex-direction: column;
+        background-color: transparent;
+        box-shadow: none;
+        margin-top: -0.1em;
+        margin-bottom: -0.1em;
+        padding-top: 0;
+        padding-bottom: 0;
+        /* box-shadow: var(--bg-dk) 1px 1px 2px; */
+        /* align-items: center;
+    line-height: 1.5em;
+    text-align: center; */
+        /* overflow: hidden; */
+    }
+    .sun-up-down span {
+        box-shadow: var(--bg-dk) 1px 1px 2px;
+        background-color: var(--bg-lt);
+        min-height: 1em;
+        border-left: none;
+        width: 100%;
+        margin: 0.15em;
+        padding: 0.5em 0.8em;
+        display: flex;
+        border-radius: 2px;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+    }
+    .sun-up-down span:last-of-type {
+        border-bottom: none;
+    }
+
+    .inline-icon.sunrise {
+        margin-bottom: 0;
+    }
+    .inline-icon.sunset {
+        margin-bottom: 0;
+    }
+    .inline-icon.moon {
+        margin-bottom: 0;
+    }
+
+    #forcast ul {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #forcast ul li {
+        border-radius: 2px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        box-shadow: var(--bg-dk) 1px 1px 2px;
+    }
+    #forcast ul li:first-child {
+        margin-right: 0;
+        border-bottom-left-radius: 2px;
+    }
+    #forcast ul li:last-child {
+        margin-top: 0.3em;
+        margin-left: 0;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    #forcast ul li header {
+        padding: 0.3em;
+    }
+
+    .left-col {
+        max-width: 50%;
+    }
+}
