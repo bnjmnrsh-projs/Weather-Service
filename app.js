@@ -527,9 +527,9 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 ${
                     data[0].uv
                         ? '<li><span class="left-col">UV Index: ' +
-                          fClean(data[0].uv) +
+                          fClean(data[0].uv.toFixed(2)) +
                           '</span><img class="inline-icon ' +
-                          fUvClass(fClean(data[0].uv)) +
+                          fUvClass(fClean(data[0].uv.toFixed(2))) +
                           '" alt="" height="25" width="25" src="./icons/weather/svg/wi-day-sunny.svg"></li>'
                         : ''
                 }
