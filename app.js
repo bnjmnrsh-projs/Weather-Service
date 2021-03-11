@@ -261,6 +261,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fPercipConvert = function (measure) {
         if (typeof measure !== 'number') return
+
+        if (measure === 0) {
+            return measure
+        }
+
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;mm/hr`
         } else {
@@ -279,7 +284,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fTimeConvert = function (time24) {
         if (!time24) return
-        if (units === 'M') return
+
+        if (units === 'M') return time24
 
         const [sHours, minutes] = time24
             .match(/([0-9]{1,2}):([0-9]{2})/)
@@ -555,13 +561,10 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                           '</span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-snowflake-cold.svg"></li>'
                         : ''
                 }
-                ${
-                    data[0].precip
-                        ? '<li><span class="left-col">Precip: ' +
-                          fPercipConvert(fClean(data[0].precip)) +
-                          '</span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-raindrop.svg"></li>'
-                        : ''
-                }
+                <li><span class="left-col">Precip:
+                          ${fPercipConvert(fClean(data[0].precip))}
+                          </span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-raindrop.svg"></li>
+
                 ${
                     data[0].vis
                         ? '<li><span class="left-col">Visibility: ' +
@@ -696,4 +699,4 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
 }
 
 // with debugging and Imperial Units for demonstration
-weatherApp('#app', 'I', true)
+weatherApp('#app', 'M', true)
