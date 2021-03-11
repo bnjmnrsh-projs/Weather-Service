@@ -245,8 +245,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     }
 
     /**
-     * !NOTE: the API now has parmas for both imperaial and metric units.
-     * We have done the conversion ourselves so that we could switch back and fourth without additional api calls.
+     * *NOTE: the API  has parmas for both imperaial and metric units however,
+     * We do the conversion ourselves so that we can switch without additional api calls.
      */
 
     /**
@@ -463,7 +463,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @param {array} data
      * @returns {string}
      */
-    const renderHeader = function (data) {
+    const fRenderHeader = function (data) {
         const sIcon = getWeatherIcon(data[0])
         return `
         <header id="hud" class="${fTempClass(data[0].temp)}">
@@ -491,7 +491,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @param {array} data
      * @returns {string}
      */
-    const renderDetails = function (data) {
+    const fRenderDetails = function (data) {
         const sWindDirection = fClean(data[0].wind_cdir_full)
         const iconCloud = getCloudCoverIcon(data[0].clouds)
         const oMoon = fMoonPhase(data[0].obj_time)
@@ -575,7 +575,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @param {array} data
      * @returns {string}
      */
-    const renderForcast = function (data) {
+    const fRenderForcast = function (data) {
         const sIcon24 = getWeatherIcon(data[1], 23)
         const sIcon48 = getWeatherIcon(data[1], 47)
         return `
@@ -617,7 +617,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fBuildUI = function (data = []) {
         app.innerHTML =
-            renderHeader(data) + renderDetails(data) + renderForcast(data)
+            fRenderHeader(data) + fRenderDetails(data) + fRenderForcast(data)
     }
 
     /**
@@ -656,7 +656,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     /**
      * Init
      */
-    const init = async function () {
+    const fInit = async function () {
         try {
             const loc = await fGetLocation()
             const weather = await fGetWeather(loc)
@@ -670,8 +670,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
             fErrorDisplay(e)
         }
     }
-    init()
+    fInit()
 }
 
-// For demonstration with debugging
+// with debugging and Imperial Units for demonstration
 weatherApp('#app', 'I', true)
