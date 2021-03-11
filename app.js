@@ -415,22 +415,14 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     const getCloudCoverIcon = function (coverage) {}
 
     /**
-     * Build the UI
+     * Renders the app's header
      *
      * @param {array} data
+     * @returns {string}
      */
-    const fBuildUI = function (data = []) {
-        // Icons
+    const renderHeader = function (data) {
         const sIcon = getWeatherIcon(data[0])
-        const sIcon24 = getWeatherIcon(data[1], 23)
-        const sIcon48 = getWeatherIcon(data[1], 47)
-
-        const iconCloud = getCloudCoverIcon(data[0])
-
-        const sWindDirection = fClean(data[0].wind_cdir_full)
-        const oMoon = fMoonPhase(data[0].obj_time)
-
-        app.innerHTML = `
+        return `
         <header id="hud" class="${fTempClass(data[0].temp)}">
             <h3><img class="weather-icon" alt="${fClean(
                 data[0].weather.description.toLowerCase()
@@ -447,6 +439,21 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 </li>
             </ul>
         </header>
+        `
+    }
+
+    /**
+     * Renders the app's details secection
+     *
+     * @param {array} data
+     * @returns {string}
+     */
+    const renderDetails = function (data) {
+        const iconCloud = getCloudCoverIcon(data[0])
+        const sWindDirection = fClean(data[0].wind_cdir_full)
+        const oMoon = fMoonPhase(data[0].obj_time)
+
+        return `
         <div id="details">
             <ul class="unstyled">
                 <li>
@@ -514,6 +521,19 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 </li>
             </ul>
         </div>
+        `
+    }
+
+    /**
+     * Renders the app's upcoming forcast section
+     *
+     * @param {array} data
+     * @returns {string}
+     */
+    const renderForcast = function (data) {
+        const sIcon24 = getWeatherIcon(data[1], 23)
+        const sIcon48 = getWeatherIcon(data[1], 47)
+        return `
         <div id="forcast">
             <ul class="unstyled">
                 <li class="${fTempClass(fClean(data[0].temp))}">
@@ -541,7 +561,18 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 )}</p>
                 </li>
             </ul>
-        </div>`
+        </div>
+        `
+    }
+
+    /**
+     * Build the UI
+     *
+     * @param {array} data
+     */
+    const fBuildUI = function (data = []) {
+        app.innerHTML =
+            renderHeader(data) + renderDetails(data) + renderForcast(data)
     }
 
     /**
