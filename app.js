@@ -260,7 +260,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted measurement as string with units
      */
     const fPercipConvert = function (measure) {
-        if (!measure) return
+        if (typeof measure !== 'number') return
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;mm/hr`
         } else {
@@ -297,7 +297,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted coverage as string with units
      */
     const fTempConvert = function (measure) {
-        if (!measure) return
+        if (typeof measure !== 'number') return
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(1)}°&NonBreakingSpace;C`
         } else {
@@ -312,7 +312,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted wind speed as string with units
      */
     const fWindConvert = function (measure) {
-        if (!measure) return
+        if (typeof measure !== 'number') return
+
         if (units === 'M') {
             return `${(parseFloat(measure) * 3.6000059687997).toFixed(
                 2
@@ -331,6 +332,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted distance as string with units
      */
     const fVisConvert = function (measure) {
+        if (typeof measure !== 'number') return
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;km`
         } else {
@@ -347,7 +349,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} CSS class name as string
      */
     const fTempClass = function (temp) {
-        if (!temp) return
+        if (typeof temp !== 'number') return
 
         let base = units !== 'M' ? 0 : 32
 
@@ -511,7 +513,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         const sWindDirection = fClean(data[0].wind_cdir_full)
         const iconCloud = getCloudCoverIcon(data[0].clouds)
         const oMoon = fMoonPhase(data[0].obj_time)
-
+        console.log('feels like: ', data[0].app_temp)
         return `
         <div id="details">
             <ul class="unstyled">
@@ -525,7 +527,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 ${
                     data[0].uv
                         ? '<li><span class="left-col">UV Index: ' +
-                          fClean(data[0].uv.toFixed(2)) +
+                          fClean(data[0].uv) +
                           '</span><img class="inline-icon ' +
                           fUvClass(fClean(data[0].uv)) +
                           '" alt="" height="25" width="25" src="./icons/weather/svg/wi-day-sunny.svg"></li>'
@@ -535,7 +537,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 <span aria-description="Winds traveling from ${sWindDirection}">
                     Windspeed:
                     ${fWindConvert(
-                        fClean(data[0].wind_spd.toFixed(2))
+                        fClean(data[0].wind_spd)
                     )}&NonBreakingSpace;|&NonBreakingSpace;${fClean(
             data[0].wind_cdir
         )}
