@@ -73,214 +73,6 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     }
 
     /**
-     * mm/hr to inch/hr
-     *
-     * @param {float} measure
-     * @returns
-     */
-    const fPercipConvert = function (measure) {
-        if (units === 'M') {
-            return `${parseFloat(measure).toFixed(2)} mm/hr`
-        } else {
-            return `${(parseFloat(measure) * 0.0393701).toFixed(2)} inch/hr`
-        }
-    }
-
-    /**
-     * 24H to 12H conversion
-     * https://stackoverflow.com/a/58878443/362445
-     *
-     * @param {string} time24
-     * @returns string
-     */
-    const fTimeConvert = function (time24) {
-        if (units === 'M') return
-
-        const [sHours, minutes] = time24
-            .match(/([0-9]{1,2}):([0-9]{2})/)
-            .slice(1)
-        const period = +sHours < 12 ? 'AM' : 'PM'
-        const hours = +sHours % 12 || 12
-
-        return `${hours}:${minutes} ${period}`
-    }
-
-    /**
-     * C to F conversion
-     *
-     * @param {float} measure
-     * @returns
-     */
-    const fTempConvert = function (measure) {
-        if (units === 'M') {
-            return `${parseFloat(measure).toFixed(1)}° C`
-        } else {
-            return `${(parseFloat(measure) + 32).toFixed(1)}° F`
-        }
-    }
-
-    /**
-     * km/hr to mi/hr
-     *
-     * @param {float} measure
-     * @returns
-     */
-    const fWindConvert = function (measure) {
-        if (units === 'M') {
-            return `${(parseFloat(measure) * 3.6000059687997).toFixed(2)} km/hr`
-        } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(2)} mi/hr`
-        }
-    }
-
-    /**
-     * km to mi
-     *
-     * @param {float} measure
-     * @returns
-     */
-    const fVisConvert = function (measure) {
-        if (units === 'M') {
-            return `${parseFloat(measure).toFixed(2)} km`
-        } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(2)} mile`
-        }
-    }
-
-    /**
-     * Assigns a class string based on given temperature
-     *
-     * @param {float} temp
-     * @returns string
-     */
-    const fTempClass = function (temp) {
-        if (!temp) return
-
-        let base = units !== 'M' ? 0 : 32
-
-        temp = parseFloat(temp)
-        // temp = 100
-        let tempClass = 'none'
-        switch (temp) {
-            case temp < base + 0 ? temp : null:
-                tempClass = 'temp-0'
-                break
-            case temp > base + 0 && temp < base + 10 ? temp : null:
-                tempClass = 'temp-1'
-                break
-            case temp > base + 10 && temp < base + 22 ? temp : null:
-                tempClass = 'temp-2'
-                break
-            case temp > base + 22 && temp < base + 27 ? temp : null:
-                tempClass = 'temp-3'
-                break
-            case temp > base + 27 && temp < base + 34 ? temp : null:
-                tempClass = 'temp-4'
-                break
-            case temp > base + 34 ? temp : null:
-                tempClass = 'temp-5'
-                break
-        }
-        return tempClass
-    }
-
-    /**
-     * Assigns a class string based on given uv
-     *
-     * @param {int} temp
-     * @returns string
-     */
-    const fUvClass = function (uv) {
-        if (!temp) return
-        uv = parseInt(uv)
-        // uv = 100
-        let uvClass = 'none'
-        switch (uv) {
-            case uv < 10 ? uv : null:
-                uvClass = 'uv-0'
-                break
-            case uv >= 10 && uv < 30 ? uv : null:
-                uvClass = 'uv-1'
-                break
-            case uv >= 30 && uv < 50 ? uv : null:
-                uvClass = 'uv-2'
-                break
-            case uv >= 50 && uv < 70 ? uv : null:
-                uvClass = 'uv-3'
-                break
-            case uv >= 70 && uv < 90 ? uv : null:
-                uvClass = 'uv-4'
-                break
-            case uv >= 90 || uv <= 100 ? uv : null:
-                uvClass = 'uv-5'
-                break
-        }
-        return uvClass
-    }
-
-    /**
-     * https://gist.github.com/endel/dfe6bb2fbe679781948c#gistcomment-2811037
-     *
-     * @param {Date Object || date string} Date Object or valid String to make date object from.
-     *
-     * @returns {object} Moon phase object
-     */
-    const fMoonPhase = function (date) {
-        const Moon = {
-            phases: [
-                'new',
-                'waxing-crescent',
-                'first-quarter',
-                'waxing-gibbous',
-                'full',
-                'waning-gibbous',
-                'third-quarter',
-                'waning-crescent',
-            ],
-            phase: function (year, month, day) {
-                let c = (e = jd = b = 0)
-
-                if (month < 3) {
-                    year--
-                    month += 12
-                }
-
-                ++month
-                c = 365.25 * year
-                e = 30.6 * month
-                jd = c + e + day - 694039.09 // jd is total days elapsed
-                jd /= 29.5305882 // divide by the moon cycle
-                b = parseInt(jd) // int(jd) -> b, take integer part of jd
-                jd -= b // subtract integer part to leave fractional part of original jd
-                b = Math.round(jd * 8) // scale fraction from 0-8 and round
-
-                if (b >= 8) b = 0 // 0 and 8 are the same so turn 8 into 0
-                return { phase: b, name: Moon.phases[b] }
-            },
-        }
-
-        // if no date, create date based on current system date
-        date = date || new Date()
-
-        // if provided a string, try to make a new Date object
-        date = date instanceof String ? new Date(date) : date
-
-        // test our date object
-        if (!date || typeof date.getMonth !== 'function') {
-            throw new Error('fMoonPhase provided invalid date')
-        }
-
-        const yyyy = parseInt(date.getFullYear(), 10)
-        const mm = parseInt(date.getMonth() + 1, 10)
-        const dd = parseInt(date.getDate(), 10)
-        const oMoonPhase = Moon.phase(yyyy, mm, dd)
-
-        debug ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`) : ''
-        debug ? console.log('fMoonPhase resp: ', oMoonPhase) : ''
-        return oMoonPhase
-    }
-
-    /**
      * IP address based location API
      *
      * @returns {object} coordiantes object
@@ -412,7 +204,227 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         return oWeatherIcons[code][pod]
     }
 
+    /**
+     * Select the cloud coverage icon based on percentage value
+     *  TODO: finish
+     *
+     * @param {int} coverage A percentage figure 0-100;
+     * @returns {string} the string name of the icon
+     */
     const getCloudCoverIcon = function (coverage) {}
+
+    /**
+     * !NOTE: the API now has parmas for both imperaial and metric units.
+     * We have done the conversion ourselves so that we could switch back and fourth without additional api calls.
+     */
+
+    /**
+     * mm/hr to inch/hr
+     *
+     * @param {float} measure
+     * @returns {string} converted measurement as string with units
+     */
+    const fPercipConvert = function (measure) {
+        if (units === 'M') {
+            return `${parseFloat(measure).toFixed(2)} mm/hr`
+        } else {
+            return `${(parseFloat(measure) * 0.0393701).toFixed(2)} inch/hr`
+        }
+    }
+
+    /**
+     * 24H to 12H conversion
+     * https://stackoverflow.com/a/58878443/362445
+     *
+     * @param {string} time24
+     * @returns {string} converted time as string with units
+     */
+    const fTimeConvert = function (time24) {
+        if (units === 'M') return
+
+        const [sHours, minutes] = time24
+            .match(/([0-9]{1,2}):([0-9]{2})/)
+            .slice(1)
+        const period = +sHours < 12 ? 'AM' : 'PM'
+        const hours = +sHours % 12 || 12
+
+        return `${hours}:${minutes} ${period}`
+    }
+
+    /**
+     * C to F conversion
+     *
+     * @param {float} measure
+     * @returns {string} converted temp as string with units
+     */
+    const fTempConvert = function (measure) {
+        if (units === 'M') {
+            return `${parseFloat(measure).toFixed(1)}° C`
+        } else {
+            return `${(parseFloat(measure) + 32).toFixed(1)}° F`
+        }
+    }
+
+    /**
+     * km/hr to mi/hr
+     *
+     * @param {float} measure
+     * @returns {string} converted wind speed as string with units
+     */
+    const fWindConvert = function (measure) {
+        if (units === 'M') {
+            return `${(parseFloat(measure) * 3.6000059687997).toFixed(2)} km/hr`
+        } else {
+            return `${(parseFloat(measure) * 2.23694).toFixed(2)} mi/hr`
+        }
+    }
+
+    /**
+     * km to mi
+     *
+     * @param {float} measure
+     * @returns {string} converted distance as string with units
+     */
+    const fVisConvert = function (measure) {
+        if (units === 'M') {
+            return `${parseFloat(measure).toFixed(2)} km`
+        } else {
+            return `${(parseFloat(measure) * 2.23694).toFixed(2)} mile`
+        }
+    }
+
+    /**
+     * Assigns a class name string based on given temperature
+     *
+     * @param {float} temp
+     * @returns {string} CSS class name as string
+     */
+    const fTempClass = function (temp) {
+        if (!temp) return
+
+        let base = units !== 'M' ? 0 : 32
+
+        temp = parseFloat(temp)
+        // temp = 100
+        let tempClass = 'none'
+        switch (temp) {
+            case temp < base + 0 ? temp : null:
+                tempClass = 'temp-0'
+                break
+            case temp > base + 0 && temp < base + 10 ? temp : null:
+                tempClass = 'temp-1'
+                break
+            case temp > base + 10 && temp < base + 22 ? temp : null:
+                tempClass = 'temp-2'
+                break
+            case temp > base + 22 && temp < base + 27 ? temp : null:
+                tempClass = 'temp-3'
+                break
+            case temp > base + 27 && temp < base + 34 ? temp : null:
+                tempClass = 'temp-4'
+                break
+            case temp > base + 34 ? temp : null:
+                tempClass = 'temp-5'
+                break
+        }
+        return tempClass
+    }
+
+    /**
+     * Assigns a class string based on given uv
+     *
+     * @param {int} temp
+     * @returns {string} CSS class name as string
+     */
+    const fUvClass = function (uv) {
+        if (!temp) return
+        uv = parseInt(uv)
+        // uv = 100
+        let uvClass = 'none'
+        switch (uv) {
+            case uv < 10 ? uv : null:
+                uvClass = 'uv-0'
+                break
+            case uv >= 10 && uv < 30 ? uv : null:
+                uvClass = 'uv-1'
+                break
+            case uv >= 30 && uv < 50 ? uv : null:
+                uvClass = 'uv-2'
+                break
+            case uv >= 50 && uv < 70 ? uv : null:
+                uvClass = 'uv-3'
+                break
+            case uv >= 70 && uv < 90 ? uv : null:
+                uvClass = 'uv-4'
+                break
+            case uv >= 90 || uv <= 100 ? uv : null:
+                uvClass = 'uv-5'
+                break
+        }
+        return uvClass
+    }
+
+    /**
+     * https://gist.github.com/endel/dfe6bb2fbe679781948c#gistcomment-2811037
+     *
+     * @param {Date Object || date string} Date Object or valid String to make date object from.
+     *
+     * @returns {object} Moon phase object
+     */
+    const fMoonPhase = function (date) {
+        const Moon = {
+            phases: [
+                'new',
+                'waxing-crescent',
+                'first-quarter',
+                'waxing-gibbous',
+                'full',
+                'waning-gibbous',
+                'third-quarter',
+                'waning-crescent',
+            ],
+            phase: function (year, month, day) {
+                let c = (e = jd = b = 0)
+
+                if (month < 3) {
+                    year--
+                    month += 12
+                }
+
+                ++month
+                c = 365.25 * year
+                e = 30.6 * month
+                jd = c + e + day - 694039.09 // jd is total days elapsed
+                jd /= 29.5305882 // divide by the moon cycle
+                b = parseInt(jd) // int(jd) -> b, take integer part of jd
+                jd -= b // subtract integer part to leave fractional part of original jd
+                b = Math.round(jd * 8) // scale fraction from 0-8 and round
+
+                if (b >= 8) b = 0 // 0 and 8 are the same so turn 8 into 0
+                return { phase: b, name: Moon.phases[b] }
+            },
+        }
+
+        // if no date, create date based on current system date
+        date = date || new Date()
+
+        // if provided a string, try to make a new Date object
+        date = date instanceof String ? new Date(date) : date
+
+        // test our date object
+        if (!date || typeof date.getMonth !== 'function') {
+            throw new Error('fMoonPhase provided invalid date')
+        }
+
+        const yyyy = parseInt(date.getFullYear(), 10)
+        const mm = parseInt(date.getMonth() + 1, 10)
+        const dd = parseInt(date.getDate(), 10)
+        const oMoonPhase = Moon.phase(yyyy, mm, dd)
+
+        debug ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`) : ''
+        debug ? console.log('fMoonPhase resp: ', oMoonPhase) : ''
+        return oMoonPhase
+    }
 
     /**
      * Renders the app's header
