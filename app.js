@@ -53,10 +53,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     }
 
     const oCloudCoverIcons = {
-        heavy: ['wi-cloudy', 'wi-cloudy'],
-        moderate: ['wi-cloud', 'wi-cloud'],
-        light: ['wi-day-sunny-overcast', 'wi-night-alt-cloudy'],
-        clear: ['wi-day-sunny', 'wi-night-clear'],
+        0: ['wi-day-sunny', 'wi-night-clear'],
+        1: ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
+        2: ['wi-cloud', 'wi-cloud'],
+        3: ['wi-cloudy', 'wi-cloudy'],
+        4: ['dark-cloudy', 'dark-cloudy'],
     }
 
     /**
@@ -206,12 +207,42 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
 
     /**
      * Select the cloud coverage icon based on percentage value
-     *  TODO: finish
      *
-     * @param {int} coverage A percentage figure 0-100;
+     * @param {int} coverage A percentage figure 0-100
+     * @param {string} pod Point of Day
      * @returns {string} the string name of the icon
      */
-    const getCloudCoverIcon = function (coverage) {}
+    const getCloudCoverIcon = function (coverage, pod = 'd') {
+        if (!coverage) return
+
+        // set day or night icon set
+        pod = pod = 'd' ? 0 : 1
+
+        const icons = oCloudCoverIcons
+
+        coverage = parseInt(coverage)
+
+        let icon = ''
+
+        switch (coverage) {
+            case coverage >= 0 && coverage < 19 ? coverage : null:
+                icon = [icons[0][pod], 'cloud-0']
+                break
+            case coverage >= 20 && coverage < 39 ? coverage : null:
+                icon = [icons[1][pod], 'cloud-1']
+                break
+            case coverage >= 40 && coverage < 59 ? coverage : null:
+                icon = [icons[2][pod], 'cloud-2']
+                break
+            case coverage >= 60 && coverage < 79 ? coverage : null:
+                icon = [icons[3][pod], 'cloud-3']
+                break
+            case coverage >= 80 && coverage <= 100 ? coverage : null:
+                icon = [icons[4][pod], 'cloud-4']
+                break
+        }
+        return icon
+    }
 
     /**
      * !NOTE: the API now has parmas for both imperaial and metric units.
@@ -255,7 +286,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * C to F conversion
      *
      * @param {float} measure
-     * @returns {string} converted temp as string with units
+     * @returns {string} converted coverage as string with units
      */
     const fTempConvert = function (measure) {
         if (units === 'M') {
@@ -461,8 +492,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string}
      */
     const renderDetails = function (data) {
-        const iconCloud = getCloudCoverIcon(data[0])
         const sWindDirection = fClean(data[0].wind_cdir_full)
+        const iconCloud = getCloudCoverIcon(data[0].clouds)
         const oMoon = fMoonPhase(data[0].obj_time)
 
         return `
@@ -492,7 +523,9 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 <span class="inline-icon"><img class="compass ${sWindDirection}" alt="" height="25" width="25" src="./icons/extras/svg/compass.svg"><img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg"></span></li>
                 <li><span class="left-col">Cloud:
                     ${fClean(data[0].clouds)}% </span>
-                <img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-cloudy.svg"></li>
+                <img class="inline-icon ${iconCloud[1]}"
+                    alt="" height="25" width="25"
+                    src="./icons/weather/svg/${iconCloud[0]}.svg"></li>
                 ${
                     data[0].snow
                         ? '<li><span class="left-col">Snow:' +
