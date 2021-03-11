@@ -67,7 +67,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} sanitised text
      */
     const fClean = function (dirty = '') {
+        if (typeof dirty === 'number') {
+            return dirty
+        }
         if (!dirty) return
+
         temp = document.createElement('div')
         temp.innerHTML = dirty
         return temp.innerText
@@ -256,6 +260,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted measurement as string with units
      */
     const fPercipConvert = function (measure) {
+        if (!measure) return
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;mm/hr`
         } else {
@@ -273,6 +278,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted time as string with units
      */
     const fTimeConvert = function (time24) {
+        if (!time24) return
         if (units === 'M') return
 
         const [sHours, minutes] = time24
@@ -291,12 +297,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted coverage as string with units
      */
     const fTempConvert = function (measure) {
+        if (!measure) return
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(1)}°&NonBreakingSpace;C`
         } else {
-            return `${(parseFloat(measure) + 32).toFixed(
-                1
-            )}°&NonBreakingSpace;F`
+            return `${parseFloat(measure + 32).toFixed(1)}°&NonBreakingSpace;F`
         }
     }
 
@@ -307,6 +312,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted wind speed as string with units
      */
     const fWindConvert = function (measure) {
+        if (!measure) return
         if (units === 'M') {
             return `${(parseFloat(measure) * 3.6000059687997).toFixed(
                 2
