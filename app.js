@@ -699,4 +699,4 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
 }
 
 // with debugging and Imperial Units for demonstration
-weatherApp('#app', 'M', true)
+weatherApp('#app', 'I', true)
