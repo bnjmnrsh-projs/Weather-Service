@@ -257,9 +257,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fPercipConvert = function (measure) {
         if (units === 'M') {
-            return `${parseFloat(measure).toFixed(2)} mm/hr`
+            return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;mm/hr`
         } else {
-            return `${(parseFloat(measure) * 0.0393701).toFixed(2)} inch/hr`
+            return `${(parseFloat(measure) * 0.0393701).toFixed(
+                2
+            )}&NonBreakingSpace;inch/hr`
         }
     }
 
@@ -279,7 +281,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         const period = +sHours < 12 ? 'AM' : 'PM'
         const hours = +sHours % 12 || 12
 
-        return `${hours}:${minutes} ${period}`
+        return `${hours}:${minutes}&NonBreakingSpace;${period}`
     }
 
     /**
@@ -290,9 +292,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fTempConvert = function (measure) {
         if (units === 'M') {
-            return `${parseFloat(measure).toFixed(1)}° C`
+            return `${parseFloat(measure).toFixed(1)}°&NonBreakingSpace;C`
         } else {
-            return `${(parseFloat(measure) + 32).toFixed(1)}° F`
+            return `${(parseFloat(measure) + 32).toFixed(
+                1
+            )}°&NonBreakingSpace;F`
         }
     }
 
@@ -304,9 +308,13 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fWindConvert = function (measure) {
         if (units === 'M') {
-            return `${(parseFloat(measure) * 3.6000059687997).toFixed(2)} km/hr`
+            return `${(parseFloat(measure) * 3.6000059687997).toFixed(
+                2
+            )}&NonBreakingSpace;km/hr`
         } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(2)} mi/hr`
+            return `${(parseFloat(measure) * 2.23694).toFixed(
+                2
+            )}&NonBreakingSpace;mi/hr`
         }
     }
 
@@ -318,9 +326,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fVisConvert = function (measure) {
         if (units === 'M') {
-            return `${parseFloat(measure).toFixed(2)} km`
+            return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;km`
         } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(2)} mile`
+            return `${(parseFloat(measure) * 2.23694).toFixed(
+                2
+            )}&NonBreakingSpace;mile`
         }
     }
 
@@ -515,10 +525,14 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                           '" alt="" height="25" width="25" src="./icons/weather/svg/wi-day-sunny.svg"></li>'
                         : ''
                 }
-                <li><span class="left-col">Windspeed:
-                    ${fWindConvert(fClean(data[0].wind_spd.toFixed(2)))}
-                    | <span aria-description="Winds traveling from ${sWindDirection}">
-                    ${fClean(data[0].wind_cdir)}
+                <li><span class="left-col">
+                <span aria-description="Winds traveling from ${sWindDirection}">
+                    Windspeed:
+                    ${fWindConvert(
+                        fClean(data[0].wind_spd.toFixed(2))
+                    )}&NonBreakingSpace;|&NonBreakingSpace;${fClean(
+            data[0].wind_cdir
+        )}
                 </span></span>
                 <span class="inline-icon"><img class="compass ${sWindDirection}" alt="" height="25" width="25" src="./icons/extras/svg/compass.svg"><img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg"></span></li>
                 <li><span class="left-col">Cloud:
