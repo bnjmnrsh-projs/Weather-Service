@@ -369,7 +369,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * Fetch the 48h forcast based on a user's location
      *
      * @param {object} loc coordiantes object
-     * @returns {object} weather object
+     * @returns {object} hourly forcast weather object
      */
     const fGetForcast = async function (loc) {
         const resp = await fetch(
@@ -390,34 +390,51 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     }
 
     /**
+     * Returns the string name of the weather icon
+     *
+     * @param {object} data Either the current or hourly forcast weather object
+     * @param {string || int} [hour]
+     * @returns string
+     */
+    const getWeatherIcon = function (data, hour) {
+        if (!data) return
+
+        let code, pod
+        if (!hour) {
+            // Current weather object
+            pod = fClean(data.pod) === 'd' ? 0 : 1
+            code = parseInt(fClean(data.weather.code))
+        } else {
+            // Forcast weather object
+            pod = fClean(data[hour].pod) === 'd' ? 0 : 1
+            code = parseInt(fClean(data[hour].weather.code))
+        }
+        return oWeatherIcons[code][pod]
+    }
+
+    const getCloudCoverIcon = function (coverage) {}
+
+    /**
      * Build the UI
      *
      * @param {array} data
      */
     const fBuildUI = function (data = []) {
-        // Weather now icon
-        let pod = fClean(data[0].pod) === 'd' ? 0 : 1
-        const code = parseInt(fClean(data[0].weather.code))
-        const icon = oWeatherIcons[code][pod]
+        // Icons
+        const sIcon = getWeatherIcon(data[0])
+        const sIcon24 = getWeatherIcon(data[1], 23)
+        const sIcon48 = getWeatherIcon(data[1], 47)
 
-        const windDirection = fClean(data[0].wind_cdir_full)
+        const iconCloud = getCloudCoverIcon(data[0])
 
-        // Forcast icons
-        let pod24 = fClean(data[1][23].pod) === 'd' ? 0 : 1
-        const code24 = parseInt(fClean(data[1][23].weather.code))
-        const icon24 = oWeatherIcons[code24][pod24]
-
-        let pod48 = fClean(data[1][47].pod) === 'd' ? 0 : 1
-        const code48 = parseInt(fClean(data[1][47].weather.code))
-        const icon48 = oWeatherIcons[code48][pod48]
-
-        const moon = fMoonPhase()
+        const sWindDirection = fClean(data[0].wind_cdir_full)
+        const oMoon = fMoonPhase(data[0].obj_time)
 
         app.innerHTML = `
         <header id="hud" class="${fTempClass(data[0].temp)}">
             <h3><img class="weather-icon" alt="${fClean(
                 data[0].weather.description.toLowerCase()
-            )}" src="./icons/weather/svg/${icon}.svg" />${fTempConvert(
+            )}" src="./icons/weather/svg/${sIcon}.svg" />${fTempConvert(
             fClean(data[0].temp)
         )}</h3>
             <ul class="unstyled">
@@ -450,10 +467,10 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 }
                 <li><span class="left-col">Windspeed:
                     ${fWindConvert(fClean(data[0].wind_spd.toFixed(2)))}
-                    | <span aria-description="Winds traveling from ${windDirection}">
+                    | <span aria-description="Winds traveling from ${sWindDirection}">
                     ${fClean(data[0].wind_cdir)}
                 </span></span>
-                <span class="inline-icon"><img class="compass ${windDirection}" alt="" height="25" width="25" src="./icons/extras/svg/compass.svg"><img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg"></span></li>
+                <span class="inline-icon"><img class="compass ${sWindDirection}" alt="" height="25" width="25" src="./icons/extras/svg/compass.svg"><img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg"></span></li>
                 <li><span class="left-col">Cloud:
                     ${fClean(data[0].clouds)}% </span>
                 <img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-cloudy.svg"></li>
@@ -489,10 +506,10 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                     </span>
                     <span class="moonphase">
                         <img class="inline-icon moon"
-                            alt="We are currently at a ${moon.name}"
+                            alt="We are currently at a ${oMoon.name}"
                             height="25" width="25"
-                            src="./icons/moon/svg/${moon.phase}.svg"/>
-                        ${moon.name}
+                            src="./icons/moon/svg/${oMoon.phase}.svg"/>
+                        ${oMoon.name}
                     </span>
                 </li>
             </ul>
@@ -505,7 +522,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                     }" aria-description="The weather forcast in 24 hours."><h4>24h</h4></header>
                     <h5><img class="weather-icon" alt="${fClean(
                         data[1][23].weather.description
-                    )}" src="./icons/weather/svg/${icon24}.svg" />
+                    )}" src="./icons/weather/svg/${sIcon24}.svg" />
                     ${fTempConvert(fClean(data[1][23].temp))}</h5>
                 <p class="forecast-description" aria-hidden="true">${fClean(
                     data[1][23].weather.description.toLowerCase()
@@ -517,7 +534,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                     }" aria-description="The weather forcast in 48 hours."><h4>48h</h4></header>
                     <h5><img class="weather-icon" alt="${fClean(
                         data[1][47].weather.description
-                    )}" src="./icons/weather/svg/${icon48}.svg" />
+                    )}" src="./icons/weather/svg/${sIcon48}.svg" />
                     ${fTempConvert(fClean(data[1][47].temp))}</h5>
                 <p class="forecast-description" aria-hidden="true">${fClean(
                     data[1][47].weather.description.toLowerCase()
