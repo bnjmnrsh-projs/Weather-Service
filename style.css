@@ -276,20 +276,19 @@ span.inline-icon {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    align-items: center;
     line-height: 1.5em;
     text-align: center;
 }
 .sun-up-down span {
-    border-left: 1px solid var(--icon-dk);
-    padding: 0 2em;
     display: inline-block;
+    border-right: 1px solid var(--icon-dk);
+    padding: 0 2em;
     width: 33.33%;
     text-align: center;
 }
 
-.sun-up-down span:first-of-type {
-    border-left: none;
+.sun-up-down span:last-of-type {
+    border-right: none;
 }
 
 #forcast {
