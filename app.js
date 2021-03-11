@@ -220,9 +220,10 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
 
     /**
      * https://gist.github.com/endel/dfe6bb2fbe679781948c#gistcomment-2811037
-     * TODO: This dosen't seem to be giving us accurate results
      *
-     * @param {Date} date
+     * @param {Date Object || date string} Date Object or valid String to make date object from.
+     *
+     * @returns {object} Moon phase object
      */
     const fMoonPhase = function (date) {
         const Moon = {
@@ -258,12 +259,23 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
             },
         }
 
-        // If not using date from API, create local date
-        date = date || new Date().toISOString().slice(0, 13)
-        const d = date.slice(0, -3).split('-')
-        const oMoonPhase = Moon.phase(d[0], d[1], d[2])
+        // if no date, create date based on current system date
+        date = date || new Date()
 
-        debug ? console.log('fMoonPhase date: ', d) : ''
+        // if provided a string, try to make a new Date object
+        date = date instanceof String ? new Date(date) : date
+
+        // test our date object
+        if (!date || typeof date.getMonth !== 'function') {
+            throw new Error('fMoonPhase provided invalid date')
+        }
+
+        const yyyy = parseInt(date.getFullYear(), 10)
+        const mm = parseInt(date.getMonth() + 1, 10)
+        const dd = parseInt(date.getDate(), 10)
+        const oMoonPhase = Moon.phase(yyyy, mm, dd)
+
+        debug ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`) : ''
         debug ? console.log('fMoonPhase resp: ', oMoonPhase) : ''
         return oMoonPhase
     }
