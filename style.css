@@ -4,7 +4,7 @@
 :root {
     --text: #181a1c;
     --bg-lt: #f0e9e7;
-    --bg: #e1dbd9;
+    --bg: #c7c0be;
     --bg-md: #d8d5d2;
     --bg-dk: #c9c4c2;
     --bg-vdk: #686462;
@@ -100,10 +100,9 @@ ul.unstyled {
     display: inline-block;
     height: 1.5em;
     width: auto;
-    margin-top: -0.3em;
     border-radius: 15px;
     background-color: var(--icon-nutral);
-    padding: 0.1em;
+    padding: 2px;
     transition: 1s all ease;
 }
 
@@ -185,7 +184,19 @@ span.inline-icon {
 }
 
 #hud.loading {
-    background-color: rgba(145, 179, 110, 0.79);
+    /* background: linear-gradient(270deg, #68dfc0, #51c330); */
+    background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
+        radial-gradient(
+            ellipse at center,
+            var(--temp-5),
+            var(--temp-4),
+            var(--temp-3),
+            var(--temp-2),
+            var(--temp-1),
+            var(--temp-0)
+        );
+    background-size: 400% 400%;
+    animation: loading 60s ease infinite;
 }
 
 #hud .weather-icon {
@@ -427,10 +438,6 @@ span.inline-icon {
     }
     html {
         color: var(--text);
-    }
-    #forcast,
-    #hud {
-        /* filter: brightness(98%); */
     }
     .loading-icon,
     #forcast .weather-icon,
