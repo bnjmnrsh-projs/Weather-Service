@@ -144,6 +144,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     /**
      * Fetch the weather for a user's location.
      *
+     * TODO: Test for lat lag in request and use alternative
+     *
      * @param {object} loc
      * @returns {object} weather object
      */
@@ -164,6 +166,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
 
     /**
      * Fetch the 48h forcast based on a user's location
+     *
+     * TODO: Test for lat lag in request and use alternative
      *
      * @param {object} loc coordiantes object
      * @returns {object} hourly forcast weather object
