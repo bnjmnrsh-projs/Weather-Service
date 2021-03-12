@@ -182,23 +182,6 @@ span.inline-icon {
     box-shadow: var(--bg-dk) 1px 1px 1px;
     min-height: 13em;
 }
-
-#hud.loading {
-    /* background: linear-gradient(270deg, #68dfc0, #51c330); */
-    background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
-        radial-gradient(
-            ellipse at center,
-            var(--temp-5),
-            var(--temp-4),
-            var(--temp-3),
-            var(--temp-2),
-            var(--temp-1),
-            var(--temp-0)
-        );
-    background-size: 400% 400%;
-    animation: loading 60s ease infinite;
-}
-
 #hud .weather-icon {
     height: auto;
     width: 60%;
@@ -221,6 +204,21 @@ span.inline-icon {
     margin-bottom: 0.4em;
     font-size: 1.3em;
     border-bottom: 1px solid var(--text);
+}
+
+.loading-hud {
+    background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
+        radial-gradient(
+            ellipse at center,
+            var(--temp-5),
+            var(--temp-4),
+            var(--temp-3),
+            var(--temp-2),
+            var(--temp-1),
+            var(--temp-0)
+        );
+    background-size: 400% 400%;
+    animation: loading 60s ease infinite;
 }
 
 #details ul li {
@@ -420,7 +418,9 @@ span.inline-icon {
 
 /* @media Rules */
 @media screen and (prefers-reduced-motion: reduce) {
-    .loading-icon {
+    .loading-hud,
+    .loading-icon,
+    .loading-bg {
         animation: none;
     }
 }
