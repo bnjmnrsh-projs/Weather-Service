@@ -189,7 +189,6 @@ span.inline-icon {
 #hud .weather-icon {
     height: auto;
     width: 60%;
-    /* padding-right: 0.5em; */
 }
 #hud h3 {
     font-size: 1.8em;
@@ -239,12 +238,12 @@ span.inline-icon {
     min-height: 1.8em;
 }
 
-#details .visibility {
+.visibility {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
-#details .visibility .visibility-wrap {
+.visibility .visibility-wrap {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -252,14 +251,14 @@ span.inline-icon {
     margin: 0.3em 0 0.5em 0;
 }
 
-#details .visibility .visibility-wrap * {
+.visibility .visibility-wrap * {
     align-self: center;
 }
 
-#details .visibility .visibility-wrap .inline-icon {
+.visibility .visibility-wrap .inline-icon {
     margin-top: -0.3em;
 }
-#details .visibility .visibility-graph {
+.visibility .visibility-graph {
     background-color: var(--moon);
     background-image: url(imgs/graph.svg);
     background-position: right 0 bottom 0px;
@@ -272,7 +271,7 @@ span.inline-icon {
     font-size: 0.6em;
 }
 
-#details .visibility .visibility-graph::before {
+.visibility .visibility-graph::before {
     content: '0';
     position: absolute;
     bottom: 0.4em;
@@ -280,7 +279,7 @@ span.inline-icon {
     z-index: 1;
 }
 
-#details .visibility .visibility-graph::after {
+.visibility .visibility-graph::after {
     content: '50km/31mi';
     position: absolute;
     bottom: 0.4em;
@@ -289,7 +288,7 @@ span.inline-icon {
     transition: 0.5s ease;
 }
 
-#details .visibility .visibility-graph .distance {
+.visibility .visibility-graph .distance {
     background: linear-gradient(
         to left,
         var(--bg-dk) calc(var(--distance) - 10px),
@@ -461,8 +460,16 @@ span.inline-icon {
     #details .visibility .visibility-graph {
         border: 0px solid transparent;
     }
-    #details .visibility .visibility-graph::before {
+    #details .visibility .visibility-graph::before,
+    #details .visibility .visibility-graph::after {
         color: var(--bg);
+    }
+    .visibility .visibility-graph .distance {
+        background: linear-gradient(
+            to left,
+            var(--bg-vdk) calc(var(--distance) - 10px),
+            transparent 0
+        );
     }
     #details .inline-icon.sunrise,
     #details .inline-icon.sunset {
