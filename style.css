@@ -106,64 +106,6 @@ span.inline-icon {
     filter: drop-shadow(2px 3px 1px var(--icon-dk));
 }
 
-.inline-icon .north {
-    transform: rotate(0);
-}
-.inline-icon .north-northeast {
-    transform: rotate(22.5deg);
-}
-.inline-icon .northeast {
-    transform: rotate(45deg);
-}
-.inline-icon .east-northeast {
-    transform: rotate(67.5deg);
-}
-.inline-icon .east {
-    transform: rotate(90deg);
-}
-.inline-icon .east-southeast {
-    transform: rotate(112.5deg);
-}
-.inline-icon .southeast {
-    transform: rotate(135deg);
-}
-.inline-icon .south-southeast {
-    transform: rotate(157.5deg);
-}
-.inline-icon .south {
-    transform: rotate(180deg);
-}
-.inline-icon .south-southwest {
-    transform: rotate(202.5deg);
-}
-.inline-icon .southwest {
-    transform: rotate(225deg);
-}
-.inline-icon .west-southwest {
-    transform: rotate(247.5deg);
-}
-.inline-icon .west {
-    transform: rotate(270deg);
-}
-.inline-icon .west-northwest {
-    transform: rotate(292.5deg);
-}
-
-.inline-icon .northwest {
-    transform: rotate(315deg);
-}
-.inline-icon .north-northwest {
-    transform: rotate(337.5deg);
-}
-
-.inline-icon .compass {
-    height: 1.2em;
-    width: auto;
-    margin-bottom: 0.1em;
-    margin-top: 0;
-    padding: 0.1em;
-}
-
 .inline-icon.sunrise {
     background-color: var(--sunrise);
     margin-top: 0;

@@ -527,6 +527,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fRenderDetails = function (data) {
         const sWindDirection = fClean(data[0].wind_cdir_full)
+        const sWindDeg = fClean(data[0].wind_dir)
         const iconCloud = getCloudCoverIcon(data[0].clouds)
         const oMoon = fMoonPhase(data[0].obj_time)
         console.log('feels like: ', data[0].app_temp)
@@ -558,7 +559,13 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
             data[0].wind_cdir
         )}
                 </span></span>
-                <span class="inline-icon"><img class="compass ${sWindDirection}" alt="" height="25" width="25" src="./icons/extras/svg/compass.svg"><img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg"></span></li>
+                <span class="inline-icon">
+                    <img class="compass" alt="" height="25" width="25"
+                    style="transform: rotate(${sWindDeg}deg)"
+                    src="./icons/weather/svg/wi-wind-deg.svg">
+                    <img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg">
+                </span>
+                </li>
                 <li class="cloud-cover"><span class="left-col">Cloud:
                     ${fClean(data[0].clouds)}% </span>
                 <img class="inline-icon ${iconCloud[1]}"
