@@ -17,7 +17,7 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     // Merge settings with defaults
-    _oSettings = Object.assign({}, _oDefaults, _oSettings)
+    _oSettings = Object.assign(_oDefaults, _oSettings)
 
     if (!_oSettings.KEY) {
         console.warn('An API key from weatherbit.io is required.')
@@ -164,51 +164,80 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Fetch the weather for a user's location.
      *
-     * TODO: Test for lat lag in request and use alternative
+     *
+     * @param {string} urlBase [sWeatherApi || sFocastApi]
+     * @param {obj} loc [response from location API]
+     * @returns {string} Assembled url with query (cleaned)
+     */
+    const fAssembledQuery = function (urlBase, loc) {
+        if (!loc) return
+
+        let sApiQuery = `${urlBase}&lat=${loc.latitude}&lon=${loc.longitude}`
+
+        if (!loc.latitude || !loc.longitude) {
+            let sCity,
+                sState,
+                sCountry = ''
+
+            if ('city' in loc && loc.city) {
+                sCity = `&city=${loc.city}`
+            }
+            if ('state' in loc && loc.state) {
+                sState = `&state=${loc.state}`
+            }
+            if ('country' in loc && loc.country_code) {
+                sCountry = `&country=${loc.country_code}`
+            }
+
+            sApiQuery = `${urlBase}${sCity ?? ''}${sState ?? ''}${
+                sCountry ?? ''
+            }`
+        }
+
+        _oSettings.debug ? console.log('sApiQuery', fClean(sApiQuery)) : ''
+
+        return fClean(sApiQuery)
+    }
+
+    /**
+     * Fetch the weather for a user's location.
      *
      * @param {object} loc
      * @returns {object} weather object
      */
     const fGetWeather = async function (loc) {
-        const resp = await fetch(
-            `${sWeatherApi}&lat=${fClean(loc.latitude)}&lon=${fClean(
-                loc.longitude
-            )}`
-        ).then(function (resp) {
-            if (resp.ok) {
-                return resp.json()
-            } else {
-                return Promise.reject(resp)
+        const resp = await fetch(fAssembledQuery(sWeatherApi, loc)).then(
+            function (resp) {
+                if (resp.ok) {
+                    return resp.json()
+                } else {
+                    return Promise.reject(resp)
+                }
             }
-        })
+        )
         return await resp
     }
 
     /**
      * Fetch the 48h forcast based on a user's location
      *
-     * TODO: Test for lat lag in request and use alternative
-     *
      * @param {object} loc coordiantes object
      * @returns {object} hourly forcast weather object
      */
     const fGetForcast = async function (loc) {
-        const resp = await fetch(
-            `${sFocastApi}&lat=${fClean(loc.latitude)}&lon=${fClean(
-                loc.longitude
-            )}`
-        ).then(function (resp) {
-            if (resp.ok) {
-                return resp.json()
-            } else {
-                console.error(resp)
-                nApp.innerHTML = fErrorDisplay(resp)
+        const resp = await fetch(fAssembledQuery(sFocastApi, loc)).then(
+            function (resp) {
+                if (resp.ok) {
+                    return resp.json()
+                } else {
+                    console.error(resp)
+                    nApp.innerHTML = fErrorDisplay(resp)
 
-                return Promise.reject(resp)
+                    return Promise.reject(resp)
+                }
             }
-        })
+        )
         return await resp
     }
 
@@ -326,14 +355,16 @@ const weatherApp = function (_oSettings = {}) {
      * C to F conversion
      *
      * @param {float} measure
-     * @returns {string} converted coverage as string with units
+     * @returns {string || number} converted tepm as string with units, or as a Float
      */
-    const fTempConvert = function (measure) {
+    const fTempConvert = function (measure, withUnits = true) {
         if (typeof measure !== 'number') return 0
         if (_oSettings.units === 'M') {
-            return `${parseFloat(measure).toFixed(1)}°&nbsp;C`
+            let converted = parseFloat(measure).toFixed(1)
+            return withUnits ? `${converted}°&nbsp;C` : converted
         } else {
-            return `${((parseFloat(measure) * 9) / 5 + 32).toFixed(1)}°&nbsp;F`
+            let converted = ((parseFloat(measure) * 9) / 5 + 32).toFixed(1)
+            return withUnits ? `${converted}°&nbsp;F` : converted
         }
     }
 
@@ -382,7 +413,7 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Assigns a class name string based on given temperature
+     * Assigns a class name string based on temperature in C
      *
      * @param {float} temp
      * @returns {string} CSS class name as string
@@ -390,28 +421,27 @@ const weatherApp = function (_oSettings = {}) {
     const fTempClass = function (temp) {
         if (typeof temp !== 'number') return 0
 
-        let base = _oSettings.units !== 'M' ? 0 : 32
-
         temp = parseFloat(temp)
         // temp = 100
-        let tempClass = 'none'
+
+        let tempClass = ''
         switch (temp) {
-            case temp <= base + 0 ? temp : null:
+            case temp <= 0 ? temp : null:
                 tempClass = 'temp-0'
                 break
-            case temp > base + 0 && temp < base + 10 ? temp : null:
+            case temp >= 0 && temp < 10 ? temp : null:
                 tempClass = 'temp-1'
                 break
-            case temp > base + 10 && temp < base + 22 ? temp : null:
+            case temp >= 10 && temp < 22 ? temp : null:
                 tempClass = 'temp-2'
                 break
-            case temp > base + 22 && temp < base + 27 ? temp : null:
+            case temp >= 22 && temp < 27 ? temp : null:
                 tempClass = 'temp-3'
                 break
-            case temp > base + 27 && temp < base + 34 ? temp : null:
+            case temp >= 27 && temp < 34 ? temp : null:
                 tempClass = 'temp-4'
                 break
-            case temp > base + 34 ? temp : null:
+            case temp >= 34 ? temp : null:
                 tempClass = 'temp-5'
                 break
         }
