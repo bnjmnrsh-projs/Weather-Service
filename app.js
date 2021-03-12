@@ -217,7 +217,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} the string name of the icon
      */
     const getCloudCoverIcon = function (coverage, pod = 'd') {
-        if (!coverage) return
+        if (typeof coverage !== 'number') return
 
         // set day or night icon set
         pod = pod = 'd' ? 0 : 1
