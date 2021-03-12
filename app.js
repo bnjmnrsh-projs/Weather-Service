@@ -311,7 +311,9 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(1)}°&NonBreakingSpace;C`
         } else {
-            return `${parseFloat(measure + 32).toFixed(1)}°&NonBreakingSpace;F`
+            return `${((parseFloat(measure) * 9) / 5 + 32).toFixed(
+                1
+            )}°&NonBreakingSpace;F`
         }
     }
 
