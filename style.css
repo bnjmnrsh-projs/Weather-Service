@@ -60,6 +60,10 @@ body footer {
     width: 100vw;
 }
 
+body footer .wrap {
+    margin: 1em 0;
+}
+
 h1,
 h2,
 h3,
@@ -466,10 +470,8 @@ span.inline-icon {
         background-color: var(--moon);
     }
 
-    @media screen and (max-width: 545px) {
-        .sun-up-down span {
-            border-right: 1px solid transparent;
-        }
+    body footer {
+        filter: invert(1);
     }
 }
 
@@ -549,5 +551,9 @@ span.inline-icon {
 
     .left-col {
         max-width: 50%;
+    }
+
+    body footer .wrap {
+        margin: 3em 0;
     }
 }
