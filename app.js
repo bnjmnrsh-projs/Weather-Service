@@ -497,7 +497,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @param {array} data
      * @returns {string}
      */
-    const fRenderHeader = function (data) {
+    const fRenderHUD = function (data) {
         const sIcon = getWeatherIcon(data[0])
         return `
         <header id="hud" class="${fTempClass(data[0].temp)}">
@@ -512,7 +512,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                 </li>
                 <li>
                     ${fClean(data[0].city_name)},
-                    ${fClean(data[0].state_code)}
+                    ${fClean(data[0].country_code)}
                 </li>
             </ul>
         </header>
@@ -661,7 +661,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      */
     const fBuildUI = function (data = []) {
         app.innerHTML =
-            fRenderHeader(data) + fRenderDetails(data) + fRenderForcast(data)
+            fRenderHUD(data) + fRenderDetails(data) + fRenderForcast(data)
     }
 
     /**
