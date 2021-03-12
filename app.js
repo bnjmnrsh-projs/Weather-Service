@@ -396,7 +396,7 @@ const weatherApp = function (_oSettings = {}) {
         // temp = 100
         let tempClass = 'none'
         switch (temp) {
-            case temp < base + 0 ? temp : null:
+            case temp <= base + 0 ? temp : null:
                 tempClass = 'temp-0'
                 break
             case temp > base + 0 && temp < base + 10 ? temp : null:
