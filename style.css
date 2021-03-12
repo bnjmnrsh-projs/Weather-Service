@@ -553,6 +553,7 @@ span.inline-icon {
     }
 
     body footer .wrap {
-        margin: 3em 0;
+        margin: 3em auto;
+        max-width: 90%;
     }
 }
