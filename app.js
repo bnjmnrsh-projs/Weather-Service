@@ -2,16 +2,32 @@
  * The Weather Service
  * @author bnjmnrsh@gmail.com
  *
- * @param {string} [target='#app']
- * @param {string} [units='M'] [M] Metric [I] Imperial (default is metric)
- * @param {boolean} [debug=false]
+ * @param {object} [_oSettings={}]
  */
-const weatherApp = function (target = '#app', units = 'M', debug = false) {
-    const nApp = document.querySelector('#app')
+
+const weatherApp = function (_oSettings = {}) {
+    const _oDefaults = {
+        target: '#app',
+        KEY: '',
+        units: 'M',
+        forcast: `{{forcast}}`,
+        airaForcast: `The weather is currently: {{forcast}} at {{temp}}.`,
+        location: `{{city}}, {{country}}`,
+        debug: false,
+    }
+
+    // Merge settings with defaults
+    _oSettings = Object.assign({}, _oDefaults, _oSettings)
+
+    if (!_oSettings.KEY) {
+        console.warn('An API key from weatherbit.io is required.')
+        return
+    }
+
+    const nApp = document.querySelector(_oSettings.target)
     const sIpapiLocationApi = 'https://ipapi.co/json/'
-    const sWeatherKEY = 'a7c9d34c61974586aae2af81befd52f2'
-    const sWeatherApi = `https://api.weatherbit.io/v2.0/current?key=${sWeatherKEY}`
-    const sFocastApi = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${sWeatherKEY}&hours=48`
+    const sWeatherApi = `https://api.weatherbit.io/v2.0/current?key=${_oSettings.KEY}`
+    const sFocastApi = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${_oSettings.KEY}&hours=48`
 
     const oWeatherIcons = {
         200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
@@ -67,9 +83,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} sanitised text
      */
     const fClean = function (dirty = '') {
-        if (typeof dirty === 'number') {
-            return dirty
-        }
+        if (typeof dirty === 'number') return dirty
         if (!dirty) return
 
         temp = document.createElement('div')
@@ -127,15 +141,23 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     const fGetLocation = async function () {
         if (navigator.geolocation) {
             try {
-                debug ? console.log('Checking geoLoccation API.') : ''
+                _oSettings.debug
+                    ? console.log('Checking geoLoccation API.')
+                    : ''
                 return await fGeoLocApi()
             } catch (e) {
-                debug ? console.warn('fGetLocation fGeoLocApi: ', e) : ''
+                _oSettings.debug
+                    ? console.warn('fGetLocation fGeoLocApi: ', e)
+                    : ''
                 try {
-                    debug ? console.log('Falling back to IP lookup.') : ''
+                    _oSettings.debug
+                        ? console.log('Falling back to IP lookup.')
+                        : ''
                     return await fIPapi()
                 } catch (e) {
-                    debug ? console.warn('fGetLocation IP API: ', e) : ''
+                    _oSettings.debug
+                        ? console.warn('fGetLocation IP API: ', e)
+                        : ''
                 }
             }
         }
@@ -253,8 +275,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     }
 
     /**
-     * *NOTE: the API  has parmas for both imperaial and metric units however,
-     * We do the conversion ourselves so that we can switch without additional api calls.
+     * *NOTE: the API has parmas for both imperaial and metric units, however,
+     * we do the conversion ourselves so that we can switch without additional api calls.
      */
 
     /**
@@ -264,18 +286,18 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted measurement as string with units
      */
     const fPercipConvert = function (measure) {
-        if (typeof measure !== 'number') return
+        if (typeof measure !== 'number') return 0
 
         if (measure === 0) {
             return measure
         }
 
-        if (units === 'M') {
-            return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;mm/hr`
+        if (_oSettings.units === 'M') {
+            return `${parseFloat(measure).toFixed(2)}&nbsp;mm/hr`
         } else {
             return `${(parseFloat(measure) * 0.0393701).toFixed(
                 2
-            )}&NonBreakingSpace;inch/hr`
+            )}&nbsp;inch/hr`
         }
     }
 
@@ -289,7 +311,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     const fTimeConvert = function (time24) {
         if (!time24) return
 
-        if (units === 'M') return time24
+        if (_oSettings.units === 'M') return time24
 
         const [sHours, minutes] = time24
             .match(/([0-9]{1,2}):([0-9]{2})/)
@@ -297,7 +319,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         const period = +sHours < 12 ? 'AM' : 'PM'
         const hours = +sHours % 12 || 12
 
-        return `${hours}:${minutes}&NonBreakingSpace;${period}`
+        return `${hours}:${minutes}&nbsp;${period}`
     }
 
     /**
@@ -307,13 +329,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted coverage as string with units
      */
     const fTempConvert = function (measure) {
-        if (typeof measure !== 'number') return
-        if (units === 'M') {
-            return `${parseFloat(measure).toFixed(1)}°&NonBreakingSpace;C`
+        if (typeof measure !== 'number') return 0
+        if (_oSettings.units === 'M') {
+            return `${parseFloat(measure).toFixed(1)}°&nbsp;C`
         } else {
-            return `${((parseFloat(measure) * 9) / 5 + 32).toFixed(
-                1
-            )}°&NonBreakingSpace;F`
+            return `${((parseFloat(measure) * 9) / 5 + 32).toFixed(1)}°&nbsp;F`
         }
     }
 
@@ -324,16 +344,14 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted wind speed as string with units
      */
     const fWindConvert = function (measure) {
-        if (typeof measure !== 'number') return
+        if (typeof measure !== 'number') return 0
 
-        if (units === 'M') {
+        if (_oSettings.units === 'M') {
             return `${(parseFloat(measure) * 3.6000059687997).toFixed(
                 2
-            )}&NonBreakingSpace;km/hr`
+            )}&nbsp;km/hr`
         } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(
-                2
-            )}&NonBreakingSpace;mi/hr`
+            return `${(parseFloat(measure) * 2.23694).toFixed(2)}&nbsp;mi/hr`
         }
     }
 
@@ -344,13 +362,11 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} converted distance as string with units
      */
     const fKilometreConvert = function (measure) {
-        if (typeof measure !== 'number') return
-        if (units === 'M') {
-            return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;km`
+        if (typeof measure !== 'number') return 0
+        if (_oSettings.units === 'M') {
+            return `${parseFloat(measure).toFixed(2)}&nbsp;km`
         } else {
-            return `${(parseFloat(measure) * 0.621371).toFixed(
-                2
-            )}&NonBreakingSpace;mile`
+            return `${(parseFloat(measure) * 0.621371).toFixed(2)}&nbsp;mile`
         }
     }
 
@@ -372,9 +388,9 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @returns {string} CSS class name as string
      */
     const fTempClass = function (temp) {
-        if (typeof temp !== 'number') return
+        if (typeof temp !== 'number') return 0
 
-        let base = units !== 'M' ? 0 : 32
+        let base = _oSettings.units !== 'M' ? 0 : 32
 
         temp = parseFloat(temp)
         // temp = 100
@@ -493,9 +509,27 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         const dd = parseInt(date.getDate(), 10)
         const oMoonPhase = Moon.phase(yyyy, mm, dd)
 
-        debug ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`) : ''
-        debug ? console.log('fMoonPhase resp: ', oMoonPhase) : ''
+        _oSettings.debug
+            ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`)
+            : ''
+        _oSettings.debug ? console.log('fMoonPhase resp: ', oMoonPhase) : ''
         return oMoonPhase
+    }
+
+    /**
+     * Perform string replacement for UI strings.
+     *
+     * @param {string} string
+     * @param {object} data
+     * @returns {string} Formatted string
+     */
+    const fFormatUIstr = function (string, data) {
+        if (!string) return ''
+        return string
+            .replace('{{forcast}}', fClean(data.weather.description))
+            .replace('{{temp}}', fTempConvert(fClean(data.temp)))
+            .replace('{{city}}', fClean(data.city_name))
+            .replace('{{country}}', fClean(data.country_code))
     }
 
     /**
@@ -508,18 +542,18 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         const sIcon = getWeatherIcon(data[0])
         return `
         <header id="hud" class="${fTempClass(data[0].temp)}">
-            <h3><img class="weather-icon" alt="${fClean(
-                data[0].weather.description.toLowerCase()
-            )}" src="./icons/weather/svg/${sIcon}.svg" />${fTempConvert(
+            <h3><img class="weather-icon" alt="${fFormatUIstr(
+                _oSettings.airaForcast,
+                data[0]
+            )}" src="./icons/weather/svg/${sIcon}.svg" /><span aria-hidden="true">${fTempConvert(
             fClean(data[0].temp)
-        )}</h3>
+        )}</span></h3>
             <ul class="unstyled">
                 <li aria-hidden="true">
-                    ${fClean(data[0].weather.description.toLowerCase())}
+                    ${fFormatUIstr(_oSettings.forcast, data[0]).toLowerCase()}
                 </li>
                 <li>
-                    ${fClean(data[0].city_name)},
-                    ${fClean(data[0].country_code)}
+                    ${fFormatUIstr(_oSettings.location, data[0])}
                 </li>
             </ul>
         </header>
@@ -562,9 +596,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                     Windspeed:
                     ${fWindConvert(
                         fClean(data[0].wind_spd)
-                    )}&NonBreakingSpace;|&NonBreakingSpace;${fClean(
-            data[0].wind_cdir
-        )}
+                    )}&nbsp;|&nbsp;${fClean(data[0].wind_cdir)}
                 </span></span>
                 <span class="inline-icon">
                     <img class="compass" alt="" height="25" width="25"
@@ -609,7 +641,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                     </span>
                     <span class="moonphase">
                         <img class="inline-icon moon"
-                            alt="We are currently at a ${oMoon.name}"
+                            alt="We currently have a ${oMoon.name} moon."
                             height="25" width="25"
                             src="./icons/moon/svg/${oMoon.phase}.svg"/>
                         ${oMoon.name}
@@ -713,8 +745,8 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
             const weather = await fGetWeather(loc)
             const forcast = await fGetForcast(loc)
 
-            debug ? console.log('weather', weather.data[0]) : ''
-            debug ? console.log('forcast', forcast.data[0]) : ''
+            _oSettings.debug ? console.log('weather', weather.data[0]) : ''
+            _oSettings.debug ? console.log('forcast', forcast.data[0]) : ''
 
             fBuildUI([weather.data[0], forcast.data])
             fSetVisabilityScale(weather.data[0].vis)
@@ -726,5 +758,12 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
     fInit()
 }
 
-// with debugging and Imperial Units for demonstration
-weatherApp('#app', 'I', true)
+// with debugging and Imperial Units
+const settings = {
+    forcast: `Currently: {{forcast}}`,
+    KEY: 'a7c9d34c61974586aae2af81befd52f2',
+    units: 'I',
+    debug: true,
+}
+
+weatherApp(settings)
