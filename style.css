@@ -249,8 +249,15 @@ span.inline-icon {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    margin-top: 0.3em;
-    margin: 0.3em 0rem;
+    margin: 0.3em 0 0.5em 0;
+}
+
+#details .visibility .visibility-wrap * {
+    align-self: center;
+}
+
+#details .visibility .visibility-wrap .inline-icon {
+    margin-top: -0.3em;
 }
 #details .visibility .visibility-graph {
     background-color: var(--moon);
@@ -274,7 +281,7 @@ span.inline-icon {
 }
 
 #details .visibility .visibility-graph::after {
-    content: '100km/62.15mi';
+    content: '50km/31mi';
     position: absolute;
     bottom: 0.4em;
     right: 1em;
