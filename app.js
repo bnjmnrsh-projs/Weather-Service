@@ -358,7 +358,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @param {float} vis
      */
     const fSetVisabilityScale = function (vis) {
-        const distance = 50 / parseInt(vis)
+        const distance = (parseInt(vis) / 50) * 100
         const nGraph = app.querySelector('.distance')
         nGraph.style.setProperty('--distance', 100 - distance + '%')
     }

@@ -342,11 +342,11 @@ span.inline-icon {
     min-height: 8em;
 }
 #forcast ul li:first-child {
-    margin-right: 0.2em;
+    margin-right: 0.1em;
     border-bottom-left-radius: 10px;
 }
 #forcast ul li:last-child {
-    margin-left: 0.2em;
+    margin-left: 0.1em;
     border-bottom-right-radius: 10px;
 }
 #forcast h4 {
