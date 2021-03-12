@@ -337,15 +337,25 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
      * @param {float} measure
      * @returns {string} converted distance as string with units
      */
-    const fVisConvert = function (measure) {
+    const fKilometreConvert = function (measure) {
         if (typeof measure !== 'number') return
         if (units === 'M') {
             return `${parseFloat(measure).toFixed(2)}&NonBreakingSpace;km`
         } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(
+            return `${(parseFloat(measure) * 0.621371).toFixed(
                 2
             )}&NonBreakingSpace;mile`
         }
+    }
+
+    /**
+     * Generate a visual scale based on 100km
+     * @param {float} vis
+     */
+    const fSetVisabilityScale = function (vis) {
+        const distance = parseInt(vis) / 100
+        const nGraph = app.querySelector('.distance')
+        nGraph.style.setProperty('--distance', 100 - distance + '%')
     }
 
     /**
@@ -523,7 +533,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         return `
         <div id="details">
             <ul class="unstyled">
-                <li>
+                <li class="feels-like">
                 <span class="left-col">Feels like:
                     ${fTempConvert(fClean(data[0].app_temp))}
                 </span>
@@ -539,7 +549,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                           '" alt="" height="25" width="25" src="./icons/weather/svg/wi-day-sunny.svg"></li>'
                         : ''
                 }
-                <li><span class="left-col">
+                <li class="windspeed"><span class="left-col">
                 <span aria-description="Winds traveling from ${sWindDirection}">
                     Windspeed:
                     ${fWindConvert(
@@ -549,7 +559,7 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
         )}
                 </span></span>
                 <span class="inline-icon"><img class="compass ${sWindDirection}" alt="" height="25" width="25" src="./icons/extras/svg/compass.svg"><img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg"></span></li>
-                <li><span class="left-col">Cloud:
+                <li class="cloud-cover"><span class="left-col">Cloud:
                     ${fClean(data[0].clouds)}% </span>
                 <img class="inline-icon ${iconCloud[1]}"
                     alt="" height="25" width="25"
@@ -561,17 +571,19 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
                           '</span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-snowflake-cold.svg"></li>'
                         : ''
                 }
-                <li><span class="left-col">Precip:
+                <li class="precipitation"><span class="left-col">Precip:
                           ${fPercipConvert(fClean(data[0].precip))}
                           </span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-raindrop.svg"></li>
 
-                ${
-                    data[0].vis
-                        ? '<li><span class="left-col">Visibility: ' +
-                          fVisConvert(fClean(data[0].vis)) +
-                          '</span><img class="inline-icon" alt="" height="25" width="25" src="./icons/extras/svg/binoculars.svg"></li>'
-                        : ''
-                }
+                <li class="visibility">
+                    <div class="visibility-wrap">
+                        <span class="left-col">Visibility:
+                          ${fKilometreConvert(fClean(data[0].vis))}
+                        </span>
+                        <img class="inline-icon" alt="" height="25" width="25" src="./icons/extras/svg/binoculars.svg">
+                    </div>
+                    <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
+                </li>
                 <li class="sun-up-down">
                     <span>
                         <img class="inline-icon sunrise" alt="sunrise" height="25" width="25" src="./icons/weather/svg/wi-sunrise.svg"/>
@@ -686,10 +698,12 @@ const weatherApp = function (target = '#app', units = 'M', debug = false) {
             const loc = await fGetLocation()
             const weather = await fGetWeather(loc)
             const forcast = await fGetForcast(loc)
+
             debug ? console.log('weather', weather.data[0]) : ''
             debug ? console.log('forcast', forcast.data[0]) : ''
 
             fBuildUI([weather.data[0], forcast.data])
+            fSetVisabilityScale(weather.data[0].vis)
         } catch (e) {
             console.error('init error: ', e)
             fErrorDisplay(e)

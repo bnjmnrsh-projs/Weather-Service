@@ -7,6 +7,7 @@
     --bg: #e1dbd9;
     --bg-md: #d8d5d2;
     --bg-dk: #c9c4c2;
+    --bg-vdk: #686462;
     --icon-nutral: hsla(0, 0%, 50%, 0.125);
     --icon-dk: hsla(0, 2%, 11%, 0.564);
     --sunrise: rgba(227, 227, 32, 0.743);
@@ -26,6 +27,8 @@
     --uv-3: hsla(33, 100%, 50%, 0.653);
     --uv-4: hsla(21, 100%, 50%, 0.714);
     --uv-5: hsla(9, 100%, 50%, 0.735);
+
+    --distance: 0%;
 }
 
 html {
@@ -217,6 +220,11 @@ span.inline-icon {
     background-color: var(--uv-5) !important;
 }
 
+.left-col {
+    max-width: 70%;
+    display: inline-block;
+}
+
 #hud {
     display: flex;
     flex-direction: column;
@@ -242,7 +250,6 @@ span.inline-icon {
     margin: 0;
 }
 #hud ul {
-    /* margin: -10vw 0 3vw 0; */
     font-family: 'Turret Road', sans-serif;
 }
 
@@ -267,9 +274,64 @@ span.inline-icon {
     min-height: 1.8em;
 }
 
-.left-col {
-    max-width: 70%;
-    display: inline-block;
+#details .visibility {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#details .visibility .visibility-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 0.3em;
+    margin: 0.3em 0rem;
+}
+#details .visibility .visibility-graph {
+    background-color: var(--moon);
+    background-image: url(imgs/graph.svg);
+    background-position: right 0 bottom 0px;
+    border: 1px solid var(--bg-md);
+    height: 2em;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    font-size: 0.6em;
+}
+
+#details .visibility .visibility-graph::before {
+    content: '0';
+    position: absolute;
+    bottom: 0.4em;
+    left: 0.6em;
+    z-index: 1;
+}
+
+#details .visibility .visibility-graph::after {
+    content: '100km/62.15mi';
+    position: absolute;
+    bottom: 0.4em;
+    right: 1em;
+    z-index: 1;
+    transition: 0.5s ease;
+}
+
+#details .visibility .visibility-graph .distance {
+    background: linear-gradient(
+        to left,
+        var(--bg-dk) calc(var(--distance) - 10px),
+        transparent 0
+    );
+    filter: blur(10px);
+    background-repeat: no-repeat;
+    overflow: hidden;
+    position: absolute;
+    bottom: -50%;
+    right: -10px;
+    width: 100%;
+    height: 200%;
+    z-index: 0;
 }
 
 .sun-up-down {
