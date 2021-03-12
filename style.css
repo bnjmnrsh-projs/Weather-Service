@@ -423,8 +423,7 @@ span.inline-icon {
 /* @media Rules */
 @media screen and (prefers-reduced-motion: reduce) {
     .loading-hud,
-    .loading-icon,
-    .loading-bg {
+    .loading-icon {
         animation: none;
     }
 }
