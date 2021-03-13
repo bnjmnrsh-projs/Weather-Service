@@ -477,14 +477,14 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Assigns a class string based on given uv
+     * Assigns a uv scale value based uv reading
      *
-     * @param {int} temp
-     * @returns {string} CSS class name as string
+     * @param {float} temp
+     * @returns {int}  whole int value on  6 step scale
      */
     const fUvDataPt = function (uv) {
         if (!temp) return
-        uv = parseInt(uv)
+        uv = parseFloat(uv)
 
         let uvClass = 'none'
         switch (uv) {
