@@ -414,12 +414,15 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Generate a visual scale based on 100km
+     * Generate a visual scale based on 5km
      *
      * @param {float} vis
      */
     const fSetVisabilityScale = function (vis) {
-        const distance = (parseInt(vis) / 50) * 100
+        console.log('vis:', vis)
+        const distance = (parseFloat(vis) / 5) * 100
+        console.log('distance:', distance)
+
         const nGraph = app.querySelector('.distance')
         nGraph.style.setProperty('--distance', 100 - distance + '%')
     }
