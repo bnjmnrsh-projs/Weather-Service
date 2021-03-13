@@ -94,52 +94,6 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Select the cloud coverage icon based on percentage value
-     *
-     * @param {int} coverage A percentage figure 0-100
-     * @param {string} pod Point of Day
-     * @returns {string} the string name of the icon
-     */
-    const getCloudCoverIcon = function (coverage, pod = 'd') {
-        if (typeof coverage !== 'number') return
-
-        // set day or night icon set
-        pod = pod = 'd' ? 0 : 1
-
-        const icons = oCloudCoverIcons
-
-        coverage = parseInt(coverage)
-
-        let aIconData = ''
-
-        switch (coverage) {
-            case coverage >= 0 && coverage < 16 ? coverage : null:
-                aIconData = [icons[0][pod], 0]
-                break
-            case coverage >= 16 && coverage < 32 ? coverage : null:
-                aIconData = [icons[1][pod], 1]
-                break
-            case coverage >= 32 && coverage < 48 ? coverage : null:
-                aIconData = [icons[2][pod], 2]
-                break
-            case coverage >= 48 && coverage < 65 ? coverage : null:
-                aIconData = [icons[3][pod], 3]
-                break
-            case coverage >= 65 && coverage < 83 ? coverage : null:
-                aIconData = [icons[4][pod], 4]
-                break
-            case coverage >= 83 && coverage <= 100 ? coverage : null:
-                aIconData = [icons[5][pod], 5]
-                break
-        }
-        aIconData.push(
-            document.querySelector(`#svgs .svg-${aIconData[0]}`).outerHTML
-        )
-
-        return aIconData
-    }
-
-    /**
      * Sanitise incoming API data
      *
      * @param {string} [dirty='']
@@ -327,6 +281,52 @@ const weatherApp = function (_oSettings = {}) {
             code = parseInt(fClean(data[hour].weather.code))
         }
         return oWeatherIcons[code][pod]
+    }
+
+    /**
+     * Select the cloud coverage icon based on percentage value
+     *
+     * @param {int} coverage A percentage figure 0-100
+     * @param {string} pod Point of Day
+     * @returns {string} the string name of the icon
+     */
+    const getCloudCoverIcon = function (coverage, pod = 'd') {
+        if (typeof coverage !== 'number') return
+
+        // set day or night icon set
+        pod = pod = 'd' ? 0 : 1
+
+        const icons = oCloudCoverIcons
+
+        coverage = parseInt(coverage)
+
+        let aIconData = ''
+
+        switch (coverage) {
+            case coverage >= 0 && coverage < 16 ? coverage : null:
+                aIconData = [icons[0][pod], 0]
+                break
+            case coverage >= 16 && coverage < 32 ? coverage : null:
+                aIconData = [icons[1][pod], 1]
+                break
+            case coverage >= 32 && coverage < 48 ? coverage : null:
+                aIconData = [icons[2][pod], 2]
+                break
+            case coverage >= 48 && coverage < 65 ? coverage : null:
+                aIconData = [icons[3][pod], 3]
+                break
+            case coverage >= 65 && coverage < 83 ? coverage : null:
+                aIconData = [icons[4][pod], 4]
+                break
+            case coverage >= 83 && coverage <= 100 ? coverage : null:
+                aIconData = [icons[5][pod], 5]
+                break
+        }
+        aIconData.push(
+            document.querySelector(`#svgs .svg-${aIconData[0]}`).outerHTML
+        )
+
+        return aIconData
     }
 
     /**
