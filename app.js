@@ -721,7 +721,9 @@ const weatherApp = function (_oSettings = {}) {
         return `
         <div id="forcast">
             <ul class="unstyled">
-                <li class="" data-temp="${fTempDataPt(fClean(data[0].temp))}">
+                <li class="" data-temp="${fTempDataPt(
+                    fClean(data[1][47].temp)
+                )}">
                     <header datetime="${
                         data[1][23].datetime
                     }" aria-description="The weather forcast in 24 hours."><h4>24h</h4></header>
