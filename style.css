@@ -463,10 +463,14 @@ span.inline-icon {
     svg {
         fill: var(--text);
     }
-    .feels-like.svg-feels-l,
-    .inline-icon.svg-uv,
+
     #details .inline-icon {
         background-color: var(--icon-nutral);
+    }
+
+    .feels-like .svg-wi-thermometer,
+    .uv-index .svg-wi-day-sunny {
+        fill: var(--bg-vdk);
     }
     #details .visibility .visibility-graph {
         border: 0px solid transparent;
