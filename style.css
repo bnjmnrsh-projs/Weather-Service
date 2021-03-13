@@ -6,14 +6,14 @@
     --bg-lt: #f0e9e7;
     --bg: #c7c0be;
     --bg-md: #d8d5d2;
-    --bg-dk: #c9c4c2;
+    --bg-dk: #aba7a6;
     --bg-vdk: #686462;
     --icon-nutral: rgba(128, 128, 128, 0.125);
     --icon-dk: rgba(29, 27, 27, 0.564);
 
     --sunrise: rgba(227, 227, 32, 0.68);
     --sunset: rgba(233, 198, 110, 0.68);
-    --moon: rgba(230, 230, 118, 0.858);
+    --yellow-lt: rgba(230, 230, 118, 0.858);
 
     --temp-0: rgba(21, 173, 223, 0.9);
     --temp-1: rgba(24, 201, 189, 0.851);
@@ -129,7 +129,7 @@ span.inline-icon {
     background-color: var(--sunset);
 }
 .inline-icon.moon {
-    background-color: var(--moon);
+    background-color: var(--yellow-lt);
     padding: 1px;
 }
 
@@ -262,7 +262,7 @@ span.inline-icon {
 .visibility .visibility-graph {
     background-color: var(--scale-bg);
     background-image: url(imgs/graph.svg);
-    background-position: right 0 bottom 0px;
+    background-position: left -1px bottom -1px;
     border: 1px solid var(--bg-md);
     height: 2em;
     width: calc(100% + 2.5em);
@@ -446,21 +446,27 @@ span.inline-icon {
         --bg: #282626;
         --bg-md: #494848;
         --bg-dk: #413f3f;
-        --bg-vdk: #a7a19f;
-        --icon-nutral: rgba(128, 128, 128, 0.125);
-        --icon-dk: rgba(224, 209, 209, 0.564);
+        --bg-vdk: #2e2e2e;
+        --icon-nutral: hsla(0, 0%, 25%, 0.5);
+        --icon-dk: hsla(0, 0%, 50%, 0.5);
     }
     html {
         color: var(--text);
     }
     .loading-icon,
     #forcast .weather-icon,
-    #hud .weather-icon,
-    #details .inline-icon {
-        filter: invert(95%) hue-rotate(180deg);
+    #hud .weather-icon {
+        filter: invert(95%) hue-rotate(180deg)
+            drop-shadow(2px 3px 1px var(--icon-dk));
     }
+
+    svg {
+        fill: var(--text);
+    }
+    .feels-like.svg-feels-l,
+    .inline-icon.svg-uv,
     #details .inline-icon {
-        background-color: var(--bg-vdk);
+        background-color: var(--icon-nutral);
     }
     #details .visibility .visibility-graph {
         border: 0px solid transparent;
@@ -472,20 +478,21 @@ span.inline-icon {
     .visibility .visibility-graph .distance {
         background: linear-gradient(
             to left,
-            var(--bg-vdk) calc(var(--distance) - 10px),
+            var(--text) calc(var(--distance) - 10px),
             transparent 0
         );
+        border-right: 30px solid var(--text);
     }
-    #details .inline-icon.svg-sunrise,
-    #details .inline-icon.svg-sunset {
-        filter: invert(9);
-        background-color: rgba(0, 8, 255, 0.523);
-        mix-blend-mode: hard-light;
+
+    #details .inline-icon.svg-wi-sunrise,
+    #details .inline-icon.svg-wi-sunset {
+        fill: var(--yellow-lt);
     }
 
     #details .inline-icon.moon {
         filter: invert(0);
-        background-color: var(--moon);
+        background-color: var(--yellow-lt);
+        fill: var(--bg-dk);
     }
 
     body footer {
