@@ -513,8 +513,9 @@ const weatherApp = function (_oSettings = {}) {
     /**
      * https://gist.github.com/endel/dfe6bb2fbe679781948c#gistcomment-2811037
      *
-     * @param {Date Object || date string} Date Object or valid String to make date object from.
+     * TODO: Moon.phase requres the date values to be passed as strings. Update toaccept a date object.
      *
+     * @param {Date Object || date string} Date Object or valid String to make date object from.
      * @returns {object} Moon phase object
      */
     const fMoonPhase = function (date) {
@@ -562,16 +563,23 @@ const weatherApp = function (_oSettings = {}) {
             throw new Error('fMoonPhase provided invalid date')
         }
 
-        const yyyy = parseInt(date.getFullYear(), 10)
-        const mm = parseInt(date.getMonth() + 1, 10)
-        const dd = parseInt(date.getDate(), 10)
+        //https://stackoverflow.com/a/2998874/362445
+        const zeroPad = (num, places) => String(num).padStart(places, '0')
+
+        const yyyy = zeroPad(parseInt(date.getFullYear(), 10), 4)
+        const mm = zeroPad(parseInt(date.getMonth() + 1, 10), 2)
+        const dd = zeroPad(parseInt(date.getDate(), 10), 2)
+
         const oMoonPhase = Moon.phase(yyyy, mm, dd)
 
         _oSettings.debug
-            ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`)
+            ? console.log(
+                  'fMoonPhase date (yyyy mm dd): ',
+                  `${dd} ${mm} ${yyyy}`
+              )
             : ''
-
         _oSettings.debug ? console.log('fMoonPhase result: ', oMoonPhase) : ''
+
         return oMoonPhase
     }
 
