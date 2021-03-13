@@ -132,7 +132,6 @@ const weatherApp = function (_oSettings = {}) {
                 aIconData = [icons[5][pod], 5]
                 break
         }
-        console.log('aIconData', aIconData)
         aIconData.push(
             document.querySelector(`#svgs .svg-${aIconData[0]}`).outerHTML
         )
@@ -259,7 +258,9 @@ const weatherApp = function (_oSettings = {}) {
             }`
         }
 
-        _oSettings.debug ? console.log('sApiQuery', fClean(sApiQuery)) : ''
+        _oSettings.debug
+            ? console.log('sApiQuery query:', fClean(sApiQuery))
+            : ''
 
         return fClean(sApiQuery)
     }
@@ -569,7 +570,8 @@ const weatherApp = function (_oSettings = {}) {
         _oSettings.debug
             ? console.log('fMoonPhase d m y: ', `${dd} ${mm} ${yyyy}`)
             : ''
-        _oSettings.debug ? console.log('fMoonPhase resp: ', oMoonPhase) : ''
+
+        _oSettings.debug ? console.log('fMoonPhase result: ', oMoonPhase) : ''
         return oMoonPhase
     }
 
@@ -627,7 +629,6 @@ const weatherApp = function (_oSettings = {}) {
         const sWindDirection = fClean(data[0].wind_cdir_full)
         const sWindDeg = fClean(data[0].wind_dir)
         const iconCloud = getCloudCoverIcon(data[0].clouds)
-
         const oMoon = fMoonPhase(data[0].obj_time)
 
         return `
@@ -666,7 +667,7 @@ const weatherApp = function (_oSettings = {}) {
                     ${iconCloud[2]}
                 ${
                     data[0].snow
-                        ? '<li><span class="left-col">Snow:' +
+                        ? '<li><span class="left-col">Snow: ' +
                           fPercipConvert(fClean(data[0].snow)) +
                           '</span>' +
                           nSnow +
@@ -803,9 +804,23 @@ const weatherApp = function (_oSettings = {}) {
             const weather = await fGetWeather(loc)
             const forcast = await fGetForcast(loc)
 
-            _oSettings.debug ? console.log('location', loc) : ''
-            _oSettings.debug ? console.log('weather', weather) : ''
-            _oSettings.debug ? console.log('forcast', forcast) : ''
+            _oSettings.debug ? console.log('fGetLocation response:', loc) : ''
+            _oSettings.debug
+                ? console.log('fGetWeather response:', weather)
+                : ''
+            _oSettings.debug
+                ? console.log('fGetForcast response:', forcast)
+                : ''
+
+            // to test values
+            // weather.data[0].temp = 60
+            // weather.data[0].app_temp = 60
+            // weather.data[0].uv = 100
+            // weather.data[0].clouds = 85
+            // weather.data[0].snow = 100
+            // weather.data[0].precip = 100
+            // weather.data[0].vis = 0.2
+            weather.data[0].ob_time = '2021-02-20 17:38'
 
             fBuildUI([weather.data[0], forcast.data])
             fSetVisabilityScale(weather.data[0].vis)
