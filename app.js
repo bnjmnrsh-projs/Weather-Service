@@ -428,39 +428,40 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Assigns a class name string based on temperature in C
+     * Assigns a named string based on temperature in C
+     * 6 step scale for data-temp
      *
      * @param {float} temp
-     * @returns {string} CSS class name as string
+     * @returns {string}   string
      */
-    const fTempClass = function (temp) {
+    const fTempDataPt = function (temp) {
         if (typeof temp !== 'number') return 0
 
         temp = parseFloat(temp)
         // temp = 100
 
-        let tempClass = ''
+        let sTempScale = ''
         switch (temp) {
             case temp <= 0 ? temp : null:
-                tempClass = 'temp-0'
+                sTempScale = 0
                 break
             case temp >= 0 && temp < 10 ? temp : null:
-                tempClass = 'temp-1'
+                sTempScale = 1
                 break
             case temp >= 10 && temp < 22 ? temp : null:
-                tempClass = 'temp-2'
+                sTempScale = 2
                 break
             case temp >= 22 && temp < 27 ? temp : null:
-                tempClass = 'temp-3'
+                sTempScale = 3
                 break
             case temp >= 27 && temp < 34 ? temp : null:
-                tempClass = 'temp-4'
+                sTempScale = 4
                 break
             case temp >= 34 ? temp : null:
-                tempClass = 'temp-5'
+                sTempScale = 5
                 break
         }
-        return tempClass
+        return sTempScale
     }
 
     /**
@@ -469,29 +470,29 @@ const weatherApp = function (_oSettings = {}) {
      * @param {int} temp
      * @returns {string} CSS class name as string
      */
-    const fUvClass = function (uv) {
+    const fUvDataPt = function (uv) {
         if (!temp) return
         uv = parseInt(uv)
-        // uv = 100
+
         let uvClass = 'none'
         switch (uv) {
             case uv < 10 ? uv : null:
-                uvClass = 'uv-0'
+                uvClass = 0
                 break
             case uv >= 10 && uv < 30 ? uv : null:
-                uvClass = 'uv-1'
+                uvClass = 1
                 break
             case uv >= 30 && uv < 50 ? uv : null:
-                uvClass = 'uv-2'
+                uvClass = 2
                 break
             case uv >= 50 && uv < 70 ? uv : null:
-                uvClass = 'uv-3'
+                uvClass = 3
                 break
             case uv >= 70 && uv < 90 ? uv : null:
-                uvClass = 'uv-4'
+                uvClass = 4
                 break
             case uv >= 90 || uv <= 100 ? uv : null:
-                uvClass = 'uv-5'
+                uvClass = 5
                 break
         }
         return uvClass
@@ -586,7 +587,7 @@ const weatherApp = function (_oSettings = {}) {
     const fRenderHUD = function (data) {
         const sIcon = getWeatherIcon(data[0])
         return `
-        <header id="hud" class="${fTempClass(data[0].temp)}">
+        <header id="hud" class="" data-temp="${fTempDataPt(data[0].temp)}">
             <h3><img class="weather-icon" alt="${fFormatUIstr(
                 _oSettings.airaForcast,
                 data[0]
@@ -624,15 +625,15 @@ const weatherApp = function (_oSettings = {}) {
                 <span class="left-col">Feels like:
                     ${fTempConvert(fClean(data[0].app_temp))}
                 </span>
-                <svg alt="" height="25" width="25" class="inline-icon ${fUvClass(
-                    fClean(data[0].uv.toFixed(2))
+                <svg alt="" height="25" width="25" class="inline-icon" data-temp="${fTempDataPt(
+                    fClean(data[0].app_temp.toFixed(2))
                 )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m9.91 19.56c0-.85.2-1.64.59-2.38s.94-1.35 1.65-1.84v-9.92c0-.8.27-1.48.82-2.03s1.23-.84 2.03-.84c.81 0 1.49.28 2.04.83.55.56.83 1.23.83 2.03v9.92c.71.49 1.25 1.11 1.64 1.84s.58 1.53.58 2.38c0 .92-.23 1.78-.68 2.56s-1.07 1.4-1.85 1.85-1.63.68-2.56.68c-.92 0-1.77-.23-2.55-.68s-1.4-1.07-1.86-1.85-.68-1.63-.68-2.55zm1.76 0c0 .93.33 1.73.98 2.39s1.44.99 2.36.99c.93 0 1.73-.33 2.4-1s1.01-1.46 1.01-2.37c0-.62-.16-1.2-.48-1.73s-.76-.94-1.32-1.23l-.28-.14c-.1-.04-.15-.14-.15-.29v-10.76c0-.32-.11-.59-.34-.81-.23-.21-.51-.32-.85-.32-.32 0-.6.11-.83.32s-.34.48-.34.81v10.74c0 .15-.05.25-.14.29l-.27.14c-.55.29-.98.7-1.29 1.23s-.46 1.1-.46 1.74zm.78 0c0 .71.24 1.32.73 1.82s1.07.75 1.76.75 1.28-.25 1.79-.75.76-1.11.76-1.81c0-.63-.22-1.19-.65-1.67s-.96-.77-1.58-.85v-7.36c0-.06-.03-.13-.1-.19-.07-.07-.14-.1-.22-.1-.09 0-.16.03-.21.08-.05.06-.08.12-.08.21v7.34c-.61.09-1.13.37-1.56.85-.43.49-.64 1.04-.64 1.68z"/></svg>
                 ${
                     data[0].uv
                         ? '<li><span class="left-col">UV Index: ' +
                           fClean(data[0].uv.toFixed(2)) +
-                          '</span><svg alt="" height="25" width="25" class="inline-icon ' +
-                          fUvClass(fClean(data[0].uv.toFixed(2))) +
+                          '</span><svg alt="" height="25" width="25" class="inline-icon svg-uv" data-uv="' +
+                          fUvDataPt(fClean(data[0].uv.toFixed(2))) +
                           '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
                         : ''
                 }
@@ -709,7 +710,7 @@ const weatherApp = function (_oSettings = {}) {
         return `
         <div id="forcast">
             <ul class="unstyled">
-                <li class="${fTempClass(fClean(data[0].temp))}">
+                <li class="" data-temp="${fTempDataPt(fClean(data[0].temp))}">
                     <header datetime="${
                         data[1][23].datetime
                     }" aria-description="The weather forcast in 24 hours."><h4>24h</h4></header>
@@ -721,7 +722,9 @@ const weatherApp = function (_oSettings = {}) {
                     data[1][23].weather.description.toLowerCase()
                 )}</p>
                 </li>
-                <li class="${fTempClass(fClean(data[1][47].temp))}">
+                <li class="" data-temp="${fTempDataPt(
+                    fClean(data[1][47].temp)
+                )}">
                     <header datetime="${
                         data[1][47].datetime
                     }" aria-description="The weather forcast in 48 hours."><h4>48h</h4></header>

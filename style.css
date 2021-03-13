@@ -133,41 +133,41 @@ span.inline-icon {
     padding: 1px;
 }
 
-.temp-0 {
+[data-temp='0'] {
     background-color: var(--temp-0) !important;
 }
-.temp-1 {
+[data-temp='1'] {
     background-color: var(--temp-1) !important;
 }
-.temp-2 {
+[data-temp='2'] {
     background-color: var(--temp-2) !important;
 }
-.temp-3 {
+[data-temp='3'] {
     background-color: var(--temp-3) !important;
 }
-.temp-4 {
+[data-temp='4'] {
     background-color: var(--temp-4) !important;
 }
-.temp-5 {
+[data-temp='5'] {
     background-color: var(--temp-5) !important;
 }
 
-.uv-0 {
+[data-uv='0'] {
     background-color: var(--uv-0) !important;
 }
-.uv-1 {
+[data-uv='1'] {
     background-color: var(--uv-1) !important;
 }
-.uv-2 {
+[data-uv='2'] {
     background-color: var(--uv-2) !important;
 }
-.uv-3 {
+[data-uv='3'] {
     background-color: var(--uv-3) !important;
 }
-.uv-4 {
+[data-uv='4'] {
     background-color: var(--uv-4) !important;
 }
-.uv-5 {
+[data-uv='5'] {
     background-color: var(--uv-5) !important;
 }
 
