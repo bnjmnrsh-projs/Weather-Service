@@ -32,14 +32,18 @@ const weatherApp = function (_oSettings = {}) {
     // DOM Target
     const nApp = document.querySelector(_oSettings.target)
 
-    // SVGs staged in HTML for details section, the remainder inlined (except Cloudcover & Moon)
+    // SVGs staged in HTML for details section,
+    // the remainder inlined(except Cloudcover & Moon, loaded dynamically)
     const nIcons = document.querySelector('#svgs')
-    const nWind = nIcons.querySelector('.svg-strong-wind').outerHTML
-    const nSunrise = nIcons.querySelector('.svg-sunrise').outerHTML
-    const nSunset = nIcons.querySelector('.svg-sunset').outerHTML
-    const nRaindrop = nIcons.querySelector('.svg-raindrop').outerHTML
+    // degrees/compass inline
+    const nWind = nIcons.querySelector('.svg-wi-strong-wind').outerHTML
+    const nSnow = nIcons.querySelector('.svg-wi-snow').outerHTML
+    // cloud lodaded dynamically
+    const nRaindrop = nIcons.querySelector('.svg-wi-raindrop').outerHTML
     const nBinoculars = nIcons.querySelector('.svg-binoculars').outerHTML
-    const nSnow = nIcons.querySelector('.svg-snow').outerHTML
+    const nSunrise = nIcons.querySelector('.svg-wi-sunrise').outerHTML
+    const nSunset = nIcons.querySelector('.svg-wi-sunset').outerHTML
+    // moon phases loaded as img
 
     const oWeatherIcons = {
         200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
@@ -82,10 +86,58 @@ const weatherApp = function (_oSettings = {}) {
 
     const oCloudCoverIcons = {
         0: ['wi-day-sunny', 'wi-night-clear'],
-        1: ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
-        2: ['wi-cloud', 'wi-cloud'],
-        3: ['wi-cloudy', 'wi-cloudy'],
-        4: ['dark-cloudy', 'dark-cloudy'],
+        1: ['wi-day-cloudy-high', 'wi-night-alt-cloudy-high'],
+        2: ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
+        3: ['wi-cloud', 'wi-cloud'],
+        4: ['wi-cloudy', 'wi-cloudy'],
+        5: ['dark-cloudy', 'dark-cloudy'],
+    }
+
+    /**
+     * Select the cloud coverage icon based on percentage value
+     *
+     * @param {int} coverage A percentage figure 0-100
+     * @param {string} pod Point of Day
+     * @returns {string} the string name of the icon
+     */
+    const getCloudCoverIcon = function (coverage, pod = 'd') {
+        if (typeof coverage !== 'number') return
+
+        // set day or night icon set
+        pod = pod = 'd' ? 0 : 1
+
+        const icons = oCloudCoverIcons
+
+        coverage = parseInt(coverage)
+
+        let aIconData = ''
+
+        switch (coverage) {
+            case coverage >= 0 && coverage < 16 ? coverage : null:
+                aIconData = [icons[0][pod], 0]
+                break
+            case coverage >= 16 && coverage < 32 ? coverage : null:
+                aIconData = [icons[1][pod], 1]
+                break
+            case coverage >= 32 && coverage < 48 ? coverage : null:
+                aIconData = [icons[2][pod], 2]
+                break
+            case coverage >= 48 && coverage < 65 ? coverage : null:
+                aIconData = [icons[3][pod], 3]
+                break
+            case coverage >= 65 && coverage < 83 ? coverage : null:
+                aIconData = [icons[4][pod], 4]
+                break
+            case coverage >= 83 && coverage <= 100 ? coverage : null:
+                aIconData = [icons[5][pod], 5]
+                break
+        }
+        console.log('aIconData', aIconData)
+        aIconData.push(
+            document.querySelector(`#svgs .svg-${aIconData[0]}`).outerHTML
+        )
+
+        return aIconData
     }
 
     /**
@@ -163,7 +215,7 @@ const weatherApp = function (_oSettings = {}) {
                     : ''
                 try {
                     _oSettings.debug
-                        ? console.log('Falling back to IP lookup.')
+                        ? console.warn('Falling back to IP lookup.')
                         : ''
                     return await fIPapi()
                 } catch (e) {
@@ -277,46 +329,7 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Select the cloud coverage icon based on percentage value
-     *
-     * @param {int} coverage A percentage figure 0-100
-     * @param {string} pod Point of Day
-     * @returns {string} the string name of the icon
-     */
-    const getCloudCoverIcon = function (coverage, pod = 'd') {
-        if (typeof coverage !== 'number') return
-
-        // set day or night icon set
-        pod = pod = 'd' ? 0 : 1
-
-        const icons = oCloudCoverIcons
-
-        coverage = parseInt(coverage)
-
-        let icon = ''
-
-        switch (coverage) {
-            case coverage >= 0 && coverage < 19 ? coverage : null:
-                icon = [icons[0][pod], 'cloud-0']
-                break
-            case coverage >= 20 && coverage < 39 ? coverage : null:
-                icon = [icons[1][pod], 'cloud-1']
-                break
-            case coverage >= 40 && coverage < 59 ? coverage : null:
-                icon = [icons[2][pod], 'cloud-2']
-                break
-            case coverage >= 60 && coverage < 79 ? coverage : null:
-                icon = [icons[3][pod], 'cloud-3']
-                break
-            case coverage >= 80 && coverage <= 100 ? coverage : null:
-                icon = [icons[4][pod], 'cloud-4']
-                break
-        }
-        return icon
-    }
-
-    /**
-     * *NOTE: the API has parmas for both imperaial and metric units, however,
+     * *NOTE: the API has parms for both imperial and metric units, however,
      * we do the conversion ourselves so that we can switch without additional api calls.
      */
 
@@ -419,9 +432,7 @@ const weatherApp = function (_oSettings = {}) {
      * @param {float} vis
      */
     const fSetVisabilityScale = function (vis) {
-        console.log('vis:', vis)
         const distance = (parseFloat(vis) / 5) * 100
-        console.log('distance:', distance)
 
         const nGraph = app.querySelector('.distance')
         nGraph.style.setProperty('--distance', 100 - distance + '%')
@@ -616,6 +627,7 @@ const weatherApp = function (_oSettings = {}) {
         const sWindDirection = fClean(data[0].wind_cdir_full)
         const sWindDeg = fClean(data[0].wind_dir)
         const iconCloud = getCloudCoverIcon(data[0].clouds)
+
         const oMoon = fMoonPhase(data[0].obj_time)
 
         return `
@@ -625,35 +637,33 @@ const weatherApp = function (_oSettings = {}) {
                 <span class="left-col">Feels like:
                     ${fTempConvert(fClean(data[0].app_temp))}
                 </span>
-                <svg alt="" height="25" width="25" class="inline-icon" data-temp="${fTempDataPt(
-                    fClean(data[0].app_temp.toFixed(2))
+                <svg alt="" height="25" width="25" class="inline-icon svg-wi-thermometer" data-temp="${fTempDataPt(
+                    fClean(data[0].app_temp)
                 )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m9.91 19.56c0-.85.2-1.64.59-2.38s.94-1.35 1.65-1.84v-9.92c0-.8.27-1.48.82-2.03s1.23-.84 2.03-.84c.81 0 1.49.28 2.04.83.55.56.83 1.23.83 2.03v9.92c.71.49 1.25 1.11 1.64 1.84s.58 1.53.58 2.38c0 .92-.23 1.78-.68 2.56s-1.07 1.4-1.85 1.85-1.63.68-2.56.68c-.92 0-1.77-.23-2.55-.68s-1.4-1.07-1.86-1.85-.68-1.63-.68-2.55zm1.76 0c0 .93.33 1.73.98 2.39s1.44.99 2.36.99c.93 0 1.73-.33 2.4-1s1.01-1.46 1.01-2.37c0-.62-.16-1.2-.48-1.73s-.76-.94-1.32-1.23l-.28-.14c-.1-.04-.15-.14-.15-.29v-10.76c0-.32-.11-.59-.34-.81-.23-.21-.51-.32-.85-.32-.32 0-.6.11-.83.32s-.34.48-.34.81v10.74c0 .15-.05.25-.14.29l-.27.14c-.55.29-.98.7-1.29 1.23s-.46 1.1-.46 1.74zm.78 0c0 .71.24 1.32.73 1.82s1.07.75 1.76.75 1.28-.25 1.79-.75.76-1.11.76-1.81c0-.63-.22-1.19-.65-1.67s-.96-.77-1.58-.85v-7.36c0-.06-.03-.13-.1-.19-.07-.07-.14-.1-.22-.1-.09 0-.16.03-.21.08-.05.06-.08.12-.08.21v7.34c-.61.09-1.13.37-1.56.85-.43.49-.64 1.04-.64 1.68z"/></svg>
                 ${
                     data[0].uv
-                        ? '<li><span class="left-col">UV Index: ' +
+                        ? '<li class="uv-index"><span class="left-col">UV Index: ' +
                           fClean(data[0].uv.toFixed(2)) +
-                          '</span><svg alt="" height="25" width="25" class="inline-icon svg-uv" data-uv="' +
-                          fUvDataPt(fClean(data[0].uv.toFixed(2))) +
+                          '</span><svg alt="" height="25" width="25" class="inline-icon svg-wi-day-sunny" data-uv="' +
+                          fUvDataPt(fClean(data[0].uv)) +
                           '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
                         : ''
                 }
                 <li class="windspeed"><span class="left-col">
-                <span aria-description="Winds traveling from ${sWindDirection}">
-                    Windspeed:
-                    ${fKmPerHourConvert(
-                        fClean(data[0].wind_spd)
-                    )}&nbsp;|&nbsp;${fClean(data[0].wind_cdir)}
-                </span></span>
-                <span class="inline-icon">
-                    <svg alt="" height="25" width="25" class="compass"  style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
-                    ${nWind}
-                </span>
+                    <span aria-description="Winds traveling from ${sWindDirection}">
+                        Windspeed:
+                        ${fKmPerHourConvert(
+                            fClean(data[0].wind_spd)
+                        )}&nbsp;|&nbsp;${fClean(data[0].wind_cdir)}
+                    </span></span>
+                    <span class="inline-icon">
+                        <svg alt="" height="25" width="25" class="compass"  style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
+                        ${nWind}
+                    </span>
                 </li>
                 <li class="cloud-cover"><span class="left-col">Cloud:
                     ${fClean(data[0].clouds)}% </span>
-                <img class="inline-icon ${iconCloud[1]}"
-                    alt="" height="25" width="25"
-                    src="./icons/weather/svg/${iconCloud[0]}.svg"></li>
+                    ${iconCloud[2]}
                 ${
                     data[0].snow
                         ? '<li><span class="left-col">Snow:' +
