@@ -386,7 +386,7 @@ const weatherApp = function (_oSettings = {}) {
      * @param {float} measure
      * @returns {string} converted wind speed as string with units
      */
-    const fWindConvert = function (measure) {
+    const fKmPerHourConvert = function (measure) {
         if (typeof measure !== 'number') return 0
 
         if (_oSettings.units === 'M') {
@@ -404,7 +404,7 @@ const weatherApp = function (_oSettings = {}) {
      * @param {float} measure
      * @returns {string} converted distance as string with units
      */
-    const fKilometreConvert = function (measure) {
+    const fKmConvert = function (measure) {
         if (typeof measure !== 'number') return 0
         if (_oSettings.units === 'M') {
             return `${parseFloat(measure).toFixed(2)}&nbsp;km`
@@ -787,8 +787,9 @@ const weatherApp = function (_oSettings = {}) {
             const weather = await fGetWeather(loc)
             const forcast = await fGetForcast(loc)
 
-            _oSettings.debug ? console.log('weather', weather.data[0]) : ''
-            _oSettings.debug ? console.log('forcast', forcast.data[0]) : ''
+            _oSettings.debug ? console.log('location', loc) : ''
+            _oSettings.debug ? console.log('weather', weather) : ''
+            _oSettings.debug ? console.log('forcast', forcast) : ''
 
             fBuildUI([weather.data[0], forcast.data])
             fSetVisabilityScale(weather.data[0].vis)
