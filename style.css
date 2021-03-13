@@ -121,10 +121,10 @@ span.inline-icon {
     filter: drop-shadow(2px 3px 1px var(--icon-dk));
 }
 
-.inline-icon.sunrise {
+.inline-icon.svg-sunrise {
     background-color: var(--sunrise);
 }
-.inline-icon.sunset {
+.inline-icon.svg-sunset {
     background-color: var(--sunset);
 }
 .inline-icon.moon {
@@ -471,10 +471,10 @@ span.inline-icon {
             transparent 0
         );
     }
-    #details .inline-icon.sunrise,
-    #details .inline-icon.sunset {
+    #details .inline-icon.svg-sunrise,
+    #details .inline-icon.svg-sunset {
         filter: invert(9);
-        background-color: rgba(0, 102, 255, 0.523);
+        background-color: rgba(0, 8, 255, 0.523);
         mix-blend-mode: hard-light;
     }
 
@@ -526,10 +526,10 @@ span.inline-icon {
         border: none;
     }
 
-    .inline-icon.sunrise {
+    .inline-icon.svg-sunrise {
         margin-bottom: 0;
     }
-    .inline-icon.sunset {
+    .inline-icon.svg-sunset {
         margin-bottom: 0;
     }
     .inline-icon.moon {

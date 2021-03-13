@@ -24,10 +24,22 @@ const weatherApp = function (_oSettings = {}) {
         return
     }
 
-    const nApp = document.querySelector(_oSettings.target)
+    // API urls
     const sIpapiLocationApi = 'https://ipapi.co/json/'
     const sWeatherApi = `https://api.weatherbit.io/v2.0/current?key=${_oSettings.KEY}`
     const sFocastApi = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${_oSettings.KEY}&hours=48`
+
+    // DOM Target
+    const nApp = document.querySelector(_oSettings.target)
+
+    // SVGs staged in HTML for details section, the remainder inlined (except Cloudcover & Moon)
+    const nIcons = document.querySelector('#svgs')
+    const nWind = nIcons.querySelector('.svg-strong-wind').outerHTML
+    const nSunrise = nIcons.querySelector('.svg-sunrise').outerHTML
+    const nSunset = nIcons.querySelector('.svg-sunset').outerHTML
+    const nRaindrop = nIcons.querySelector('.svg-raindrop').outerHTML
+    const nBinoculars = nIcons.querySelector('.svg-binoculars').outerHTML
+    const nSnow = nIcons.querySelector('.svg-snow').outerHTML
 
     const oWeatherIcons = {
         200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
@@ -601,7 +613,7 @@ const weatherApp = function (_oSettings = {}) {
         const sWindDeg = fClean(data[0].wind_dir)
         const iconCloud = getCloudCoverIcon(data[0].clouds)
         const oMoon = fMoonPhase(data[0].obj_time)
-        console.log('feels like: ', data[0].app_temp)
+
         return `
         <div id="details">
             <ul class="unstyled">
@@ -609,30 +621,28 @@ const weatherApp = function (_oSettings = {}) {
                 <span class="left-col">Feels like:
                     ${fTempConvert(fClean(data[0].app_temp))}
                 </span>
-                <img
-                class="inline-icon ${fTempClass(fClean(data[0].app_temp))}"
-                alt="" height="25" width="25" src="./icons/weather/svg/wi-thermometer.svg"></li>
+                <svg alt="" height="25" width="25" class="inline-icon ${fUvClass(
+                    fClean(data[0].uv.toFixed(2))
+                )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m9.91 19.56c0-.85.2-1.64.59-2.38s.94-1.35 1.65-1.84v-9.92c0-.8.27-1.48.82-2.03s1.23-.84 2.03-.84c.81 0 1.49.28 2.04.83.55.56.83 1.23.83 2.03v9.92c.71.49 1.25 1.11 1.64 1.84s.58 1.53.58 2.38c0 .92-.23 1.78-.68 2.56s-1.07 1.4-1.85 1.85-1.63.68-2.56.68c-.92 0-1.77-.23-2.55-.68s-1.4-1.07-1.86-1.85-.68-1.63-.68-2.55zm1.76 0c0 .93.33 1.73.98 2.39s1.44.99 2.36.99c.93 0 1.73-.33 2.4-1s1.01-1.46 1.01-2.37c0-.62-.16-1.2-.48-1.73s-.76-.94-1.32-1.23l-.28-.14c-.1-.04-.15-.14-.15-.29v-10.76c0-.32-.11-.59-.34-.81-.23-.21-.51-.32-.85-.32-.32 0-.6.11-.83.32s-.34.48-.34.81v10.74c0 .15-.05.25-.14.29l-.27.14c-.55.29-.98.7-1.29 1.23s-.46 1.1-.46 1.74zm.78 0c0 .71.24 1.32.73 1.82s1.07.75 1.76.75 1.28-.25 1.79-.75.76-1.11.76-1.81c0-.63-.22-1.19-.65-1.67s-.96-.77-1.58-.85v-7.36c0-.06-.03-.13-.1-.19-.07-.07-.14-.1-.22-.1-.09 0-.16.03-.21.08-.05.06-.08.12-.08.21v7.34c-.61.09-1.13.37-1.56.85-.43.49-.64 1.04-.64 1.68z"/></svg>
                 ${
                     data[0].uv
                         ? '<li><span class="left-col">UV Index: ' +
                           fClean(data[0].uv.toFixed(2)) +
-                          '</span><img class="inline-icon ' +
+                          '</span><svg alt="" height="25" width="25" class="inline-icon ' +
                           fUvClass(fClean(data[0].uv.toFixed(2))) +
-                          '" alt="" height="25" width="25" src="./icons/weather/svg/wi-day-sunny.svg"></li>'
+                          '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
                         : ''
                 }
                 <li class="windspeed"><span class="left-col">
                 <span aria-description="Winds traveling from ${sWindDirection}">
                     Windspeed:
-                    ${fWindConvert(
+                    ${fKmPerHourConvert(
                         fClean(data[0].wind_spd)
                     )}&nbsp;|&nbsp;${fClean(data[0].wind_cdir)}
                 </span></span>
                 <span class="inline-icon">
-                    <img class="compass" alt="" height="25" width="25"
-                    style="transform: rotate(${sWindDeg}deg)"
-                    src="./icons/weather/svg/wi-wind-deg.svg">
-                    <img class="" alt="" height="25" width="25" src="./icons/weather/svg/wi-strong-wind.svg">
+                    <svg alt="" height="25" width="25" class="compass"  style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
+                    ${nWind}
                 </span>
                 </li>
                 <li class="cloud-cover"><span class="left-col">Cloud:
@@ -644,29 +654,31 @@ const weatherApp = function (_oSettings = {}) {
                     data[0].snow
                         ? '<li><span class="left-col">Snow:' +
                           fPercipConvert(fClean(data[0].snow)) +
-                          '</span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-snowflake-cold.svg"></li>'
+                          '</span>' +
+                          nSnow +
+                          '</li>'
                         : ''
                 }
                 <li class="precipitation"><span class="left-col">Precip:
                           ${fPercipConvert(fClean(data[0].precip))}
-                          </span><img class="inline-icon" alt="" height="25" width="25" src="./icons/weather/svg/wi-raindrop.svg"></li>
+                          </span>${nRaindrop}</li>
 
                 <li class="visibility">
                     <div class="visibility-wrap">
                         <span class="left-col">Visibility:
-                          ${fKilometreConvert(fClean(data[0].vis))}
+                          ${fKmConvert(fClean(data[0].vis))}
                         </span>
-                        <img class="inline-icon" alt="" height="25" width="25" src="./icons/extras/svg/binoculars.svg">
+                        ${nBinoculars}
                     </div>
                     <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
                 </li>
                 <li class="sun-up-down">
                     <span>
-                        <img class="inline-icon sunrise" alt="sunrise" height="25" width="25" src="./icons/weather/svg/wi-sunrise.svg"/>
+                        ${nSunrise}
                         ${fTimeConvert(fClean(data[0].sunrise))}
                     </span>
                     <span>
-                        <img class="inline-icon sunset" alt="sunset" height="25" width="25" src="./icons/weather/svg/wi-sunset.svg"/>
+                        ${nSunset}
                         ${fTimeConvert(fClean(data[0].sunset))}
                     </span>
                     <span class="moonphase">
