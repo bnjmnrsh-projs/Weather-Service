@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
-  <defs>
-    <pattern id="square" width="10" height="10" patternUnits="userSpaceOnUse" >
-      <rect width="20" height="20" style="fill:none;stroke:#c9c4c2"/>
-    </pattern>
-    <pattern id="quad" width="20" height="20" patternUnits="userSpaceOnUse" >
-      <rect width="100" height="100" style="stroke:#c9c4c2" fill="url(#square)"/>
-    </pattern>
-  </defs>
-  <rect width="50" height="50" fill="url(#quad)" style="stroke:#c9c4c2;stroke-width:1px"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"  xmlns:v="https://vecta.io/nano"><defs><pattern id="A" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h20v20H0z" fill="none" stroke="#c9c4c2"/></pattern><pattern id="B" width="20" height="20" patternUnits="userSpaceOnUse"><path fill="url(#A)" d="M0 0h100v100H0z" stroke="#c9c4c2"/></pattern></defs><path fill="url(#B)" d="M0 0h50v50H0z" stroke="#c9c4c2"/></svg>
