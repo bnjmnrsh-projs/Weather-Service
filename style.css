@@ -177,12 +177,11 @@ span.inline-icon {
 }
 
 #hud {
-    padding: 1em;
+    padding: 2em;
     border-radius: 10px 10px 2px 2px;
     background-color: var(--bg-lt);
     margin: 0.3em;
     box-shadow: var(--bg-dk) 1px 1px 1px;
-    min-height: 13em;
 }
 
 #hud h3 {
