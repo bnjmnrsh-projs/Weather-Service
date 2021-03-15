@@ -513,9 +513,7 @@ const weatherApp = function (_oSettings = {}) {
     /**
      * https://gist.github.com/endel/dfe6bb2fbe679781948c#gistcomment-2811037
      *
-     * TODO: Moon.phase requres the date values to be passed as strings. Update toaccept a date object.
-     *
-     * @param {Date Object || date string} Date Object or valid String to make date object from.
+     * @param {Date object || date string} Date Object or String with valid formatting to make date object from.
      * @returns {object} Moon phase object
      */
     const fMoonPhase = function (date) {
@@ -555,7 +553,7 @@ const weatherApp = function (_oSettings = {}) {
         // if no date, create date based on current system date
         date = date || new Date()
 
-        // if provided a string, try to make a new Date object
+        // if provided a date, try to make a new Date object
         date = date instanceof String ? new Date(date) : date
 
         // test our date object
@@ -563,12 +561,9 @@ const weatherApp = function (_oSettings = {}) {
             throw new Error('fMoonPhase provided invalid date')
         }
 
-        //https://stackoverflow.com/a/2998874/362445
-        const zeroPad = (num, places) => String(num).padStart(places, '0')
-
-        const yyyy = zeroPad(parseInt(date.getFullYear(), 10), 4)
-        const mm = zeroPad(parseInt(date.getMonth() + 1, 10), 2)
-        const dd = zeroPad(parseInt(date.getDate(), 10), 2)
+        const yyyy = date.getFullYear()
+        const mm = date.getMonth() + 1 // 0 indexed
+        const dd = date.getDate()
 
         const oMoonPhase = Moon.phase(yyyy, mm, dd)
 
@@ -833,7 +828,7 @@ const weatherApp = function (_oSettings = {}) {
             // weather.data[0].snow = 100
             // weather.data[0].precip = 100
             // weather.data[0].vis = 0.2
-            // weather.data[0].ob_time = '1800-02-20 17:38'
+            // weather.data[0].obj_time = new Date('2000-07-18 12:43')
 
             fBuildUI([weather.data[0], forcast.data])
             fSetVisabilityScale(weather.data[0].vis)
