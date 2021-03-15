@@ -575,7 +575,7 @@ const weatherApp = function (_oSettings = {}) {
         _oSettings.debug
             ? console.log(
                   'fMoonPhase date (yyyy mm dd): ',
-                  `${dd} ${mm} ${yyyy}`
+                  `  ${yyyy} ${mm} ${dd}`
               )
             : ''
         _oSettings.debug ? console.log('fMoonPhase result: ', oMoonPhase) : ''
