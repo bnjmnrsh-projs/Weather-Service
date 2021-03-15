@@ -122,10 +122,10 @@ span.inline-icon {
     filter: drop-shadow(2px 3px 1px var(--icon-dk));
 }
 
-.inline-icon.svg-sunrise {
+.inline-icon.svg-wi-sunrise {
     background-color: var(--sunrise);
 }
-.inline-icon.svg-sunset {
+.inline-icon.svg-wi-sunset {
     background-color: var(--sunset);
 }
 .inline-icon.moon {
@@ -468,7 +468,7 @@ span.inline-icon {
         fill: var(--text);
     }
 
-    #details .inline-icon {
+    .inline-icon {
         background-color: var(--icon-nutral);
     }
 
@@ -476,11 +476,11 @@ span.inline-icon {
     .uv-index .svg-wi-day-sunny {
         fill: var(--bg-vdk);
     }
-    #details .visibility .visibility-graph {
+    .visibility .visibility-graph {
         border: 0px solid transparent;
     }
-    #details .visibility .visibility-graph::before,
-    #details .visibility .visibility-graph::after {
+    .visibility .visibility-graph::before,
+    .visibility .visibility-graph::after {
         color: var(--bg);
     }
     .visibility .visibility-graph .distance {
@@ -491,13 +491,16 @@ span.inline-icon {
         );
         border-right: 30px solid var(--text);
     }
+    .sun-up-down span {
+        border-right: 1px solid var(--text);
+    }
 
-    #details .inline-icon.svg-wi-sunrise,
-    #details .inline-icon.svg-wi-sunset {
+    .inline-icon.svg-wi-sunrise,
+    .inline-icon.svg-wi-sunset {
         fill: var(--yellow-lt);
     }
 
-    #details .inline-icon.moon {
+    .inline-icon.moon {
         filter: invert(0);
         background-color: var(--yellow-lt);
         fill: var(--bg-dk);
