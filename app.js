@@ -830,7 +830,7 @@ const weatherApp = function (_oSettings = {}) {
             // weather.data[0].snow = 100
             // weather.data[0].precip = 100
             // weather.data[0].vis = 0.2
-            weather.data[0].ob_time = '2021-02-20 17:38'
+            // weather.data[0].ob_time = '1800-02-20 17:38'
 
             fBuildUI([weather.data[0], forcast.data])
             fSetVisabilityScale(weather.data[0].vis)
