@@ -177,9 +177,6 @@ span.inline-icon {
 }
 
 #hud {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 1em;
     border-radius: 10px 10px 2px 2px;
     background-color: var(--bg-lt);
@@ -187,20 +184,27 @@ span.inline-icon {
     box-shadow: var(--bg-dk) 1px 1px 1px;
     min-height: 13em;
 }
-#hud .weather-icon {
-    height: auto;
-    width: 60%;
-}
+
 #hud h3 {
     font-size: 1.8em;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: center;
     margin: 0;
 }
+#hud .weather-icon {
+    height: auto;
+    width: 25%;
+}
 #hud ul {
+    display: flex;
+    flex-direction: column;
     font-family: 'Turret Road', sans-serif;
+}
+#hud ul li {
+    margin: 0 auto;
 }
 
 #hud ul li:first-child {
@@ -336,6 +340,7 @@ span.inline-icon {
 }
 #forcast ul {
     display: flex;
+    flex-direction: row;
 }
 #forcast ul li {
     background-color: var(--bg-md);
@@ -367,7 +372,7 @@ span.inline-icon {
     font-size: 0.7em;
 }
 #forcast .weather-icon {
-    width: 5em;
+    width: 30%;
     height: auto;
     margin-right: 0.8em;
 }

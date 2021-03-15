@@ -609,12 +609,15 @@ const weatherApp = function (_oSettings = {}) {
         const sIcon = getWeatherIcon(data[0])
         return `
         <header id="hud" class="" data-temp="${fTempDataPt(data[0].temp)}">
-            <h3><img class="weather-icon" alt="${fFormatUIstr(
-                _oSettings.airaForcast,
-                data[0]
-            )}" src="./icons/weather/svg/${sIcon}.svg" /><span aria-hidden="true">${fTempConvert(
-            fClean(data[0].temp)
-        )}</span></h3>
+            <h3>
+                    <img class="weather-icon" alt="${fFormatUIstr(
+                        _oSettings.airaForcast,
+                        data[0]
+                    )}" src="./icons/weather/svg/${sIcon}.svg" />
+                <span aria-hidden="true">${fTempConvert(
+                    fClean(data[0].temp)
+                )}</span>
+            </h3>
             <ul class="unstyled">
                 <li aria-hidden="true">
                     ${fFormatUIstr(_oSettings.forcast, data[0]).toLowerCase()}
