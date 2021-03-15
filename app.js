@@ -429,14 +429,14 @@ const weatherApp = function (_oSettings = {}) {
 
     /**
      * Generate a visual scale based on 5km
+     * Returns the style with --distance css custom property
      *
      * @param {float} vis
+     * @returns {string}
      */
     const fSetVisabilityScale = function (vis) {
         const distance = (parseFloat(vis) / 5) * 100
-
-        const nGraph = app.querySelector('.distance')
-        nGraph.style.setProperty('--distance', 100 - distance + '%')
+        return `--distance:${100 - distance}%`
     }
 
     /**
@@ -691,7 +691,11 @@ const weatherApp = function (_oSettings = {}) {
                         </span>
                         ${nBinoculars}
                     </div>
-                    <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
+                    <div class="visibility-graph" aria-hidden="true">
+                        <div class="distance" style="${fSetVisabilityScale(
+                            data[0].vis
+                        )}"></div>
+                    </div>
                 </li>
                 <li class="sun-up-down">
                     <span>
@@ -831,7 +835,6 @@ const weatherApp = function (_oSettings = {}) {
             // weather.data[0].obj_time = new Date('2000-07-18 12:43')
 
             fBuildUI([weather.data[0], forcast.data])
-            fSetVisabilityScale(weather.data[0].vis)
         } catch (e) {
             console.error('init error: ', e)
             fErrorDisplay(e)
