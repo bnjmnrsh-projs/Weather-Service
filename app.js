@@ -125,6 +125,45 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
+     * Assembles the formatted query string for weather and forecast queries
+     *
+     * @param {string} urlBase [sWeatherApi || sFocastApi]
+     * @param {obj} loc [response from location API]
+     * @returns {string} Assembled url with query (cleaned)
+     */
+    const fAssembledQuery = function (urlBase, loc) {
+        if (!loc) return
+
+        let sApiQuery = `${urlBase}&lat=${loc.latitude}&lon=${loc.longitude}`
+
+        if (!loc.latitude || !loc.longitude) {
+            let sCity,
+                sState,
+                sCountry = ''
+
+            if ('city' in loc && loc.city) {
+                sCity = `&city=${loc.city}`
+            }
+            if ('state' in loc && loc.state) {
+                sState = `&state=${loc.state}`
+            }
+            if ('country' in loc && loc.country_code) {
+                sCountry = `&country=${loc.country_code}`
+            }
+
+            sApiQuery = `${urlBase}${sCity ?? ''}${sState ?? ''}${
+                sCountry ?? ''
+            }`
+        }
+
+        _oSettings.debug
+            ? console.log('sApiQuery query:', fClean(sApiQuery))
+            : ''
+
+        return fClean(sApiQuery)
+    }
+
+    /**
      * Browser based location API
      *
      * @returns {object} coordiantes object
@@ -178,45 +217,6 @@ const weatherApp = function (_oSettings = {}) {
                 }
             }
         }
-    }
-
-    /**
-     *
-     *
-     * @param {string} urlBase [sWeatherApi || sFocastApi]
-     * @param {obj} loc [response from location API]
-     * @returns {string} Assembled url with query (cleaned)
-     */
-    const fAssembledQuery = function (urlBase, loc) {
-        if (!loc) return
-
-        let sApiQuery = `${urlBase}&lat=${loc.latitude}&lon=${loc.longitude}`
-
-        if (!loc.latitude || !loc.longitude) {
-            let sCity,
-                sState,
-                sCountry = ''
-
-            if ('city' in loc && loc.city) {
-                sCity = `&city=${loc.city}`
-            }
-            if ('state' in loc && loc.state) {
-                sState = `&state=${loc.state}`
-            }
-            if ('country' in loc && loc.country_code) {
-                sCountry = `&country=${loc.country_code}`
-            }
-
-            sApiQuery = `${urlBase}${sCity ?? ''}${sState ?? ''}${
-                sCountry ?? ''
-            }`
-        }
-
-        _oSettings.debug
-            ? console.log('sApiQuery query:', fClean(sApiQuery))
-            : ''
-
-        return fClean(sApiQuery)
     }
 
     /**
