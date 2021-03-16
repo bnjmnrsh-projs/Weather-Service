@@ -313,24 +313,25 @@ span.inline-icon {
     z-index: 0;
 }
 
-.sun-up-down {
+#details .sun-up-down {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     line-height: 1.5rem;
     text-align: center;
 }
-.sun-up-down span {
+#details .sun-up-down span {
     display: flex;
-    justify-content: space-evenly;
+    flex: 1;
     align-items: center;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     border-right: 1px solid var(--icon-dk);
-    width: 33.33%;
     text-align: center;
+    margin: 0 0.5rem;
 }
 
-.sun-up-down span:last-of-type {
+#details .sun-up-down span:last-of-type {
     border-right: none;
 }
 
@@ -491,13 +492,13 @@ span.inline-icon {
         );
         border-right: 30px solid var(--text);
     }
-    .sun-up-down span {
+    #details .sun-up-down span {
         border-right: 1px solid var(--text);
     }
 
-    .inline-icon.svg-wi-sunrise,
-    .inline-icon.svg-wi-sunset {
-        fill: var(--yellow-lt);
+    #details .sun-up-down .inline-icon.svg-wi-sunrise,
+    #details .sun-up-down .inline-icon.svg-wi-sunset {
+        fill: white;
     }
 
     .inline-icon.moon {
@@ -533,7 +534,7 @@ span.inline-icon {
         padding-top: 0;
         padding-bottom: 0;
     }
-    .sun-up-down span {
+    #details .sun-up-down span {
         box-shadow: var(--bg-dk) 1px 1px 2px;
         background-color: var(--bg-lt);
         min-height: 1rem;
