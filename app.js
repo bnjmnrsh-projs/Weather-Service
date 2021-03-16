@@ -14,6 +14,7 @@ const weatherApp = function (_oSettings = {}) {
         airaForcast: `The weather is currently: {{forcast}} at {{temp}}.`,
         location: `{{city}}, {{country}}`,
         debug: false,
+        geoLocOpts: '',
     }
 
     // Merge settings with defaults
@@ -168,23 +169,27 @@ const weatherApp = function (_oSettings = {}) {
      *
      * @returns {object} coordiantes object
      */
-    const fGeoLocApi = async function () {
-        let options = {
+    const fGeoLocApi = async function (oGeoOptions) {
+        oGeoOptions = oGeoOptions || {
             enableHighAccuracy: true,
             timeout: 5000,
             maximumAge: 0,
         }
 
         resp = new Promise(function (resolve, reject) {
-            navigator.geolocation.getCurrentPosition(
-                function (resp) {
-                    resolve(resp.coords)
-                },
-                function (resp) {
-                    reject(resp)
-                },
-                options
-            )
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (resp) {
+                        resolve(resp.coords)
+                    },
+                    function (resp) {
+                        reject(resp)
+                    },
+                    oGeoOptions
+                )
+            } else {
+                reject('Navigator.geolocation unavaliable')
+            }
         })
         return await resp
     }
@@ -192,29 +197,26 @@ const weatherApp = function (_oSettings = {}) {
     /**
      * Gets the user location
      *
-     * @param {string} [section='home']
+     * @param {object} oGeoOptions
      */
-    const fGetLocation = async function () {
-        if (navigator.geolocation) {
+    const fGetLocation = async function (oGeoOptions) {
+        try {
+            _oSettings.debug ? console.log('Checking geoLoccation API.') : ''
+            return await fGeoLocApi(oGeoOptions)
+        } catch (e) {
             try {
-                _oSettings.debug
-                    ? console.log('Checking geoLoccation API.')
-                    : ''
-                return await fGeoLocApi()
-            } catch (e) {
                 _oSettings.debug
                     ? console.warn('fGetLocation fGeoLocApi: ', e)
                     : ''
-                try {
-                    _oSettings.debug
-                        ? console.warn('Falling back to IP lookup.')
-                        : ''
-                    return await fIPapi()
-                } catch (e) {
-                    _oSettings.debug
-                        ? console.warn('fGetLocation IP API: ', e)
-                        : ''
-                }
+                _oSettings.debug
+                    ? console.warn(' fGeoLocApi options: ', oGeoOptions)
+                    : ''
+                _oSettings.debug
+                    ? console.warn('Falling back to IP lookup.')
+                    : ''
+                return await fIPapi()
+            } catch (e) {
+                _oSettings.debug ? console.warn('fGetLocation IP API: ', e) : ''
             }
         }
     }
@@ -812,7 +814,7 @@ const weatherApp = function (_oSettings = {}) {
      */
     const fInit = async function () {
         try {
-            const loc = await fGetLocation()
+            const loc = await fGetLocation(_oSettings.geoLocOpts)
             const weather = await fGetWeather(loc)
             const forcast = await fGetForcast(loc)
 
