@@ -108,9 +108,10 @@ ul.unstyled {
     border-radius: 15px;
     background-color: var(--icon-nutral);
     padding: 2px;
+    margin: 0.25rem;
     transition: 1s all ease;
 }
-
+/* inline-icon group */
 span.inline-icon {
     display: flex;
     flex-direction: row;
@@ -319,6 +320,7 @@ span.inline-icon {
     justify-content: space-evenly;
     line-height: 1.5rem;
     text-align: center;
+    line-height: 1rem;
 }
 #details .sun-up-down span {
     display: flex;
@@ -329,6 +331,7 @@ span.inline-icon {
     border-right: 1px solid var(--icon-dk);
     text-align: center;
     margin: 0 0.5rem;
+    padding: 0 0.5rem;
 }
 
 #details .sun-up-down span:last-of-type {
