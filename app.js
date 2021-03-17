@@ -632,7 +632,7 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     *
+     * Generate 'feels like' markup
      *
      * @param {object} data
      * @returns {string}
@@ -650,6 +650,12 @@ const weatherApp = function (_oSettings = {}) {
         </li>`
     }
 
+    /**
+     * Genearge UV markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateUv = function (data) {
         if (!data[0].uv) return ''
 
@@ -667,6 +673,12 @@ const weatherApp = function (_oSettings = {}) {
         </li>`
     }
 
+    /**
+     * Generage cloud cover markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateCloudCover = function (data) {
         const iconCloud = getCloudCoverIcon(data[0].clouds)
         return `
@@ -676,6 +688,12 @@ const weatherApp = function (_oSettings = {}) {
         </li>`
     }
 
+    /**
+     * Generate snow fall markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateSnow = function (data) {
         if (!data[0].snow) return ''
         return `
@@ -685,6 +703,12 @@ const weatherApp = function (_oSettings = {}) {
         </li>`
     }
 
+    /**
+     * Generage Percip markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGeneratePercip = function (data) {
         if (!data[0].precip) return ''
         return `
@@ -696,6 +720,12 @@ const weatherApp = function (_oSettings = {}) {
         </li>`
     }
 
+    /**
+     * Generage wind markup for #details section
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateWinds = function (data) {
         const sWindDeg = fClean(data[0].wind_dir) + 180
         const sWindDirection = fClean(data[0].wind_cdir_full)
@@ -714,6 +744,12 @@ const weatherApp = function (_oSettings = {}) {
             </li>`
     }
 
+    /**
+     * Generate wind markup for forcast section
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateWindsForecast = function (data) {
         const sWindDeg = fClean(data.wind_dir) + 180
         const sWindspeed = fKmPerHourConvert(fClean(data.wind_spd), false, 0)
@@ -725,6 +761,12 @@ const weatherApp = function (_oSettings = {}) {
             `
     }
 
+    /**
+     * Generage visibility scale markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenearateVis = function (data) {
         return `
         <li class="visibility">
@@ -742,6 +784,12 @@ const weatherApp = function (_oSettings = {}) {
         </li>`
     }
 
+    /**
+     * Generate peroid markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateSunUpDown = function (data) {
         return `
         <li>
@@ -755,6 +803,13 @@ const weatherApp = function (_oSettings = {}) {
             </s pan>
         </li>`
     }
+
+    /**
+     * Generate moone pahse markup
+     *
+     * @param {object} data
+     * @returns {string}
+     */
     const fGenerateMoon = function (data) {
         const oMoon = fMoonPhase(data[0].obj_time)
         return `
@@ -771,7 +826,7 @@ const weatherApp = function (_oSettings = {}) {
      * Renders the app's details secection
      *
      * @param {array} data
-     * @returns {domnode}
+     * @returns {dom node}
      */
     const fRenderDetails = function (data) {
         const sMarkup = `
@@ -798,7 +853,7 @@ const weatherApp = function (_oSettings = {}) {
      * Renders the app's details secection
      *
      * @param {array} data
-     * @returns {domnode}
+     * @returns {dom node}
      */
     const fRenderSunUpDown = function (data) {
         const sMarkup = `
@@ -813,11 +868,11 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Map over each hour in forecast and produce element.
+     * Map over each hour in forecast and produce markup.
      *
      * @param {array} [range=[]]
      * @param {object} data
-     * @returns
+     * @returns {string}
      */
     const fRenderforecastEl = function (range = [], forecast) {
         return range
