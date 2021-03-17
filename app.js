@@ -635,7 +635,7 @@ const weatherApp = function (_oSettings = {}) {
      */
     const fRenderDetails = function (data) {
         const sWindDirection = fClean(data[0].wind_cdir_full)
-        const sWindDeg = fClean(data[0].wind_dir)
+        const sWindDeg = fClean(data[0].wind_dir) + 180
         const iconCloud = getCloudCoverIcon(data[0].clouds)
         const oMoon = fMoonPhase(data[0].obj_time)
 
