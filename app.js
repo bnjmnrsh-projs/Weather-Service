@@ -10,8 +10,8 @@ const weatherApp = function (_oSettings = {}) {
         target: '#app',
         KEY: '',
         units: 'M',
-        forcast: `{{forcast}}`,
-        airaForcast: `The weather is currently: {{forcast}} at {{temp}}.`,
+        forecast: `{{forecast}}`,
+        airaforecast: `The weather is currently: {{forecast}} at {{temp}}.`,
         location: `{{city}}, {{country}}`,
         debug: false,
         geoLocOpts: '',
@@ -241,12 +241,12 @@ const weatherApp = function (_oSettings = {}) {
     }
 
     /**
-     * Fetch the 48h forcast based on a user's location
+     * Fetch the 48h forecast based on a user's location
      *
      * @param {object} loc coordiantes object
-     * @returns {object} hourly forcast weather object
+     * @returns {object} hourly forecast weather object
      */
-    const fGetForcast = async function (loc) {
+    const fGetForecast = async function (loc) {
         const resp = await fetch(fAssembledQuery(sFocastApi, loc)).then(
             function (resp) {
                 if (resp.ok) {
@@ -265,23 +265,14 @@ const weatherApp = function (_oSettings = {}) {
     /**
      * Returns the string name of the weather icon
      *
-     * @param {object} data Either the current or hourly forcast weather object
+     * @param {object} data Either the current or hourly forecast weather object
      * @param {string || int} [hour]
      * @returns string
      */
     const getWeatherIcon = function (data, hour) {
         if (!data) return
-
-        let code, pod
-        if (!hour) {
-            // Current weather object
-            pod = fClean(data.pod) === 'd' ? 0 : 1
-            code = parseInt(fClean(data.weather.code))
-        } else {
-            // Forcast weather object
-            pod = fClean(data[hour].pod) === 'd' ? 0 : 1
-            code = parseInt(fClean(data[hour].weather.code))
-        }
+        const pod = fClean(data.pod) === 'd' ? 0 : 1
+        const code = parseInt(fClean(data.weather.code))
         return oWeatherIcons[code][pod]
     }
 
@@ -402,15 +393,27 @@ const weatherApp = function (_oSettings = {}) {
      * @param {float} measure
      * @returns {string} converted wind speed as string with units
      */
-    const fKmPerHourConvert = function (measure) {
+    const fKmPerHourConvert = function (measure, withUnits = true, places = 2) {
         if (typeof measure !== 'number') return 0
 
         if (_oSettings.units === 'M') {
-            return `${(parseFloat(measure) * 3.6000059687997).toFixed(
-                2
-            )}&nbsp;km/hr`
+            if (withUnits) {
+                return `${(parseFloat(measure) * 3.6000059687997).toFixed(
+                    places
+                )}&nbsp;km/hr`
+            } else {
+                return `${(parseFloat(measure) * 3.6000059687997).toFixed(
+                    places
+                )}`
+            }
         } else {
-            return `${(parseFloat(measure) * 2.23694).toFixed(2)}&nbsp;mi/hr`
+            if (withUnits) {
+                return `${(parseFloat(measure) * 2.23694).toFixed(
+                    places
+                )}&nbsp;mi/hr`
+            } else {
+                return `${(parseFloat(measure) * 2.23694).toFixed(places)}`
+            }
         }
     }
 
@@ -590,7 +593,7 @@ const weatherApp = function (_oSettings = {}) {
     const fFormatUIstr = function (string, data) {
         if (!string) return ''
         return string
-            .replace('{{forcast}}', fClean(data.weather.description))
+            .replace('{{forecast}}', fClean(data.weather.description))
             .replace('{{temp}}', fTempConvert(fClean(data.temp)))
             .replace('{{city}}', fClean(data.city_name))
             .replace('{{country}}', fClean(data.country_code))
@@ -600,182 +603,272 @@ const weatherApp = function (_oSettings = {}) {
      * Renders the app's header
      *
      * @param {array} data
-     * @returns {string}
+     * @returns {domnode}
      */
-    const fRenderHUD = function (data) {
-        const sIcon = getWeatherIcon(data[0])
-        return `
-        <header id="hud" class="" data-temp="${fTempDataPt(data[0].temp)}">
+    const fRenderHUD = function (data, sForcast, sLocation) {
+        const sIcon = getWeatherIcon(data)
+        const sMarkup = `
+        <header id="hud" class="" data-temp="${fTempDataPt(data.temp)}">
             <h3>
                     <img class="weather-icon" alt="${fFormatUIstr(
-                        _oSettings.airaForcast,
-                        data[0]
+                        _oSettings.airaforecast,
+                        data
                     )}" src="./icons/weather/svg/${sIcon}.svg" />
                 <span aria-hidden="true">${fTempConvert(
-                    fClean(data[0].temp)
+                    fClean(data.temp)
                 )}</span>
             </h3>
             <ul class="unstyled">
                 <li aria-hidden="true">
-                    ${fFormatUIstr(_oSettings.forcast, data[0]).toLowerCase()}
+                    ${fFormatUIstr(sForcast, data).toLowerCase()}
                 </li>
                 <li>
-                    ${fFormatUIstr(_oSettings.location, data[0])}
+                    ${fFormatUIstr(sLocation, data)}
                 </li>
             </ul>
         </header>
         `
+        return document.createRange().createContextualFragment(sMarkup)
+    }
+
+    /**
+     *
+     *
+     * @param {object} data
+     * @returns {string}
+     */
+
+    const fGenerateFeelsLike = function (data) {
+        return `
+        <li class="feels-like">
+            <span class="left-col">Feels like: ${fTempConvert(
+                fClean(data[0].app_temp)
+            )}</span>
+            <svg alt="" height="25" width="25" class="inline-icon svg-wi-thermometer" data-temp="${fTempDataPt(
+                fClean(data[0].app_temp)
+            )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m9.91 19.56c0-.85.2-1.64.59-2.38s.94-1.35 1.65-1.84v-9.92c0-.8.27-1.48.82-2.03s1.23-.84 2.03-.84c.81 0 1.49.28 2.04.83.55.56.83 1.23.83 2.03v9.92c.71.49 1.25 1.11 1.64 1.84s.58 1.53.58 2.38c0 .92-.23 1.78-.68 2.56s-1.07 1.4-1.85 1.85-1.63.68-2.56.68c-.92 0-1.77-.23-2.55-.68s-1.4-1.07-1.86-1.85-.68-1.63-.68-2.55zm1.76 0c0 .93.33 1.73.98 2.39s1.44.99 2.36.99c.93 0 1.73-.33 2.4-1s1.01-1.46 1.01-2.37c0-.62-.16-1.2-.48-1.73s-.76-.94-1.32-1.23l-.28-.14c-.1-.04-.15-.14-.15-.29v-10.76c0-.32-.11-.59-.34-.81-.23-.21-.51-.32-.85-.32-.32 0-.6.11-.83.32s-.34.48-.34.81v10.74c0 .15-.05.25-.14.29l-.27.14c-.55.29-.98.7-1.29 1.23s-.46 1.1-.46 1.74zm.78 0c0 .71.24 1.32.73 1.82s1.07.75 1.76.75 1.28-.25 1.79-.75.76-1.11.76-1.81c0-.63-.22-1.19-.65-1.67s-.96-.77-1.58-.85v-7.36c0-.06-.03-.13-.1-.19-.07-.07-.14-.1-.22-.1-.09 0-.16.03-.21.08-.05.06-.08.12-.08.21v7.34c-.61.09-1.13.37-1.56.85-.43.49-.64 1.04-.64 1.68z"/></svg>
+        </li>`
+    }
+
+    const fGenerateUv = function (data) {
+        if (!data[0].uv) return ''
+
+        return `
+        <li class="uv-index">
+            <span class="left-col">UV Index: ${fClean(
+                data[0].uv.toFixed(2)
+            )}</span>
+            <svg alt="" height="25" width="25"
+                class="inline-icon svg-wi-day-sunny"
+                data-uv="${fUvDataPt(
+                    fClean(data[0].uv)
+                )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>
+
+        </li>`
+    }
+
+    const fGenerateCloudCover = function (data) {
+        const iconCloud = getCloudCoverIcon(data[0].clouds)
+        return `
+        <li class="cloud-cover">
+            <span class="left-col">Cloud: ${fClean(data[0].clouds)}% </span>
+            ${iconCloud[2]}
+        </li>`
+    }
+
+    const fGenerateSnow = function (data) {
+        if (!data[0].snow) return ''
+        return `
+        <li class="snow">
+            <span class="left-col">Snow: ${fPercipConvert(fClean(data[0].snow))}
+            ${nSnow}
+        </li>`
+    }
+
+    const fGeneratePercip = function (data) {
+        if (!data[0].precip) return ''
+        return `
+        <li class="precipitation">
+            <span class="left-col">Snow: ${fPercipConvert(
+                fClean(data[0].precip)
+            )}
+            ${nRaindrop}
+        </li>`
+    }
+
+    const fGenerateWinds = function (data) {
+        const sWindDeg = fClean(data[0].wind_dir) + 180
+        const sWindDirection = fClean(data[0].wind_cdir_full)
+        return `
+            <li class="windspeed"><span class="left-col">
+                <span aria-description="Winds traveling from ${sWindDirection}">
+                    Windspeed:
+                    ${fKmPerHourConvert(
+                        fClean(data[0].wind_spd)
+                    )}&nbsp;|&nbsp;${fClean(data[0].wind_cdir)}
+                </span></span>
+                <span class="inline-icon">
+                    <svg alt="" class="compass" style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
+                    ${nWind}
+                </span>
+            </li>`
+    }
+
+    const fGenerateWindsForecast = function (data) {
+        const sWindDeg = fClean(data.wind_dir) + 180
+        const sWindspeed = fKmPerHourConvert(fClean(data.wind_spd), false, 0)
+        return `
+            <span class="inline-icon">
+                <svg alt="" class="compass" style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
+                <span>${sWindspeed}</span>
+            </span>
+            `
+    }
+
+    const fGenearateVis = function (data) {
+        return `
+        <li class="visibility">
+            <div class="visibility-wrap">
+                <span class="left-col">Visibility:
+                    ${fKmConvert(fClean(data[0].vis))}
+                </span>
+                ${nBinoculars}
+            </div>
+            <div class="visibility-graph" aria-hidden="true">
+                <div class="distance" style="${fSetVisabilityScale(
+                    data[0].vis
+                )}"></div>
+            </div>
+        </li>`
+    }
+
+    const fGenerateSunUpDown = function (data) {
+        return `
+        <li>
+            <span>
+                ${nSunrise}
+                ${fTimeConvert(fClean(data[0].sunrise))}
+            </span>
+            <span>
+                ${nSunset}
+                ${fTimeConvert(fClean(data[0].sunset))}
+            </s pan>
+        </li>`
+    }
+    const fGenerateMoon = function (data) {
+        const oMoon = fMoonPhase(data[0].obj_time)
+        return `
+        <li class="moonphase">
+            <img class="inline-icon moon"
+                alt="We currently have a ${oMoon.name} moon."
+                height="25" width="25"
+                src="./icons/moon/svg/${oMoon.phase}.svg"/>
+            ${oMoon.name}
+        </li>`
     }
 
     /**
      * Renders the app's details secection
      *
      * @param {array} data
-     * @returns {string}
+     * @returns {domnode}
      */
     const fRenderDetails = function (data) {
-        const sWindDirection = fClean(data[0].wind_cdir_full)
-        const sWindDeg = fClean(data[0].wind_dir) + 180
-        const iconCloud = getCloudCoverIcon(data[0].clouds)
-        const oMoon = fMoonPhase(data[0].obj_time)
-
-        return `
-        <div id="details">
+        const sMarkup = `
+        <section id="details">
             <ul class="unstyled">
                 <ul class="unstyled group">
-                    <li class="feels-like">
-                    <span class="left-col">Feels like:
-                        ${fTempConvert(fClean(data[0].app_temp))}
-                    </span>
-                    <svg alt="" height="25" width="25" class="inline-icon svg-wi-thermometer" data-temp="${fTempDataPt(
-                        fClean(data[0].app_temp)
-                    )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m9.91 19.56c0-.85.2-1.64.59-2.38s.94-1.35 1.65-1.84v-9.92c0-.8.27-1.48.82-2.03s1.23-.84 2.03-.84c.81 0 1.49.28 2.04.83.55.56.83 1.23.83 2.03v9.92c.71.49 1.25 1.11 1.64 1.84s.58 1.53.58 2.38c0 .92-.23 1.78-.68 2.56s-1.07 1.4-1.85 1.85-1.63.68-2.56.68c-.92 0-1.77-.23-2.55-.68s-1.4-1.07-1.86-1.85-.68-1.63-.68-2.55zm1.76 0c0 .93.33 1.73.98 2.39s1.44.99 2.36.99c.93 0 1.73-.33 2.4-1s1.01-1.46 1.01-2.37c0-.62-.16-1.2-.48-1.73s-.76-.94-1.32-1.23l-.28-.14c-.1-.04-.15-.14-.15-.29v-10.76c0-.32-.11-.59-.34-.81-.23-.21-.51-.32-.85-.32-.32 0-.6.11-.83.32s-.34.48-.34.81v10.74c0 .15-.05.25-.14.29l-.27.14c-.55.29-.98.7-1.29 1.23s-.46 1.1-.46 1.74zm.78 0c0 .71.24 1.32.73 1.82s1.07.75 1.76.75 1.28-.25 1.79-.75.76-1.11.76-1.81c0-.63-.22-1.19-.65-1.67s-.96-.77-1.58-.85v-7.36c0-.06-.03-.13-.1-.19-.07-.07-.14-.1-.22-.1-.09 0-.16.03-.21.08-.05.06-.08.12-.08.21v7.34c-.61.09-1.13.37-1.56.85-.43.49-.64 1.04-.64 1.68z"/></svg>
-                    ${
-                        data[0].uv
-                            ? '<li class="uv-index"><span class="left-col">UV Index: ' +
-                              fClean(data[0].uv.toFixed(2)) +
-                              '</span><svg alt="" height="25" width="25" class="inline-icon svg-wi-day-sunny" data-uv="' +
-                              fUvDataPt(fClean(data[0].uv)) +
-                              '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
-                            : ''
-                    }
+                    ${fGenerateFeelsLike(data)}
+                    ${fGenerateUv(data)}
+                    ${fGenerateCloudCover(data)}
+
+                    ${fGenerateSnow(data)}
+                    ${fGeneratePercip(data)}
+                    ${fGenerateWinds(data)}
                 </ul>
-                <ul class="unstyled group">
-                    <li class="windspeed"><span class="left-col">
-                        <span aria-description="Winds traveling from ${sWindDirection}">
-                            Windspeed:
-                            ${fKmPerHourConvert(
-                                fClean(data[0].wind_spd)
-                            )}&nbsp;|&nbsp;${fClean(data[0].wind_cdir)}
-                        </span></span>
-                        <span class="inline-icon">
-                            <svg alt="" height="25" width="25" class="compass"  style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
-                            ${nWind}
-                        </span>
-                    </li>
-                    <li class="cloud-cover"><span class="left-col">Cloud:
-                        ${fClean(data[0].clouds)}% </span>
-                        ${iconCloud[2]}
-                    ${
-                        data[0].snow
-                            ? '<li><span class="left-col">Snow: ' +
-                              fPercipConvert(fClean(data[0].snow)) +
-                              '</span>' +
-                              nSnow +
-                              '</li>'
-                            : ''
-                    }
-                    ${
-                        data[0].precip
-                            ? '<li class="precipitation"><span class="left-col">Precip: ' +
-                              fPercipConvert(fClean(data[0].precip)) +
-                              '</span>' +
-                              nRaindrop +
-                              '</li>'
-                            : ''
-                    }
-                </ul>
-                <li class="visibility">
-                    <div class="visibility-wrap">
-                        <span class="left-col">Visibility:
-                          ${fKmConvert(fClean(data[0].vis))}
-                        </span>
-                        ${nBinoculars}
-                    </div>
-                    <div class="visibility-graph" aria-hidden="true">
-                        <div class="distance" style="${fSetVisabilityScale(
-                            data[0].vis
-                        )}"></div>
-                    </div>
-                </li>
-                <ul class="sun-up-down unstyled group">
-                        <li>
-                            <span>
-                                ${nSunrise}
-                                ${fTimeConvert(fClean(data[0].sunrise))}
-                            </span>
-                            <span>
-                                ${nSunset}
-                                ${fTimeConvert(fClean(data[0].sunset))}
-                            </span>
-                        </li>
-                        <li class="moonphase">
-                            <img class="inline-icon moon"
-                                alt="We currently have a ${oMoon.name} moon."
-                                height="25" width="25"
-                                src="./icons/moon/svg/${oMoon.phase}.svg"/>
-                            ${oMoon.name}
-                        </li>
-                    </ul>
-                </li>
+                ${fGenearateVis(data)}
+
             </ul>
-        </div>
+        </section>
         `
+        return document.createRange().createContextualFragment(sMarkup)
     }
 
     /**
-     * Renders the app's upcoming forcast section
+     * Renders the app's details secection
+     *
+     * @param {array} data
+     * @returns {domnode}
+     */
+    const fRenderSunUpDown = function (data) {
+        const sMarkup = `
+        <section id="period">
+            <ul class="sun-up-down unstyled group">
+                ${fGenerateSunUpDown(data)}
+                ${fGenerateMoon(data)}
+            </ul>
+        </section>
+        `
+        return document.createRange().createContextualFragment(sMarkup)
+    }
+
+    /**
+     * Map over each hour in forecast and produce element.
+     *
+     * @param {array} [range=[]]
+     * @param {object} data
+     * @returns
+     */
+    const fRenderforecastEl = function (range = [], forecast) {
+        return range
+            .map(function (el) {
+                console.log(`forecast ${el}:`, forecast[el])
+                console.log('icon: ', getWeatherIcon(forecast[el], el))
+                const sIcon = getWeatherIcon(forecast[el], el)
+                return `
+                <li class="" data-temp="${fTempDataPt(
+                    fClean(forecast[el].temp)
+                )}">
+                    <header datetime="${forecast[el].datetime}"
+                        aria-description="The weather forecast in ${
+                            el + 1
+                        } hours."><h4>${el + 1}h</h4>
+
+                    </header>
+                    <img class="weather-icon"
+                        alt="${fClean(forecast[el].weather.description)}"
+                        src="./icons/weather/svg/${sIcon}.svg" />
+                    <h5>
+                        ${fTempConvert(fClean(forecast[el].temp))}
+                    </h5>
+                    ${fGenerateWindsForecast(forecast[el])}
+                    <!--<p class="forecast-description" aria-hidden="true">
+                        ${fClean(
+                            forecast[el].weather.description.toLowerCase()
+                        )}
+                    </p>-->
+                </li>`
+            })
+            .join('')
+    }
+
+    /**
+     * Renders the app's upcoming forecast section
      *
      * @param {array} data
      * @returns {string}
      */
-    const fRenderForcast = function (data) {
-        const sIcon24 = getWeatherIcon(data[1], 23)
-        const sIcon48 = getWeatherIcon(data[1], 47)
-        return `
-        <div id="forcast">
+    const fRenderforecast = function (data) {
+        // let hours = [23, 47]
+        let hours = [...data[1].keys()]
+        const sMarkup = `
+        <section id="forecast">
             <ul class="unstyled">
-                <li class="" data-temp="${fTempDataPt(
-                    fClean(data[1][47].temp)
-                )}">
-                    <header datetime="${
-                        data[1][23].datetime
-                    }" aria-description="The weather forcast in 24 hours."><h4>24h</h4></header>
-                    <h5><img class="weather-icon" alt="${fClean(
-                        data[1][23].weather.description
-                    )}" src="./icons/weather/svg/${sIcon24}.svg" />
-                    ${fTempConvert(fClean(data[1][23].temp))}</h5>
-                <p class="forecast-description" aria-hidden="true">${fClean(
-                    data[1][23].weather.description.toLowerCase()
-                )}</p>
-                </li>
-                <li class="" data-temp="${fTempDataPt(
-                    fClean(data[1][47].temp)
-                )}">
-                    <header datetime="${
-                        data[1][47].datetime
-                    }" aria-description="The weather forcast in 48 hours."><h4>48h</h4></header>
-                    <h5><img class="weather-icon" alt="${fClean(
-                        data[1][47].weather.description
-                    )}" src="./icons/weather/svg/${sIcon48}.svg" />
-                    ${fTempConvert(fClean(data[1][47].temp))}</h5>
-                <p class="forecast-description" aria-hidden="true">${fClean(
-                    data[1][47].weather.description.toLowerCase()
-                )}</p>
-                </li>
+                ${fRenderforecastEl(hours, data[1])}
             </ul>
-        </div>
+        </section>
         `
+        return document.createRange().createContextualFragment(sMarkup)
     }
 
     /**
@@ -784,8 +877,17 @@ const weatherApp = function (_oSettings = {}) {
      * @param {array} data
      */
     const fBuildUI = function (data = []) {
-        app.innerHTML =
-            fRenderHUD(data) + fRenderDetails(data) + fRenderForcast(data)
+        const nFrag = document.createDocumentFragment()
+        nFrag.append(
+            fRenderHUD(data[0], _oSettings.forecast, _oSettings.forecast)
+        )
+        nFrag.append(fRenderDetails(data))
+        nFrag.append(fRenderSunUpDown(data))
+        nFrag.append(fRenderforecast(data))
+
+        app.innerHTML = ''
+        app.append(nFrag)
+
     }
 
     /**
@@ -795,7 +897,7 @@ const weatherApp = function (_oSettings = {}) {
      * @returns
      */
     const fErrorDisplay = function (err) {
-        const markup = `<div id="hud">
+        const markup = `<section id="hud">
                             <div id="ohnos">
                                 <h3><span aria-hidden="true">⥀.⥀<br /></span>Oh Nooos!</h3>
                                 <p class="sr-only">There has been a crittical error:</p>
@@ -817,7 +919,7 @@ const weatherApp = function (_oSettings = {}) {
                                     </div>
                                 <img alt="" src="./icons/weather/svg/wi-alien.svg"/>
                             </div>
-                        </div>`
+                        </section>`
         nApp.innerHTML = markup
     }
 
@@ -828,14 +930,14 @@ const weatherApp = function (_oSettings = {}) {
         try {
             const loc = await fGetLocation(_oSettings.geoLocOpts)
             const weather = await fGetWeather(loc)
-            const forcast = await fGetForcast(loc)
+            const forecast = await fGetForecast(loc)
 
             _oSettings.debug ? console.log('fGetLocation response:', loc) : ''
             _oSettings.debug
                 ? console.log('fGetWeather response:', weather)
                 : ''
             _oSettings.debug
-                ? console.log('fGetForcast response:', forcast)
+                ? console.log('fGetForecast response:', forecast)
                 : ''
 
             // to test values
@@ -848,7 +950,7 @@ const weatherApp = function (_oSettings = {}) {
             // weather.data[0].vis = 0.2
             // weather.data[0].obj_time = new Date('2000-07-18 12:43')
 
-            fBuildUI([weather.data[0], forcast.data])
+            fBuildUI([weather.data[0], forecast.data])
         } catch (e) {
             console.error('init error: ', e)
             fErrorDisplay(e)
@@ -859,7 +961,7 @@ const weatherApp = function (_oSettings = {}) {
 
 // with debugging and Imperial Units
 const settings = {
-    forcast: `Currently: {{forcast}}`,
+    forecast: `Currently: {{forecast}}`,
     KEY: 'a7c9d34c61974586aae2af81befd52f2',
     units: 'I',
     debug: true,

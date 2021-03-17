@@ -352,46 +352,82 @@ span.inline-icon {
     border: none;
 }
 
-#forcast {
+#forecast {
     margin: 0.15rem 0.3rem;
 }
-#forcast ul {
+#forecast ul {
     display: flex;
     flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 1em;
+    will-change: transform; /* fix jank & paint issues */
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
 }
-#forcast ul li {
+
+#forecast ul::-webkit-scrollbar {
+    width: 0 !important;
+}
+
+#forecast ul li {
+    display: flex;
+    flex-direction: column;
     background-color: var(--bg-md);
     border-radius: 2px;
     width: 50%;
     padding: 0.3rem;
     box-shadow: var(--bg-dk) 1px 1px 2px;
     min-height: 8rem;
+    margin: 0 0.15rem;
 }
-#forcast ul li:first-child {
-    margin-right: 0.1rem;
+#forecast ul li:nth-child(3n + 3) {
+    scroll-snap-align: start;
+}
+
+#forecast ul li:first-child {
     border-bottom-left-radius: 10px;
+    margin-left: 0;
+    scroll-snap-align: start;
 }
-#forcast ul li:last-child {
-    margin-left: 0.1rem;
+#forecast ul li:last-child {
+    margin-right: 0;
     border-bottom-right-radius: 10px;
+    scroll-snap-align: end;
 }
-#forcast h4 {
+#forecast header {
+    background: var(--bg-md);
+    margin: -0.3rem -0.3rem 0 -0.3rem;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+#forecast li h4 {
     margin: 0.3rem;
     text-align: left;
 }
-#forcast h5 {
+#forecast li h5 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
+    margin: 0 auto 0.5rem auto;
 }
-#forcast .forecast-description {
+#forecast li .forecast-description {
+    font-size: 1rem;
+}
+#forecast .weather-icon {
+    width: 100%;
+    height: auto;
+}
+#forecast .inline-icon {
+    display: inline-grid;
+    flex: 1;
+    margin: auto;
     font-size: 0.7rem;
 }
-#forcast .weather-icon {
-    width: 30%;
-    height: auto;
-    margin-right: 0.8rem;
+#forecast .inline-icon svg {
+    width: 25px;
 }
 
 /* Animations */
@@ -476,7 +512,7 @@ span.inline-icon {
         color: var(--text);
     }
     .loading-icon,
-    #forcast .weather-icon,
+    #forecast .weather-icon,
     #hud .weather-icon {
         filter: invert(95%) hue-rotate(180deg)
             drop-shadow(2px 3px 1px var(--icon-dk));
@@ -577,37 +613,6 @@ span.inline-icon {
     }
     .inline-icon.moon {
         margin-bottom: 0;
-    }
-
-    #forcast ul {
-        display: flex;
-        flex-direction: column;
-    }
-
-    #forcast ul li {
-        border-radius: 2px;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        box-shadow: var(--bg-dk) 1px 1px 2px;
-    }
-    #forcast ul li:first-child {
-        margin-right: 0;
-        border-bottom-left-radius: 2px;
-    }
-    #forcast ul li:last-child {
-        margin-top: 0.3rem;
-        margin-left: 0;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-    }
-    #forcast ul li header {
-        padding: 0.3rem;
-    }
-
-    body footer .wrap {
-        margin: 3rem auto;
-        max-width: 90%;
     }
 }
 
