@@ -32,6 +32,7 @@ const weatherApp = function (_oSettings = {}) {
 
     // DOM Target
     const nApp = document.querySelector(_oSettings.target)
+    // const nLoadingState = nApp.cloneNode('deep')
 
     // SVGs staged in HTML for details section,
     // the remainder inlined(except Cloudcover & Moon, loaded dynamically)
