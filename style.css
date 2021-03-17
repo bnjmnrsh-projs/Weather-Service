@@ -117,6 +117,10 @@ span.inline-icon {
     align-items: center;
     justify-content: center;
 }
+.inline-icon svg {
+    width: 25px;
+    height: auto;
+}
 
 .weather-icon {
     filter: drop-shadow(2px 3px 1px var(--icon-dk));
@@ -231,7 +235,7 @@ span.inline-icon {
     background-size: 400% 400%;
     animation: loading 60s ease infinite;
 }
-
+#period ul li,
 #details ul li {
     display: flex;
     flex: 1;
@@ -246,7 +250,7 @@ span.inline-icon {
     box-shadow: var(--bg-dk) 1px 1px 2px;
     min-height: 1.8rem;
 }
-
+#period ul.group,
 #details ul.group {
     display: flex;
     flex-direction: row;
@@ -254,6 +258,7 @@ span.inline-icon {
     flex: 1;
     margin: 0 0.15rem;
 }
+#period ul.group li,
 #details ul.group li {
     margin: 0.15rem;
 }
@@ -330,13 +335,13 @@ span.inline-icon {
     height: 200%;
     z-index: 0;
 }
-#details .sun-up-down li {
+#period .sun-up-down li {
     justify-content: space-evenly;
     align-items: center;
     text-align: center;
 }
 
-#details .sun-up-down span {
+#period .sun-up-down span {
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
@@ -348,7 +353,7 @@ span.inline-icon {
     padding: 0 1rem;
 }
 
-#details .sun-up-down span:last-of-type {
+#period .sun-up-down span:last-of-type {
     border: none;
 }
 
@@ -545,12 +550,12 @@ span.inline-icon {
         );
         border-right: 30px solid var(--text);
     }
-    #details .sun-up-down span {
+    #period .sun-up-down span {
         border-right: 1px solid var(--text);
     }
 
-    #details .sun-up-down .inline-icon.svg-wi-sunrise,
-    #details .sun-up-down .inline-icon.svg-wi-sunset {
+    #period .sun-up-down .inline-icon.svg-wi-sunrise,
+    #period .sun-up-down .inline-icon.svg-wi-sunset {
         fill: white;
     }
 
@@ -578,14 +583,14 @@ span.inline-icon {
         width: 100%;
         max-width: inherit;
     }
-    #details ul li.sun-up-down {
+    #period ul li.sun-up-down {
         /* flex-direction: column;
         background-color: transparent;
         box-shadow: none;
         margin: -0.1rem 0.3rem;
         padding: 0 0.8rem; */
     }
-    #details .sun-up-down span {
+    #period .sun-up-down span {
         /* box-shadow: var(--bg-dk) 1px 1px 2px;
         background-color: var(--bg-lt);
         min-height: 1rem;
@@ -608,7 +613,7 @@ span.inline-icon {
         margin-bottom: 0;
     }
 
-    #details .sun-up-down li.moonphase {
+    #period .sun-up-down li.moonphase {
         text-align: center;
     }
     .inline-icon.moon {
@@ -627,10 +632,10 @@ span.inline-icon {
     #details .windspeed .inline-icon svg:last-of-type {
         display: none;
     }
-    #details .sun-up-down li {
+    #period .sun-up-down li {
         flex-direction: column;
     }
-    #details .sun-up-down span {
+    #period .sun-up-down span {
         border: none;
         border-bottom: 1px solid var(--text);
         padding-bottom: 0.3rem;
