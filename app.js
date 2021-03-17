@@ -69,6 +69,7 @@ const weatherApp = function (_oSettings = {}) {
         610: ['wi-day-snow-thunderstorm', 'wi-night-alt-snow-thunderstorm'],
         611: ['wi-day-snow-wind', 'wi-night-alt-snow-wind'],
         612: ['wi-day-snow-wind', 'wi-night-alt-snow-wind'],
+        621: ['wi-day-snow', 'wi-night-alt-snow'],
         622: ['wi-day-snow-thunderstorm', 'wi-night-alt-snow-thunderstorm'],
         623: ['wi-day-snow', 'wi-night-alt-snow'],
         700: ['wi-day-fog', 'wi-night-fog'],
@@ -266,10 +267,9 @@ const weatherApp = function (_oSettings = {}) {
      * Returns the string name of the weather icon
      *
      * @param {object} data Either the current or hourly forecast weather object
-     * @param {string || int} [hour]
      * @returns string
      */
-    const getWeatherIcon = function (data, hour) {
+    const getWeatherIcon = function (data) {
         if (!data) return
         const pod = fClean(data.pod) === 'd' ? 0 : 1
         const code = parseInt(fClean(data.weather.code))
@@ -879,12 +879,13 @@ const weatherApp = function (_oSettings = {}) {
     const fBuildUI = function (data = []) {
         const nFrag = document.createDocumentFragment()
         nFrag.append(
-            fRenderHUD(data[0], _oSettings.forecast, _oSettings.forecast)
+            fRenderHUD(data[0], _oSettings.forecast, _oSettings.location)
         )
         nFrag.append(fRenderDetails(data))
         nFrag.append(fRenderSunUpDown(data))
         nFrag.append(fRenderforecast(data))
 
+        // nuke and pave
         app.innerHTML = ''
         app.append(nFrag)
 
