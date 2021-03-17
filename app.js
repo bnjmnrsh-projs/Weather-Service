@@ -944,6 +944,7 @@ const weatherApp = function (_oSettings = {}) {
         app.innerHTML = ''
         app.append(nFrag)
 
+        fHorDragToScroll('#forecast ul')
     }
 
     /**
@@ -977,6 +978,50 @@ const weatherApp = function (_oSettings = {}) {
                             </div>
                         </section>`
         nApp.innerHTML = markup
+    }
+
+    /**
+     * Add click dragging to horizontal elements
+     *
+     * @param {string} sEl
+     */
+    const fHorDragToScroll = function (sEl) {
+        const nEl = document.querySelector(sEl)
+        let pos = { left: 0, x: 0 }
+
+        const mouseDwn = function (e) {
+            nEl.style.cursor = 'grabbing'
+            nEl.style.userSelect = 'none'
+
+            pos = {
+                left: nEl.scrollLeft,
+                x: e.clientX,
+            }
+
+            document.addEventListener('pointermove', mouseMove)
+            document.addEventListener('pointerup', mouseUp)
+        }
+        const mouseUp = function (e) {
+            nEl.style.cursor = 'grab'
+            nEl.style.removeProperty('user-select')
+
+            document.removeEventListener('pointermove', mouseMove)
+            document.removeEventListener('pointerup', mouseUp)
+        }
+
+        const mouseMove = function (e) {
+            e.preventDefault()
+            const dx = e.clientX - pos.x
+
+            // Scroll the element
+            // nEl.scrollLeft = pos.left - dx
+            nEl.scroll({
+                left: pos.left - dx,
+                behavior: 'smooth',
+            })
+        }
+
+        nEl.addEventListener('pointerdown', mouseDwn)
     }
 
     /**
