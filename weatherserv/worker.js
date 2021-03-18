@@ -2,7 +2,7 @@
  * Cloudflare webWorker serverless function
  * to proxy API requests without revealing API key.
  *
- * ex: https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262
+ * ex: https://weatherserv.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262
  *
  * Environmantal varriable WB_KEY
  *
@@ -14,7 +14,7 @@
  */
 
 /* Run in console to test
-fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
+fetch('https://weatherserv.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
     .then(function (response) {
         if (response.ok) {
             return response.json()
@@ -30,20 +30,31 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
  */
 
 {
-
-    const WEATHER = `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
-    const FORECAST = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${WB_KEY}&hours=48&`
+    const CURRENT = `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
+    const HOURLY = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${WB_KEY}&hours=48&`
+    const DAILY = `https://api.weatherbit.io/v2.0/forecast/daily?key=${WB_KEY}&days=16&`
     const ALERTS = `https://api.weatherbit.io/v2.0/alerts?key=${WB_KEY}&`
+
+    const toFetch = [CURRENT, DAILY, HOURLY, ALERTS]
 
     // Allowed origins
     const allowed = [
         'https://orionrush.com',
         'https://bnjmnrsh.com',
         'https://bnjmnrsh-projs.github.io',
+        'https://bnjmnrsh-projs.github.io/Weather-Service',
         'http://127.0.0.1:5500',
     ]
 
-    let url
+    // Response headers
+    const init = {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': '*',
+            'content-type': 'application/json;charset=UTF-8',
+        },
+    }
 
     /**
      * Gather returning response from Weatherbit API fetch request
@@ -57,10 +68,6 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
 
         if (contentType.includes('application/json')) {
             return JSON.stringify(await response.json())
-        } else if (contentType.includes('application/text')) {
-            return await response.text()
-        } else if (contentType.includes('text/html')) {
-            return await response.text()
         } else {
             return await response.text()
         }
@@ -69,26 +76,14 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
     /**
      * Fetch json from Weatherbit APIs
      *
-     * Api url is selected from api=FORECAST || WEATHER
-     * Defaults to WEATHER
-     *
      * @param {object} request
      * @returns {json}
      */
     async function handleRequest(event) {
         const request = event.request
-
-        // Response headers
-        const init = {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': '*',
-                'content-type': 'application/json;charset=UTF-8',
-            },
-        }
-
+        // set headers for fetch
         const headers = new Headers(init.headers)
+        const { searchParams } = new URL(request.url)
 
         // If domain is not allowed, return error code
         if (!allowed.includes(request.headers.get('origin'))) {
@@ -99,37 +94,26 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
             })
         }
 
-                // Get incoming URL params
-        const { searchParams } = new URL(request.url)
-        console.log(searchParams.hostname)
-        // Get the api flag from params
-        let api = searchParams.get('api')
+        // Fetch the data
+        const weatherResp = await fetch(CURRENT + searchParams.toString())
+        const hourlyResp = await fetch(HOURLY + searchParams.toString())
+        const dailyResp = await fetch(DAILY + searchParams.toString())
+        const alertsResp = await fetch(ALERTS + searchParams.toString())
+        // Gather the responses
+        const weatherResults = await gatherResponse(weatherResp, headers)
+        const hourlyResults = await gatherResponse(hourlyResp, headers)
+        const dailyResults = await gatherResponse(dailyResp, headers)
+        const alertsResults = await gatherResponse(alertsResp, headers)
 
-        // set which api to fetch 
-        let url 
-        if (api === 'WEATHER') {
-            url = WEATHER
-        } else if (api === 'FORECAST') {
-            url = FORECAST
-        } else if (api === 'ALERTS') {
-            url = ALERTS
-        } else {
-            return new Response('Not a valid api', {
-                status: 400,
-                statusText: 'Not a valid API type.',
-                headers: headers,
-            })
+        // Collect reslts into one response
+        const response = {
+            current: JSON.parse(weatherResults),
+            hourly: JSON.parse(hourlyResults),
+            daily: JSON.parse(dailyResults),
+            alerts: JSON.parse(alertsResults),
         }
 
-        // Tidy up
-        searchParams.delete('api')
-        // Assemble the url params
-        url += searchParams.toString()
-
-        // fetch & return the response
-        const response = await fetch(url)
-        const results = await gatherResponse(response, headers)
-        return new Response(results, init)
+        return new Response(JSON.stringify(response), init)
     }
 
     // Event listener
