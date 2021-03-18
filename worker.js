@@ -30,8 +30,10 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
  */
 
 {
+
     const WEATHER = `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
-    const FORCAST = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${WB_KEY}&hours=48&`
+    const FORECAST = `https://api.weatherbit.io/v2.0/forecast/hourly?key=${WB_KEY}&hours=48&`
+    const ALERTS = `https://api.weatherbit.io/v2.0/alerts?key=${WB_KEY}&`
 
     // Allowed origins
     const allowed = [
@@ -76,19 +78,6 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
     async function handleRequest(event) {
         const request = event.request
 
-        // Get incoming URL params
-        const { searchParams } = new URL(request.url)
-        console.log(searchParams.hostname)
-        // Get the api flag from params
-        let api = searchParams.get('api')
-
-        // set which api to fetch (defaults to WEATHER)
-        let url = api === 'FORCAST' ? FORECAST : WEATHER
-        // Tidy up
-        searchParams.delete('api')
-        // Assemble the url params
-        url += searchParams.toString()
-
         // Response headers
         const init = {
             headers: {
@@ -103,12 +92,39 @@ fetch('https://weatherbit.bnjmnrsh.workers.dev/?lat=55.139856&lon=-3.704262')
 
         // If domain is not allowed, return error code
         if (!allowed.includes(request.headers.get('origin'))) {
-            return new Response('Not allowed', {
-                status: 403,
+            return new Response('Not an allowed domian.', {
+                status: 403.503,
                 statusText: 'Requests not allowed from this domain.',
                 headers: headers,
             })
         }
+
+                // Get incoming URL params
+        const { searchParams } = new URL(request.url)
+        console.log(searchParams.hostname)
+        // Get the api flag from params
+        let api = searchParams.get('api')
+
+        // set which api to fetch 
+        let url 
+        if (api === 'WEATHER') {
+            url = WEATHER
+        } else if (api === 'FORECAST') {
+            url = FORECAST
+        } else if (api === 'ALERTS') {
+            url = ALERTS
+        } else {
+            return new Response('Not a valid api', {
+                status: 400,
+                statusText: 'Not a valid API type.',
+                headers: headers,
+            })
+        }
+
+        // Tidy up
+        searchParams.delete('api')
+        // Assemble the url params
+        url += searchParams.toString()
 
         // fetch & return the response
         const response = await fetch(url)
