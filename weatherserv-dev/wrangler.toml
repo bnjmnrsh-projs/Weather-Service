@@ -1,6 +1,0 @@
-name = "weatherserv-dev"
-type = "webpack"
-account_id = "f60bbee010ecca0652fb3fa11fb8e268"
-workers_dev = true
-route = ""
-zone_id = ""
