@@ -4,3 +4,6 @@ account_id = "f60bbee010ecca0652fb3fa11fb8e268"
 workers_dev = true
 route = ""
 zone_id = ""
+kv_namespaces = [
+         { binding = "WEATHERSERV-DUMMYRESPONSE", id = "ba332f16599d4baf8941b74f511b4dac" }
+]
