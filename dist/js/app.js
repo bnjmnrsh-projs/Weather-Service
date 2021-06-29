@@ -17,8 +17,63 @@
         return temp.innerText
     };
 
-    const getWeekday = function (date) {
-        return new Date(date).toLocaleString('default', { weekday: 'short' })
+    /**
+     * To help ensure that date strings from API are translated into the correct local time and not UTC
+     * TODO: A regex would be a more robust solution, however in this case we trust the API to be consistant.
+     *
+     * @param {string} date
+     * @returns date as string with time component
+     */
+    function fAddTimeToDateString(sDate) {
+        // bail
+        if (!sDate || typeof sDate !== 'string') return
+        // not the best check, but length is better then nothing
+        if (sDate.length >= 16) return sDate
+
+        // otherwise add the time component
+        return `${sDate}T00:00`
+    }
+
+    /**
+     * Format date string to weekday name
+     *
+     * @param {string} sDate, valid date string
+     * @returns string, abreviated weekday name
+     */
+    const fGetWeekday = function (sDate) {
+        const oDate = new Date(fAddTimeToDateString(sDate));
+        // test our oDate object
+        if (!oDate || typeof oDate.getMonth !== 'function') {
+            throw new Error('fGetWeekday provided invalid date')
+        }
+
+        return oDate.toLocaleString('default', { weekday: 'short' })
+    };
+
+    /**
+     * Format date string to weekday ordinal number (string)
+     *
+     * @param {string} sDate
+     * @returns string, weekday ordinal number
+     */
+    const fGetDayOrdinal = function (sDate) {
+        const oDate = new Date(fAddTimeToDateString(sDate));
+
+        // test our date object
+        if (!oDate || typeof oDate.getMonth !== 'function') {
+            throw new Error('fFormatDayOrdinal provided invalid date')
+        }
+
+        const sFormatedDate =
+            oDate.getDate() +
+            (oDate.getDate() % 10 == 1 && oDate.getDate() != 11
+                ? 'st'
+                : oDate.getDate() % 10 == 2 && oDate.getDate() != 12
+                ? 'nd'
+                : oDate.getDate() % 10 == 3 && oDate.getDate() != 13
+                ? 'rd'
+                : 'th');
+        return sFormatedDate
     };
 
     /**
@@ -186,7 +241,7 @@
     /**
      * Assigns a uv scale value based uv reading
      *
-     * @param {float} temp
+     * @param {float} uv
      * @returns {int}  whole int value on  6 step scale
      */
     const fUvDataPt = function (uv) {
@@ -366,7 +421,7 @@
      * @param {string || int} [hour]
      * @returns string
      */
-    const getWeatherIcon = function (data, hour) {
+    const fGetWeatherIcon = function (data, hour) {
         if (!data) return
 
         let code, pod;
@@ -393,7 +448,7 @@
      * @param {string} pod Point of Day
      * @returns {string} the string name of the icon
      */
-    const getCloudCoverIcon = function (coverage, pod = 'd') {
+    const fGetCloudCoverIcon = function (coverage, pod = 'd') {
         if (typeof coverage !== 'number') return
 
         // set day or night icon set
@@ -459,7 +514,7 @@
      */
     const fRenderHUD = function (data, _oSettings) {
         console.log('fRenderHUD: ', data);
-        const sIcon = getWeatherIcon(data);
+        const sIcon = fGetWeatherIcon(data);
         return `
         <header id="hud" class="" data-temp="${fTempDataPt(data.temp)}">
             <h3>
@@ -510,10 +565,13 @@
                 fClean(forecast[el].temp))}">
                         <header datetime="${fClean(
                             forecast[el].datetime
-                        )}" aria-description="">${getWeekday(forecast[el].datetime)}</header>
+                        )}" aria-description="The forcast for">${fGetWeekday(fClean(forecast[el].datetime))} ${fGetDayOrdinal(fClean(forecast[el].datetime))}</header>
                         <img class="weather-icon" alt="${fClean(
                             forecast[el].weather.description
-                        )}" src="./svg/icons/weather/svg/${getWeatherIcon(forecast[el])}.svg" />
+                        )}" src="./svg/icons/weather/svg/${fGetWeatherIcon(forecast[el])}.svg" />
+                        <p class="forecast-description" aria-hidden="true">${fClean(
+                            forecast[el].weather.description.toLowerCase()
+                        )}</p>
                          <span><stong>${fTemp(
                              fClean(forecast[el].high_temp),
                              _oSettings
@@ -522,9 +580,7 @@
                               fClean(forecast[el].low_temp),
                               _oSettings
                           )}</span>
-                        <p class="forecast-description" aria-hidden="true">${fClean(
-                            forecast[el].weather.description.toLowerCase()
-                        )}</p>
+
                     </li>`
             })
             .join('')
@@ -624,7 +680,7 @@
         console.log('fRenderDetails: ', data);
         const sWindDirection = fClean(data.wind_cdir_full);
         const sWindDeg = fClean(data.wind_dir);
-        const iconCloud = getCloudCoverIcon(data.clouds);
+        const iconCloud = fGetCloudCoverIcon(data.clouds);
         const oMoon = fPhase(data.obj_time, _oSettings);
 
         return `
@@ -646,6 +702,23 @@
                           '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
                         : ''
                 }
+                <li class="cloud-cover"><span class="left-col">Cloud:
+                    ${fClean(data.clouds)}% </span>
+                    ${iconCloud[2]}
+                ${
+                    data.snow
+                        ? '<li><span class="left-col">Snow: ' +
+                          fPercip(fClean(data.snow), _oS) +
+                          '</span>' +
+                          _oSettings.nSnow +
+                          '</li>'
+                        : ''
+                }
+                <li class="precipitation">
+                    <span class="left-col">Precip:
+                          ${fPercip(fClean(data.precip))}
+                          </span>${_oSettings.nRaindrop}
+                </li>
                 <li class="windspeed"><span class="left-col">
                     <span aria-description="Winds traveling from ${sWindDirection}">
                         Windspeed:
@@ -659,22 +732,6 @@
                         ${_oSettings.nWind}
                     </span>
                 </li>
-                <li class="cloud-cover"><span class="left-col">Cloud:
-                    ${fClean(data.clouds)}% </span>
-                    ${iconCloud[2]}
-                ${
-                    data.snow
-                        ? '<li><span class="left-col">Snow: ' +
-                          fPercip(fClean(data.snow), _oS) +
-                          '</span>' +
-                          _oSettings.nSnow +
-                          '</li>'
-                        : ''
-                }
-                <li class="precipitation"><span class="left-col">Precip:
-                          ${fPercip(fClean(data.precip))}
-                          </span>${_oSettings.nRaindrop}</li>
-
                 <li class="visibility">
                     <div class="visibility-wrap">
                         <span class="left-col">Visibility:
@@ -685,31 +742,22 @@
                     <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
                 </li>
                 <li class="sun-up-down">
-                    <span>
-                        ${_oSettings.nSunrise}
+                    <span class="left-col">
                         ${fTime(
                             fClean(data.sunrise),
                             _oSettings
-                        )}
-                    </span>
-                    <span>
-                        ${_oSettings.nSunset}
-                        ${fTime(
-                            fClean(data.sunset),
-                            _oSettings
-                        )}
-                    </span>
-                    <span class="moonphase">
-                        <img class="inline-icon moon"
-                            alt="We currently have a ${
-                                oMoon.name || null
-                            } moon."
-                            height="25" width="25"
-                            src="./svg/icons/moon/svg/${
-                                oMoon.phase || null
-                            }.svg"/>
-                        ${oMoon.name || null}
-                    </span>
+                        )} | ${fTime(
+        fClean(data.sunset),
+        _oSettings
+    )}</span>
+                    ${_oSettings.nSunrise}
+                </li>
+                <li class="moonphase">
+                    <span class="left-col">Moon: ${oMoon.name}</span>
+                    <img class="inline-icon moon"
+                        alt=""
+                        height="25" width="25"
+                        src="./svg/icons/moon/svg/${oMoon.phase}.svg"/>
                 </li>
             </ul>
         </div>
