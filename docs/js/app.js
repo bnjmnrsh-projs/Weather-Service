@@ -77,6 +77,22 @@
     };
 
     /**
+     * IP address based location API
+     *
+     * @returns {object} coordiantes object
+     */
+    const fIPapi = async function (sIpapiLocationApi) {
+        const resp = await fetch(sIpapiLocationApi).then(function (resp) {
+            if (resp.ok) {
+                return resp.json()
+            } else {
+                return Promise.reject(resp)
+            }
+        });
+        return await resp
+    };
+
+    /**
      * Assembles the formatted query string for CF API requests
      *
      * @param {string} urlBase
@@ -144,27 +160,24 @@
      *
      * @param {string} [section='home']
      */
-    const fGetLocation = async function (_oSettings) {
+    const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
         console.log('1');
         if (navigator.geolocation) {
-            console.log('2');
             try {
-                _oSettings.debug ? console.log('3 Checking geoLoccation API.') : '';
+                _oSettings.debug ? console.log('2 Checking geoLoccation API.') : '';
                 return await fGeoLocApi()
             } catch (e) {
                 _oSettings.debug
-                    ? console.warn('4 fGetLocation fGeoLocApi: ', e)
+                    ? console.warn('3 fGetLocation fGeoLocApi: ', e)
                     : '';
                 try {
                     console.log('5');
                     _oSettings.debug
                         ? console.warn('5 Falling back to IP lookup.')
                         : '';
-                    return await Queries.fIPapi()
+                    return await fIPapi(sIpapiLocationApi)
                 } catch (e) {
-                    _oSettings.debug
-                        ? console.warn('6 fGetLocation IP API: ', e)
-                        : '';
+                    _oSettings.debug ? console.warn('fGetLocation IP API: ', e) : '';
                 }
             }
         }
@@ -814,6 +827,9 @@
 
         // Merge settings with defaults
         _oSettings = Object.assign(_oDefaults, _oSettings);
+
+        // API urls
+        const sIpapiLocationApi = 'https://ipapi.co/json/';
         let sWeatherApi = `https://weatherserv.bnjmnrsh.workers.dev/?`;
 
         if (_oSettings.dev === true) {
@@ -855,7 +871,10 @@
          */
         const fInit = async function () {
             try {
-                const loc = await fGetLocation(_oSettings);
+                const loc = await fGetLocation(
+                    sIpapiLocationApi,
+                    _oSettings
+                );
                 const weather = await fGetWeather(
                     loc,
                     sWeatherApi,

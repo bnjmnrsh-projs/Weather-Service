@@ -5,8 +5,8 @@ import * as Helpers from './_helpers'
  *
  * @returns {object} coordiantes object
  */
-export const fIPapi = async function () {
-    resp = await fetch(sIpapiLocationApi).then(function (resp) {
+export const fIPapi = async function (sIpapiLocationApi) {
+    const resp = await fetch(sIpapiLocationApi).then(function (resp) {
         if (resp.ok) {
             return resp.json()
         } else {
@@ -84,27 +84,24 @@ const fGeoLocApi = async function () {
  *
  * @param {string} [section='home']
  */
-export const fGetLocation = async function (_oSettings) {
+export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
     console.log('1')
     if (navigator.geolocation) {
-        console.log('2')
         try {
-            _oSettings.debug ? console.log('3 Checking geoLoccation API.') : ''
+            _oSettings.debug ? console.log('2 Checking geoLoccation API.') : ''
             return await fGeoLocApi()
         } catch (e) {
             _oSettings.debug
-                ? console.warn('4 fGetLocation fGeoLocApi: ', e)
+                ? console.warn('3 fGetLocation fGeoLocApi: ', e)
                 : ''
             try {
                 console.log('5')
                 _oSettings.debug
                     ? console.warn('5 Falling back to IP lookup.')
                     : ''
-                return await Queries.fIPapi()
+                return await fIPapi(sIpapiLocationApi)
             } catch (e) {
-                _oSettings.debug
-                    ? console.warn('6 fGetLocation IP API: ', e)
-                    : ''
+                _oSettings.debug ? console.warn('fGetLocation IP API: ', e) : ''
             }
         }
     }

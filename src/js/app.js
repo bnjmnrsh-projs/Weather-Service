@@ -71,7 +71,10 @@ const weatherApp = function (_oSettings = {}) {
      */
     const fInit = async function () {
         try {
-            const loc = await Queries.fGetLocation(_oSettings)
+            const loc = await Queries.fGetLocation(
+                sIpapiLocationApi,
+                _oSettings
+            )
             const weather = await Queries.fGetWeather(
                 loc,
                 sWeatherApi,
