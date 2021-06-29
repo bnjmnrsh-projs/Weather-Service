@@ -7,7 +7,7 @@ var configs = {
     name: 'BuildToolsCookbook',
     files: ['main.scss'],
     pathIn: 'src/scss',
-    pathOut: 'dist/css',
+    pathOut: 'docs/css',
     indentType: 'tab',
     indentWidth: 1,
     minify: true,

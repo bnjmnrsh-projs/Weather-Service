@@ -9,7 +9,7 @@ var configs = {
     formats: ['iife'], //, 'es', 'amd', 'cjs'
     default: 'iife',
     pathIn: 'src/js',
-    pathOut: 'dist/js',
+    pathOut: 'docs/js',
     minify: true,
     sourcemap: true,
 }

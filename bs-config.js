@@ -15,7 +15,7 @@ module.exports = {
     ui: {
         port: 3001,
     },
-    files: 'dist',
+    files: 'docs',
     watchEvents: ['change'],
     watch: false,
     ignore: [],
@@ -23,7 +23,7 @@ module.exports = {
     watchOptions: {
         ignoreInitial: true,
     },
-    server: 'dist',
+    server: 'docs',
     proxy: false,
     port: 3000,
     middleware: false,
