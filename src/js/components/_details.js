@@ -14,7 +14,7 @@ export const fRenderDetails = function (data, _oSettings) {
     console.log('fRenderDetails: ', data)
     const sWindDirection = Helpers.fClean(data.wind_cdir_full)
     const sWindDeg = Helpers.fClean(data.wind_dir)
-    const iconCloud = Icons.getCloudCoverIcon(data.clouds)
+    const iconCloud = Icons.fGetCloudCoverIcon(data.clouds)
     const oMoon = Moon.fPhase(data.obj_time, _oSettings)
 
     return `

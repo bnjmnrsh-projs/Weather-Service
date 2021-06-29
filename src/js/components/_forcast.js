@@ -22,10 +22,10 @@ const fRenderForcastList = function (forecast, _oSettings) {
             )}">
                         <header datetime="${Helpers.fClean(
                             forecast[el].datetime
-                        )}" aria-description="">${Helpers.getWeekday(forecast[el].datetime)}</header>
+                        )}" aria-description="The forcast for">${Helpers.fGetWeekday(Helpers.fClean(forecast[el].datetime))} ${Helpers.fGetDayOrdinal(Helpers.fClean(forecast[el].datetime))}</header>
                         <img class="weather-icon" alt="${Helpers.fClean(
                             forecast[el].weather.description
-                        )}" src="./svg/icons/weather/svg/${Icons.getWeatherIcon(forecast[el])}.svg" />
+                        )}" src="./svg/icons/weather/svg/${Icons.fGetWeatherIcon(forecast[el])}.svg" />
                          <span><stong>${Convert.fTemp(
                              Helpers.fClean(forecast[el].high_temp),
                              _oSettings

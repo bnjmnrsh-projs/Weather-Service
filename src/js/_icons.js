@@ -55,7 +55,7 @@ export const oCloudCover = {
  * @param {string || int} [hour]
  * @returns string
  */
-export const getWeatherIcon = function (data, hour) {
+export const fGetWeatherIcon = function (data, hour) {
     if (!data) return
 
     let code, pod
@@ -82,7 +82,7 @@ export const getWeatherIcon = function (data, hour) {
  * @param {string} pod Point of Day
  * @returns {string} the string name of the icon
  */
-export const getCloudCoverIcon = function (coverage, pod = 'd') {
+export const fGetCloudCoverIcon = function (coverage, pod = 'd') {
     if (typeof coverage !== 'number') return
 
     // set day or night icon set

@@ -12,7 +12,7 @@ import * as StrReplace from '../_strings'
  */
 export const fRenderHUD = function (data, _oSettings) {
     console.log('fRenderHUD: ', data)
-    const sIcon = Icons.getWeatherIcon(data)
+    const sIcon = Icons.fGetWeatherIcon(data)
     return `
         <header id="hud" class="" data-temp="${Scales.fTempDataPt(data.temp)}">
             <h3>

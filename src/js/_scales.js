@@ -50,7 +50,7 @@ export const fTempDataPt = function (temp) {
 /**
  * Assigns a uv scale value based uv reading
  *
- * @param {float} temp
+ * @param {float} uv
  * @returns {int}  whole int value on  6 step scale
  */
 export const fUvDataPt = function (uv) {
