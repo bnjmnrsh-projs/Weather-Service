@@ -36,6 +36,23 @@ export const fRenderDetails = function (data, _oSettings) {
                           '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
                         : ''
                 }
+                <li class="cloud-cover"><span class="left-col">Cloud:
+                    ${Helpers.fClean(data.clouds)}% </span>
+                    ${iconCloud[2]}
+                ${
+                    data.snow
+                        ? '<li><span class="left-col">Snow: ' +
+                          Convert.fPercip(Helpers.fClean(data.snow), _oS) +
+                          '</span>' +
+                          _oSettings.nSnow +
+                          '</li>'
+                        : ''
+                }
+                <li class="precipitation">
+                    <span class="left-col">Precip:
+                          ${Convert.fPercip(Helpers.fClean(data.precip))}
+                          </span>${_oSettings.nRaindrop}
+                </li>
                 <li class="windspeed"><span class="left-col">
                     <span aria-description="Winds traveling from ${sWindDirection}">
                         Windspeed:
@@ -49,22 +66,6 @@ export const fRenderDetails = function (data, _oSettings) {
                         ${_oSettings.nWind}
                     </span>
                 </li>
-                <li class="cloud-cover"><span class="left-col">Cloud:
-                    ${Helpers.fClean(data.clouds)}% </span>
-                    ${iconCloud[2]}
-                ${
-                    data.snow
-                        ? '<li><span class="left-col">Snow: ' +
-                          Convert.fPercip(Helpers.fClean(data.snow), _oS) +
-                          '</span>' +
-                          _oSettings.nSnow +
-                          '</li>'
-                        : ''
-                }
-                <li class="precipitation"><span class="left-col">Precip:
-                          ${Convert.fPercip(Helpers.fClean(data.precip))}
-                          </span>${_oSettings.nRaindrop}</li>
-
                 <li class="visibility">
                     <div class="visibility-wrap">
                         <span class="left-col">Visibility:
@@ -75,31 +76,22 @@ export const fRenderDetails = function (data, _oSettings) {
                     <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
                 </li>
                 <li class="sun-up-down">
-                    <span>
-                        ${_oSettings.nSunrise}
+                    <span class="left-col">
                         ${Convert.fTime(
                             Helpers.fClean(data.sunrise),
                             _oSettings
-                        )}
-                    </span>
-                    <span>
-                        ${_oSettings.nSunset}
-                        ${Convert.fTime(
-                            Helpers.fClean(data.sunset),
-                            _oSettings
-                        )}
-                    </span>
-                    <span class="moonphase">
-                        <img class="inline-icon moon"
-                            alt="We currently have a ${
-                                oMoon.name || null
-                            } moon."
-                            height="25" width="25"
-                            src="./svg/icons/moon/svg/${
-                                oMoon.phase || null
-                            }.svg"/>
-                        ${oMoon.name || null}
-                    </span>
+                        )} | ${Convert.fTime(
+        Helpers.fClean(data.sunset),
+        _oSettings
+    )}</span>
+                    ${_oSettings.nSunrise}
+                </li>
+                <li class="moonphase">
+                    <span class="left-col">Moon: ${oMoon.name}</span>
+                    <img class="inline-icon moon"
+                        alt=""
+                        height="25" width="25"
+                        src="./svg/icons/moon/svg/${oMoon.phase}.svg"/>
                 </li>
             </ul>
         </div>

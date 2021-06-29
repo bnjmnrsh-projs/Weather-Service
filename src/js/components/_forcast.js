@@ -26,6 +26,9 @@ const fRenderForcastList = function (forecast, _oSettings) {
                         <img class="weather-icon" alt="${Helpers.fClean(
                             forecast[el].weather.description
                         )}" src="./svg/icons/weather/svg/${Icons.fGetWeatherIcon(forecast[el])}.svg" />
+                        <p class="forecast-description" aria-hidden="true">${Helpers.fClean(
+                            forecast[el].weather.description.toLowerCase()
+                        )}</p>
                          <span><stong>${Convert.fTemp(
                              Helpers.fClean(forecast[el].high_temp),
                              _oSettings
@@ -34,9 +37,7 @@ const fRenderForcastList = function (forecast, _oSettings) {
                               Helpers.fClean(forecast[el].low_temp),
                               _oSettings
                           )}</span>
-                        <p class="forecast-description" aria-hidden="true">${Helpers.fClean(
-                            forecast[el].weather.description.toLowerCase()
-                        )}</p>
+
                     </li>`
         })
         .join('')
