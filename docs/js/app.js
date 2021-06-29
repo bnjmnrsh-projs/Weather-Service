@@ -677,7 +677,6 @@
      * @returns {string}
      */
     const fRenderDetails = function (data, _oSettings) {
-        console.log('fRenderDetails: ', data);
         const sWindDirection = fClean(data.wind_cdir_full);
         const sWindDeg = fClean(data.wind_dir);
         const iconCloud = fGetCloudCoverIcon(data.clouds);
@@ -708,7 +707,10 @@
                 ${
                     data.snow
                         ? '<li><span class="left-col">Snow: ' +
-                          fPercip(fClean(data.snow), _oS) +
+                          fPercip(
+                              fClean(data.snow),
+                              _oSettings
+                          ) +
                           '</span>' +
                           _oSettings.nSnow +
                           '</li>'

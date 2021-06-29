@@ -11,7 +11,6 @@ import * as Scales from '../_scales'
  * @returns {string}
  */
 export const fRenderDetails = function (data, _oSettings) {
-    console.log('fRenderDetails: ', data)
     const sWindDirection = Helpers.fClean(data.wind_cdir_full)
     const sWindDeg = Helpers.fClean(data.wind_dir)
     const iconCloud = Icons.fGetCloudCoverIcon(data.clouds)
@@ -42,7 +41,10 @@ export const fRenderDetails = function (data, _oSettings) {
                 ${
                     data.snow
                         ? '<li><span class="left-col">Snow: ' +
-                          Convert.fPercip(Helpers.fClean(data.snow), _oS) +
+                          Convert.fPercip(
+                              Helpers.fClean(data.snow),
+                              _oSettings
+                          ) +
                           '</span>' +
                           _oSettings.nSnow +
                           '</li>'
