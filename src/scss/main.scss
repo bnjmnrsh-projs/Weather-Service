@@ -56,7 +56,7 @@ body {
 }
 
 body footer {
-    font-size: 0.8em;
+    font-size: 0.8rem;
     background-color: var(--text);
     padding: 0.5rem 0;
     color: var(--bg-lt);
@@ -92,8 +92,8 @@ ul.unstyled {
 
 #app {
     min-width: 80%;
-    max-width: 10em;
-    margin-bottom: 3em;
+    max-width: 10rem;
+    margin-bottom: 3rem;
     flex: 1;
 }
 
@@ -105,7 +105,7 @@ ul.unstyled {
 
 .inline-icon {
     display: inline-block;
-    height: 1.5em;
+    height: 1.5rem;
     width: auto;
     border-radius: 15px;
     background-color: var(--icon-nutral);
@@ -179,15 +179,15 @@ span.inline-icon {
 }
 
 #hud {
-    padding: 2em;
+    padding: 2rem;
     border-radius: 10px 10px 2px 2px;
     background-color: var(--bg-lt);
-    margin: 0.3em;
+    margin: 0.2rem 0.3rem;
     box-shadow: var(--bg-dk) 1px 1px 1px;
 }
 
 #hud h3 {
-    font-size: 1.8em;
+    font-size: 1.8rem;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -209,9 +209,9 @@ span.inline-icon {
 }
 
 #hud ul li:first-child {
-    padding-bottom: 0.2em;
-    margin-bottom: 0.4em;
-    font-size: 1.3em;
+    padding-bottom: 0.2rem;
+    margin-bottom: 0.4rem;
+    font-size: 1.3rem;
     border-bottom: 1px solid var(--text);
 }
 
@@ -229,6 +229,15 @@ span.inline-icon {
     background-size: 400% 400%;
     animation: loading 60s ease infinite;
 }
+#details.loading-details ul {
+    display: flex;
+    flex-direction: column;
+}
+#details ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0.1rem;
+}
 
 #details ul li {
     display: flex;
@@ -236,18 +245,20 @@ span.inline-icon {
     align-items: center;
     text-align: left;
     min-height: 1rem;
-    margin: 0.3rem;
+    margin: 0.2rem;
     padding: 0.5rem 0.8rem;
     border-radius: 2px;
     background-color: var(--bg-lt);
     box-shadow: var(--bg-dk) 1px 1px 2px;
-    min-height: 1.8em;
+    min-height: 1.8rem;
+    flex: 1 0 auto;
 }
 
-.visibility {
+#details ul li.visibility {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    flex: 1 1 100%;
 }
 .visibility .visibility-wrap {
     display: flex;
@@ -269,13 +280,14 @@ span.inline-icon {
     background-image: url(../svg/graph.svg);
     background-position: left -1px bottom -1px;
     border: 1px solid var(--bg-md);
-    height: 2em;
-    width: calc(100% + 2.5em);
+    height: 2rem;
+    width: calc(100% + 1.6rem);
     position: relative;
     overflow: hidden;
     font-size: 0.6em;
     transition: 0.5s ease;
     margin-bottom: -0.9em;
+    margin: 0 -0.5rem -0.5rem -0.5rem;
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
 }
@@ -283,18 +295,18 @@ span.inline-icon {
 .visibility .visibility-graph::before,
 .visibility .visibility-graph::after {
     position: absolute;
-    bottom: 0.5em;
+    bottom: 0.5rem;
     z-index: 1;
 }
 
 .visibility .visibility-graph::before {
     content: '0 |';
-    left: 0.6em;
+    left: 0.6rem;
 }
 
 .visibility .visibility-graph::after {
     content: '| 5km/3.11mi';
-    right: 1em;
+    right: 1rem;
 }
 
 .visibility .visibility-graph .distance {
@@ -316,28 +328,28 @@ span.inline-icon {
 }
 
 .sun-up-down {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    line-height: 1.5em;
-    text-align: center;
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: space-evenly;
+    // line-height: 1.5em;
+    // text-align: center;
 }
 .sun-up-down span {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap;
-    border-right: 1px solid var(--icon-dk);
-    width: 33.33%;
-    text-align: center;
+    // display: flex;
+    // justify-content: space-evenly;
+    // align-items: center;
+    // flex-wrap: wrap;
+    // border-right: 1px solid var(--icon-dk);
+    // width: 33.33%;
+    // text-align: center;
 }
 
 .sun-up-down span:last-of-type {
-    border-right: none;
+    // border-right: none;
 }
 
 #forcast {
-    margin: 0.3em;
+    margin: 0.2rem 0.3rem;
 }
 #forcast ul {
     display: flex;
@@ -350,10 +362,10 @@ span.inline-icon {
     border-radius: 2px;
     width: 50%;
     min-width: 100px;
-    padding: 0.3em;
-    margin-right: 0.3em;
+    padding: 0.3rem;
+    margin-right: 0.3rem;
     box-shadow: var(--bg-dk) 1px 1px 2px;
-    min-height: 8em;
+    min-height: 8rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -365,11 +377,11 @@ span.inline-icon {
     border-bottom-left-radius: 10px;
 }
 #forcast ul li:last-child {
-    margin-right: 0.1em;
+    margin-right: 0.1rem;
     border-bottom-right-radius: 10px;
 }
 #forcast h4 {
-    margin: 0.3em;
+    margin: 0.3rem;
     text-align: left;
 }
 #forcast h5 {
@@ -379,7 +391,8 @@ span.inline-icon {
     margin: 0;
 }
 #forcast .forecast-description {
-    font-size: 0.7em;
+    font-size: 0.7rem;
+    margin-top: 0;
 }
 #forcast .weather-icon {
     width: 80%;
@@ -442,7 +455,7 @@ span.inline-icon {
 #ohnos h3 {
     display: inline-block;
     wrap-inside: 100%;
-    font-size: 3em;
+    font-size: 3rem;
 }
 
 /* @media Rules */
@@ -520,42 +533,37 @@ span.inline-icon {
 
 @media screen and (min-width: 1500px) {
     #app {
-        width: 50em;
-        min-width: 50em;
-        max-width: 50em;
+        width: 50rem;
+        min-width: 50rem;
+        max-width: 50rem;
     }
 }
 
 @media screen and (max-width: 545px) {
+    h1 {
+        font-size: 1.5em;
+    }
     #app {
         width: 100%;
         max-width: inherit;
     }
-    #details ul li.sun-up-down {
-        flex-direction: column;
-        background-color: transparent;
-        box-shadow: none;
-        margin-top: -0.1em;
-        margin-bottom: -0.1em;
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    .sun-up-down span {
-        box-shadow: var(--bg-dk) 1px 1px 2px;
-        background-color: var(--bg-lt);
-        min-height: 1em;
-        border-left: none;
-        width: 100%;
-        margin: 0.15em;
-        padding: 0.5rem 0.8rem;
-        display: flex;
-        border-radius: 2px;
-        align-items: center;
-        justify-content: space-between;
-        flex-direction: row-reverse;
-        border: none;
+
+    #hud {
+        padding: 1.5rem;
     }
 
+    #details {
+        font-size: 0.9rem;
+        max-height: 40vh;
+        overflow-x: scroll;
+    }
+    #details ul {
+        display: block;
+    }
+
+    #details ul li {
+        padding: 0.4rem 0.8rem;
+    }
     .inline-icon.svg-sunrise {
         margin-bottom: 0;
     }
@@ -566,37 +574,50 @@ span.inline-icon {
         margin-bottom: 0;
     }
 
-    #forcast ul {
-        display: flex;
-        flex-direction: column;
+    .visibility .visibility-graph {
+        height: 1rem;
     }
 
-    #forcast ul li {
-        border-radius: 2px;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        box-shadow: var(--bg-dk) 1px 1px 2px;
-    }
-    #forcast ul li:first-child {
-        margin-right: 0;
-        border-bottom-left-radius: 2px;
-    }
-    #forcast ul li:last-child {
-        margin-top: 0.3em;
-        margin-left: 0;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-    }
-    #forcast ul li header {
-        padding: 0.3rem;
+    .visibility .visibility-graph::before,
+    .visibility .visibility-graph::after {
+        bottom: 0.2rem;
     }
 
-    .left-col {
-        max-width: 50%;
+    // #forcast ul {
+    //     display: flex;
+    //     flex-direction: column;
+    // }
+
+    // #forcast ul li {
+    //     border-radius: 2px;
+    //     width: 100%;
+    //     padding: 0;
+    //     margin: 0;
+    //     box-shadow: var(--bg-dk) 1px 1px 2px;
+    // }
+    // #forcast ul li:first-child {
+    //     margin-right: 0;
+    //     border-bottom-left-radius: 2px;
+    // }
+    // #forcast ul li:last-child {
+    //     margin-top: 0.3em;
+    //     margin-left: 0;
+    //     border-bottom-right-radius: 10px;
+    //     border-bottom-left-radius: 10px;
+    // }
+    // #forcast ul li header {
+    //     padding: 0.3rem;
+    // }
+
+    #forcast .weather-icon {
+        width: 45%;
+        height: auto;
     }
 
-    body footer .wrap {
+    footer {
+        display: none;
+    }
+    footer .wrap {
         margin: 3rem auto;
         max-width: 90%;
     }
