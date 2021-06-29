@@ -44,7 +44,7 @@ html {
 }
 
 body {
-    font-size: 0.95rem;
+    font-size: 0.95em;
     width: 80%;
     margin: 0 auto;
     display: flex;
@@ -74,7 +74,7 @@ h4 {
     font-family: 'Turret Road', sans-serif;
 }
 h1 {
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.1em;
 }
 a {
     text-decoration: none;
@@ -102,6 +102,7 @@ ul.unstyled {
     height: 150px;
     animation: rotating 30s linear infinite;
 }
+
 .inline-icon {
     display: inline-block;
     height: 1.5rem;
@@ -109,30 +110,24 @@ ul.unstyled {
     border-radius: 15px;
     background-color: var(--icon-nutral);
     padding: 2px;
-    margin: 0.25rem;
     transition: 1s all ease;
 }
 
-/* inline-icon group */
 span.inline-icon {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
-.inline-icon svg {
-    width: 25px;
-    height: auto;
-}
 
 .weather-icon {
     filter: drop-shadow(2px 3px 1px var(--icon-dk));
 }
 
-.inline-icon.svg-wi-sunrise {
+.inline-icon.svg-sunrise {
     background-color: var(--sunrise);
 }
-.inline-icon.svg-wi-sunset {
+.inline-icon.svg-sunset {
     background-color: var(--sunset);
 }
 .inline-icon.moon {
@@ -246,7 +241,6 @@ span.inline-icon {
 
 #details ul li {
     display: flex;
-    flex: 1;
     justify-content: space-between;
     align-items: center;
     text-align: left;
@@ -279,7 +273,7 @@ span.inline-icon {
 }
 
 .visibility .visibility-wrap .inline-icon {
-    margin-top: -0.3rem;
+    margin-top: -0.3em;
 }
 .visibility .visibility-graph {
     background-color: var(--scale-bg);
@@ -290,7 +284,7 @@ span.inline-icon {
     width: calc(100% + 1.6rem);
     position: relative;
     overflow: hidden;
-    font-size: 0.6rem;
+    font-size: 0.6em;
     transition: 0.5s ease;
     margin-bottom: -0.9em;
     margin: 0 -0.5rem -0.5rem -0.5rem;
@@ -357,16 +351,13 @@ span.inline-icon {
 #forcast {
     margin: 0.2rem 0.3rem;
 }
-#forecast ul {
+#forcast ul {
     display: flex;
     flex-direction: row;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
 }
-
-#forecast ul li {
-    display: flex;
-    flex-direction: column;
+#forcast ul li {
     background-color: var(--bg-md);
     border-radius: 2px;
     width: 50%;
@@ -384,23 +375,20 @@ span.inline-icon {
 }
 #forcast ul li:first-child {
     border-bottom-left-radius: 10px;
-    margin-left: 0;
-    scroll-snap-align: start;
 }
 #forcast ul li:last-child {
     margin-right: 0.1rem;
     border-bottom-right-radius: 10px;
-    scroll-snap-align: end;
 }
 #forcast h4 {
     margin: 0.3rem;
     text-align: left;
 }
-#forecast li h5 {
+#forcast h5 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 0.5rem auto;
+    margin: 0;
 }
 #forcast .forecast-description {
     font-size: 0.7rem;
@@ -493,7 +481,7 @@ span.inline-icon {
         color: var(--text);
     }
     .loading-icon,
-    #forecast .weather-icon,
+    #forcast .weather-icon,
     #hud .weather-icon {
         filter: invert(95%) hue-rotate(180deg)
             drop-shadow(2px 3px 1px var(--icon-dk));
@@ -503,7 +491,7 @@ span.inline-icon {
         fill: var(--text);
     }
 
-    .inline-icon {
+    #details .inline-icon {
         background-color: var(--icon-nutral);
     }
 
@@ -511,11 +499,11 @@ span.inline-icon {
     .uv-index .svg-wi-day-sunny {
         fill: var(--bg-vdk);
     }
-    .visibility .visibility-graph {
+    #details .visibility .visibility-graph {
         border: 0px solid transparent;
     }
-    .visibility .visibility-graph::before,
-    .visibility .visibility-graph::after {
+    #details .visibility .visibility-graph::before,
+    #details .visibility .visibility-graph::after {
         color: var(--bg);
     }
     .visibility .visibility-graph .distance {
@@ -526,16 +514,13 @@ span.inline-icon {
         );
         border-right: 30px solid var(--text);
     }
-    #period .sun-up-down span {
-        border-right: 1px solid var(--text);
+
+    #details .inline-icon.svg-wi-sunrise,
+    #details .inline-icon.svg-wi-sunset {
+        fill: var(--yellow-lt);
     }
 
-    #period .sun-up-down .inline-icon.svg-wi-sunrise,
-    #period .sun-up-down .inline-icon.svg-wi-sunset {
-        fill: white;
-    }
-
-    .inline-icon.moon {
+    #details .inline-icon.moon {
         filter: invert(0);
         background-color: var(--yellow-lt);
         fill: var(--bg-dk);
@@ -584,10 +569,6 @@ span.inline-icon {
     }
     .inline-icon.svg-sunset {
         margin-bottom: 0;
-    }
-
-    #period .sun-up-down li.moonphase {
-        text-align: center;
     }
     .inline-icon.moon {
         margin-bottom: 0;
