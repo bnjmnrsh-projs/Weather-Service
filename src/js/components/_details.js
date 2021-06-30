@@ -1,5 +1,6 @@
 import * as Convert from '../_conversions'
 import * as Helpers from '../_helpers'
+import * as Dates from '../_datetime'
 import * as Icons from '../_icons'
 import * as Moon from '../_moonPhases'
 import * as Scales from '../_scales'
@@ -79,13 +80,18 @@ export const fRenderDetails = function (data, _oSettings) {
                 </li>
                 <li class="sun-up-down">
                     <span class="left-col">
-                        ${Convert.fTime(
-                            Helpers.fClean(data.sunrise),
-                            _oSettings
-                        )} | ${Convert.fTime(
-        Helpers.fClean(data.sunset),
-        _oSettings
-    )}</span>
+                        ${Dates.fGetLocalTime(
+                            Helpers.fClean(data.ob_time),
+                            _oSettings,
+                            Helpers.fClean(data.sunrise)
+                        )}
+                        |
+                        ${Dates.fGetLocalTime(
+                            Helpers.fClean(data.ob_time),
+                            _oSettings,
+                            Helpers.fClean(data.sunset)
+                        )}
+                    </span>
                     ${_oSettings.nSunrise}
                 </li>
                 <li class="moonphase">

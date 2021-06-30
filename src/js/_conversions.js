@@ -24,25 +24,6 @@ export const fPercip = function (measure, _oSettings) {
 }
 
 /**
- * 24H to 12H conversion
- * https://stackoverflow.com/a/58878443/362445
- *
- * @param {string} time24
- * @returns {string} converted time as string with units
- */
-export const fTime = function (time24, _oSettings) {
-    if (!time24) return
-
-    if (_oSettings.units === 'M') return time24
-
-    const [sHours, minutes] = time24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1)
-    const period = +sHours < 12 ? 'AM' : 'PM'
-    const hours = +sHours % 12 || 12
-
-    return `${hours}:${minutes}&nbsp;${period}`
-}
-
-/**
  * C to F conversion
  *
  * @param {float} measure

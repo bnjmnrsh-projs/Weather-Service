@@ -1,4 +1,5 @@
 import * as Convert from '../_conversions'
+import * as Dates from '../_datetime'
 import * as Helpers from '../_helpers'
 import * as Icons from '../_icons'
 import * as Scales from '../_scales'
@@ -22,7 +23,7 @@ const fRenderForcastList = function (forecast, _oSettings) {
             )}">
                         <header datetime="${Helpers.fClean(
                             forecast[el].datetime
-                        )}" aria-description="The forcast for">${Helpers.fGetWeekday(Helpers.fClean(forecast[el].datetime))} ${Helpers.fGetDayOrdinal(Helpers.fClean(forecast[el].datetime))}</header>
+                        )}" aria-description="The forcast for">${Dates.fGetWeekday(Helpers.fClean(forecast[el].datetime))} ${Dates.fGetDayOrdinal(Helpers.fClean(forecast[el].datetime))}</header>
                         <img class="weather-icon" alt="${Helpers.fClean(
                             forecast[el].weather.description
                         )}" src="./svg/icons/weather/svg/${Icons.fGetWeatherIcon(forecast[el])}.svg" />
