@@ -24,6 +24,7 @@ module.exports = {
         ignoreInitial: true,
     },
     server: 'docs',
+    https: true,
     proxy: false,
     port: 3000,
     middleware: false,
