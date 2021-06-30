@@ -1,28 +1,42 @@
 /**
+ * Possible Weatherbit.io date responses via our Cloudflare Worker:
+ *
+ * 1) CURRENT.data[0].ob_time: "2021-06-30 18:58"
+ * 2) CURRENT.data[0].datetime: "2021-06-30:19" <- will not convert to valid date object
+ * 3) DAILY.data[x].datetime: "2021-06-30"
+ * 4) DAILY.data[x].valid_date: "2021-06-30"
+ */
+
+/**
  * A helper to ensure that date strings from API are translated into the correct local time and not UTC
  * Dates without a time (as we have from the Weather.io API) may be converted to an invalid date by Chrome
  * https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/
+ * API:
+ *
  * TODO: A regex for different valid date patterns might be a more robust solution, however in this case we trust the API to be consistant.
  *
  * @param {string} sDate
  * @returns {string} date as string with time component
  */
 function fAddTimeToDateString(sDate) {
-    const oDate = new Date(sDate)
-    if (!sDate || typeof oDate.getMonth !== 'function') {
+    if (sDate.length >= 16) return sDate
+    // Will produce a string that can be converted into a valid date object
+    const new_sDate = `${sDate}00:00`
+    const oDate = new Date(new_sDate)
+
+    // test to see if we now have string which creates a valid date
+    if (typeof oDate.getMonth !== 'function') {
         throw new Error(
             `fAddTimeToDateString not provided a string that can be converted to a valid date: "${sDate}:`
         )
     }
-    // not the best check, but length is better then nothing
-    if (sDate.length >= 16) return sDate
 
-    // add the time component
-    return `${sDate} 00:00`
+    // return the new date string vaild for cases 2, 3, and 4)
+    return new_sDate
 }
 
 /**
- * 24H to 12H conversion based on _oSettings.units
+ * 24H to 12H conversion based on _oSettings.units = I or M
  * https://stackoverflow.com/a/58878443/362445
  *
  * @param {string} sTime24
