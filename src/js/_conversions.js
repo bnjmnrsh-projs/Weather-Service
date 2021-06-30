@@ -69,6 +69,6 @@ export const fKm = function (measure, _oSettings) {
     if (_oSettings.units === 'M') {
         return `${parseFloat(measure).toFixed(2)}&nbsp;km`
     } else {
-        return `${(parseFloat(measure) * 0.621371).toFixed(2)}&nbsp;mile`
+        return `${(parseFloat(measure) * 0.621371).toFixed(2)}&nbsp;miles`
     }
 }
