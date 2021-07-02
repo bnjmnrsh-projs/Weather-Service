@@ -6,36 +6,44 @@
 /**
  * mm/hr to inch/hr
  *
- * @param {float} measure
+ * @param {float} nMeasure
  * @returns {string} converted measurement as string with units
  */
-export const fPercip = function (measure, _oSettings) {
-    if (typeof measure !== 'number') return 0
-
-    if (measure === 0) {
-        return measure
+export const fPercip = function (nMeasure, _oSettings) {
+    if (typeof nMeasure !== 'number' && _oSettings.debug) {
+        console.warn(
+            `fPercip recieved a non numeric value: ${nMeasure} typeof: ${typeof nMeasure}`
+        )
+    }
+    if (nMeasure === 0) {
+        return nMeasure
     }
 
     if (_oSettings.units === 'M') {
-        return `${parseFloat(measure).toFixed(2)}&nbsp;mm/hr`
+        return `${parseFloat(nMeasure).toFixed(2)}&nbsp;mm/hr`
     } else {
-        return `${(parseFloat(measure) * 0.0393701).toFixed(2)}&nbsp;inch/hr`
+        return `${(parseFloat(nMeasure) * 0.0393701).toFixed(2)}&nbsp;inch/hr`
     }
 }
 
 /**
  * C to F conversion
  *
- * @param {float} measure
+ * @param {float} nMeasure
  * @returns {string || number} converted tepm as string with units, or as a Float
  */
-export const fTemp = function (measure, _oSettings, withUnits = true) {
-    if (typeof measure !== 'number') return 0
+export const fTemp = function (nMeasure, _oSettings, withUnits = true) {
+    if (typeof nMeasure !== 'number' && _oSettings.debug) {
+        console.warn(
+            `fTemp recieved a non numeric value: ${nMeasure} typeof: ${typeof nMeasure}`
+        )
+    }
+    if (typeof nMeasure !== 'number') return 0
     if (_oSettings.units === 'M') {
-        let converted = parseFloat(measure).toFixed(1)
+        let converted = parseFloat(nMeasure).toFixed(1)
         return withUnits ? `${converted}°&nbsp;C` : converted
     } else {
-        let converted = ((parseFloat(measure) * 9) / 5 + 32).toFixed(1)
+        let converted = ((parseFloat(nMeasure) * 9) / 5 + 32).toFixed(1)
         return withUnits ? `${converted}°&nbsp;F` : converted
     }
 }
@@ -43,32 +51,43 @@ export const fTemp = function (measure, _oSettings, withUnits = true) {
 /**
  * km/hr to mi/hr
  *
- * @param {float} measure
+ * @param {float} nMeasure
  * @returns {string} converted wind speed as string with units
  */
-export const fKmPerHour = function (measure, _oSettings) {
-    if (typeof measure !== 'number') return 0
+export const fKmPerHour = function (nMeasure, _oSettings) {
+    if (typeof nMeasure !== 'number' && _oSettings.debug) {
+        console.warn(
+            `fKmPerHour recieved a non numeric value: ${nMeasure} typeof: ${typeof nMeasure}`
+        )
+    }
+    if (typeof nMeasure !== 'number') return 0
 
     if (_oSettings.units === 'M') {
-        return `${(parseFloat(measure) * 3.6000059687997).toFixed(
+        return `${(parseFloat(nMeasure) * 3.6000059687997).toFixed(
             2
         )}&nbsp;km/hr`
     } else {
-        return `${(parseFloat(measure) * 2.23694).toFixed(2)}&nbsp;mi/hr`
+        return `${(parseFloat(nMeasure) * 2.23694).toFixed(2)}&nbsp;mi/hr`
     }
 }
 
 /**
  * km to mi
  *
- * @param {float} measure
+ * @param {float} nMeasure
  * @returns {string} converted distance as string with units
  */
-export const fKm = function (measure, _oSettings) {
-    if (typeof measure !== 'number') return 0
+export const fKm = function (nMeasure, _oSettings) {
+    if (typeof nMeasure !== 'number' && _oSettings.debug) {
+        console.warn(
+            `fKm recieved a non numeric value: ${nMeasure} typeof: ${typeof nMeasure}`
+        )
+    }
+
+    if (typeof nMeasure !== 'number') return 0
     if (_oSettings.units === 'M') {
-        return `${parseFloat(measure).toFixed(2)}&nbsp;km`
+        return `${parseFloat(nMeasure).toFixed(2)}&nbsp;km`
     } else {
-        return `${(parseFloat(measure) * 0.621371).toFixed(2)}&nbsp;miles`
+        return `${(parseFloat(nMeasure) * 0.621371).toFixed(2)}&nbsp;miles`
     }
 }
