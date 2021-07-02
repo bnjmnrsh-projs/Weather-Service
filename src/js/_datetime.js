@@ -21,7 +21,7 @@
 function fAddTimeToDateString(sDate) {
     if (sDate.length >= 16) return sDate
     // Will produce a string that can be converted into a valid date object
-    const new_sDate = `${sDate}00:00`
+    const new_sDate = `${sDate} 00:00`
     const oDate = new Date(new_sDate)
 
     // test to see if we now have string which creates a valid date
