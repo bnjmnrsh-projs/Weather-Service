@@ -1,14 +1,14 @@
 /**
  * Sanitise incoming API data
  *
- * @param {string} [dirty='']
+ * @param {string} [sDirty='']
  * @returns {string} sanitised text
  */
-export const fClean = function (dirty = '') {
-    if (typeof dirty === 'number') return dirty
-    if (!dirty) return
+export const fClean = function (sDirty = '') {
+    if (typeof sDirty === 'number') return sDirty
+    if (!sDirty) return
 
     const temp = document.createElement('div')
-    temp.innerHTML = dirty
+    temp.innerHTML = sDirty
     return temp.innerText
 }

@@ -107,7 +107,10 @@ export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
  * @returns {string}
  */
 export const fGetWeekday = function (sDate) {
+    console.log('fGetWeekday:', sDate)
     const oDate = new Date(fAddTimeToDateString(sDate))
+    console.log('fGetWeekday fAddTimeToDateString', fAddTimeToDateString(sDate))
+    console.log('fGetWeekday: oDate', oDate)
 
     // test our oDate object
     if (!oDate || typeof oDate.getMonth !== 'function') {

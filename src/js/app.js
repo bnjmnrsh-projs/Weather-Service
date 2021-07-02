@@ -1,4 +1,3 @@
-import * as Helpers from './_helpers'
 import * as Queries from './_queries'
 import * as Scales from './_scales'
 
@@ -59,11 +58,14 @@ const weatherApp = function (_oSettings = {}) {
      *
      * @param {array} data
      */
-    const fBuildUI = function (weather) {
+    const fBuildUI = function (_oWeather) {
         app.innerHTML =
-            fRenderHUD(weather.CURRENT.data[0], _oSettings) +
-            fRenderDetails(weather.CURRENT.data[0], _oSettings) +
-            fRenderForcast(weather.DAILY.data, _oSettings)
+            fRenderHUD(_oWeather.CURRENT.data[0], _oSettings) +
+            fRenderDetails(_oWeather.CURRENT.data[0], _oSettings) +
+            fRenderForcast(_oWeather.DAILY.data, _oSettings)
+
+        // Adjust the visibility 'fogg' bar in the details section
+        Scales.fSetVisabilityScale(_oWeather.CURRENT.data[0].vis)
     }
 
     /**
@@ -75,7 +77,7 @@ const weatherApp = function (_oSettings = {}) {
                 sIpapiLocationApi,
                 _oSettings
             )
-            const weather = await Queries.fGetWeather(
+            const _oWeather = await Queries.fGetWeather(
                 loc,
                 sWeatherApi,
                 _oSettings
@@ -83,11 +85,10 @@ const weatherApp = function (_oSettings = {}) {
 
             _oSettings.debug ? console.log('fGetLocation response:', loc) : ''
             _oSettings.debug
-                ? console.log('fGetWeather response:', weather)
+                ? console.log('fGetWeather response:', _oWeather)
                 : ''
 
-            fBuildUI(weather)
-            Scales.fSetVisabilityScale(weather.CURRENT.data[0].vis)
+            fBuildUI(_oWeather)
         } catch (e) {
             console.error('init error: ', e)
             nApp.innerHTML = fErrorDisplay(e)

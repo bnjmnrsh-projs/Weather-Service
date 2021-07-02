@@ -51,67 +51,67 @@ export const oCloudCover = {
 /**
  * Returns the string name of the weather icon
  *
- * @param {object} data Either the current, daily, or hourly forcast weather object
- * @param {string || int} [hour]
+ * @param {object} oData Either the current, daily, or iHourly forcast weather object
+ * @param {string || int} [iHour]
  * @returns string
  */
-export const fGetWeatherIcon = function (data, hour) {
-    if (!data) return
+export const fGetWeatherIcon = function (oData, iHour) {
+    if (!oData) return
 
-    let code, pod
-    if (!hour && data.hasOwnProperty('pod')) {
+    let iCode, sPod
+    if (!iHour && oData.hasOwnProperty('pod')) {
         // Current weather object
-        pod = Helpers.fClean(data.pod) === 'd' ? 0 : 1
-        code = parseInt(Helpers.fClean(data.weather.code))
-    } else if ('hour' in data) {
+        sPod = Helpers.fClean(oData.sPod) === 'd' ? 0 : 1
+        iCode = parseInt(Helpers.fClean(oData.weather.code))
+    } else if ('hour' in oData) {
         // Forcast weather object (hourly)
-        pod = Helpers.fClean(data[hour].pod) === 'd' ? 0 : 1
-        code = parseInt(Helpers.fClean(data[hour].weather.code))
+        sPod = Helpers.fClean(oData[iHour].sPod) === 'd' ? 0 : 1
+        iCode = parseInt(Helpers.fClean(oData[iHour].weather.code))
     } else {
         // Forcast weather object (days)
-        pod = 1
-        code = parseInt(Helpers.fClean(data.weather.code))
+        sPod = 1
+        iCode = parseInt(Helpers.fClean(oData.weather.code))
     }
-    return oWeather[code][pod]
+    return oWeather[iCode][sPod]
 }
 
 /**
- * Select the cloud coverage icon based on percentage value
+ * Select the cloud iCoverage icon based on percentage value
  *
- * @param {int} coverage A percentage figure 0-100
- * @param {string} pod Point of Day
+ * @param {int} iCoverage A percentage figure 0-100
+ * @param {string} sPod Point of Day
  * @returns {string} the string name of the icon
  */
-export const fGetCloudCoverIcon = function (coverage, pod = 'd') {
-    if (typeof coverage !== 'number') return
+export const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
+    if (typeof iCoverage !== 'number') return
 
     // set day or night icon set
-    pod = pod = 'd' ? 0 : 1
+    sPod = sPod = 'd' ? 0 : 1
 
     const icons = oCloudCover
 
-    coverage = parseInt(coverage)
+    iCoverage = parseInt(iCoverage)
 
     let aIconData = ''
 
-    switch (coverage) {
-        case coverage >= 0 && coverage < 16 ? coverage : null:
-            aIconData = [icons[0][pod], 0]
+    switch (iCoverage) {
+        case iCoverage >= 0 && iCoverage < 16 ? iCoverage : null:
+            aIconData = [icons[0][sPod], 0]
             break
-        case coverage >= 16 && coverage < 32 ? coverage : null:
-            aIconData = [icons[1][pod], 1]
+        case iCoverage >= 16 && iCoverage < 32 ? iCoverage : null:
+            aIconData = [icons[1][sPod], 1]
             break
-        case coverage >= 32 && coverage < 48 ? coverage : null:
-            aIconData = [icons[2][pod], 2]
+        case iCoverage >= 32 && iCoverage < 48 ? iCoverage : null:
+            aIconData = [icons[2][sPod], 2]
             break
-        case coverage >= 48 && coverage < 65 ? coverage : null:
-            aIconData = [icons[3][pod], 3]
+        case iCoverage >= 48 && iCoverage < 65 ? iCoverage : null:
+            aIconData = [icons[3][sPod], 3]
             break
-        case coverage >= 65 && coverage < 83 ? coverage : null:
-            aIconData = [icons[4][pod], 4]
+        case iCoverage >= 65 && iCoverage < 83 ? iCoverage : null:
+            aIconData = [icons[4][sPod], 4]
             break
-        case coverage >= 83 && coverage <= 100 ? coverage : null:
-            aIconData = [icons[5][pod], 5]
+        case iCoverage >= 83 && iCoverage <= 100 ? iCoverage : null:
+            aIconData = [icons[5][sPod], 5]
             break
     }
     aIconData.push(

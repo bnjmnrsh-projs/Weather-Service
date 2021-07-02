@@ -14,33 +14,32 @@ export const fSetVisabilityScale = function (vis) {
  * Assigns a named string based on temperature in C
  * 6 step scale for data-temp
  *
- * @param {float} temp
+ * @param {float} nTemp
  * @returns {string}   string
  */
-export const fTempDataPt = function (temp) {
-    if (typeof temp !== 'number') return 0
+export const fTempDataPt = function (nTemp) {
+    if (typeof nTemp !== 'number') return 0
 
-    temp = parseFloat(temp)
-    // temp = 100
+    nTemp = parseFloat(nTemp)
 
-    let sTempScale = ''
-    switch (temp) {
-        case temp <= 0 ? temp : null:
+    let sTempScale = 'none'
+    switch (nTemp) {
+        case nTemp <= 0 ? nTemp : null:
             sTempScale = 0
             break
-        case temp >= 0 && temp < 10 ? temp : null:
+        case nTemp >= 0 && nTemp < 10 ? nTemp : null:
             sTempScale = 1
             break
-        case temp >= 10 && temp < 22 ? temp : null:
+        case nTemp >= 10 && nTemp < 22 ? nTemp : null:
             sTempScale = 2
             break
-        case temp >= 22 && temp < 27 ? temp : null:
+        case nTemp >= 22 && nTemp < 27 ? nTemp : null:
             sTempScale = 3
             break
-        case temp >= 27 && temp < 34 ? temp : null:
+        case nTemp >= 27 && nTemp < 34 ? nTemp : null:
             sTempScale = 4
             break
-        case temp >= 34 ? temp : null:
+        case nTemp >= 34 ? nTemp : null:
             sTempScale = 5
             break
     }
@@ -48,35 +47,35 @@ export const fTempDataPt = function (temp) {
 }
 
 /**
- * Assigns a uv scale value based uv reading
+ * Takes a UV float value and returns an int for CSS data-UV="*" selectors.
  *
- * @param {float} uv
+ * @param {float} nUV
  * @returns {int}  whole int value on  6 step scale
  */
-export const fUvDataPt = function (uv) {
-    if (!uv) return
-    uv = parseFloat(uv)
+export const fUvDataPt = function (nUV) {
+    if (!nUV) return
+    nUV = parseFloat(nUV)
 
-    let uvClass = 'none'
-    switch (uv) {
-        case uv < 10 ? uv : null:
-            uvClass = 0
+    let sUVclass = 'none'
+    switch (nUV) {
+        case nUV < 1 ? nUV : null:
+            sUVclass = '0'
             break
-        case uv >= 10 && uv < 30 ? uv : null:
-            uvClass = 1
+        case nUV >= 1 && nUV < 3 ? nUV : null:
+            sUVclass = '1'
             break
-        case uv >= 30 && uv < 50 ? uv : null:
-            uvClass = 2
+        case nUV >= 3 && nUV < 5 ? nUV : null:
+            sUVclass = '2'
             break
-        case uv >= 50 && uv < 70 ? uv : null:
-            uvClass = 3
+        case nUV >= 5 && nUV < 7 ? nUV : null:
+            sUVclass = '3'
             break
-        case uv >= 70 && uv < 90 ? uv : null:
-            uvClass = 4
+        case nUV >= 7 && nUV < 9 ? nUV : null:
+            sUVclass = '4'
             break
-        case uv >= 90 || uv <= 100 ? uv : null:
+        case nUV >= 9 || nUV <= 10 ? nUV : null:
             uvClass = 5
             break
     }
-    return uvClass
+    return sUVclass
 }
