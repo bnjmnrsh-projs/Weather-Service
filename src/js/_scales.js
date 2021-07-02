@@ -47,35 +47,35 @@ export const fTempDataPt = function (nTemp) {
 }
 
 /**
- * Assigns a uv scale value based uv reading
+ * Takes a UV float value and returns an int for CSS data-UV="*" selectors.
  *
- * @param {float} uv
+ * @param {float} nUV
  * @returns {int}  whole int value on  6 step scale
  */
-export const fUvDataPt = function (uv) {
-    if (!uv) return
-    uv = parseFloat(uv)
+export const fUvDataPt = function (nUV) {
+    if (!nUV) return
+    nUV = parseFloat(nUV)
 
-    let uvClass = 'none'
-    switch (uv) {
-        case uv < 10 ? uv : null:
-            uvClass = 0
+    let sUVclass = 'none'
+    switch (nUV) {
+        case nUV < 1 ? nUV : null:
+            sUVclass = '0'
             break
-        case uv >= 10 && uv < 30 ? uv : null:
-            uvClass = 1
+        case nUV >= 1 && nUV < 3 ? nUV : null:
+            sUVclass = '1'
             break
-        case uv >= 30 && uv < 50 ? uv : null:
-            uvClass = 2
+        case nUV >= 3 && nUV < 5 ? nUV : null:
+            sUVclass = '2'
             break
-        case uv >= 50 && uv < 70 ? uv : null:
-            uvClass = 3
+        case nUV >= 5 && nUV < 7 ? nUV : null:
+            sUVclass = '3'
             break
-        case uv >= 70 && uv < 90 ? uv : null:
-            uvClass = 4
+        case nUV >= 7 && nUV < 9 ? nUV : null:
+            sUVclass = '4'
             break
-        case uv >= 90 || uv <= 100 ? uv : null:
+        case nUV >= 9 || nUV <= 10 ? nUV : null:
             uvClass = 5
             break
     }
-    return uvClass
+    return sUVclass
 }
