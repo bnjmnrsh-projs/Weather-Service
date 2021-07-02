@@ -14,33 +14,32 @@ export const fSetVisabilityScale = function (vis) {
  * Assigns a named string based on temperature in C
  * 6 step scale for data-temp
  *
- * @param {float} temp
+ * @param {float} nTemp
  * @returns {string}   string
  */
-export const fTempDataPt = function (temp) {
-    if (typeof temp !== 'number') return 0
+export const fTempDataPt = function (nTemp) {
+    if (typeof nTemp !== 'number') return 0
 
-    temp = parseFloat(temp)
-    // temp = 100
+    nTemp = parseFloat(nTemp)
 
-    let sTempScale = ''
-    switch (temp) {
-        case temp <= 0 ? temp : null:
+    let sTempScale = 'none'
+    switch (nTemp) {
+        case nTemp <= 0 ? nTemp : null:
             sTempScale = 0
             break
-        case temp >= 0 && temp < 10 ? temp : null:
+        case nTemp >= 0 && nTemp < 10 ? nTemp : null:
             sTempScale = 1
             break
-        case temp >= 10 && temp < 22 ? temp : null:
+        case nTemp >= 10 && nTemp < 22 ? nTemp : null:
             sTempScale = 2
             break
-        case temp >= 22 && temp < 27 ? temp : null:
+        case nTemp >= 22 && nTemp < 27 ? nTemp : null:
             sTempScale = 3
             break
-        case temp >= 27 && temp < 34 ? temp : null:
+        case nTemp >= 27 && nTemp < 34 ? nTemp : null:
             sTempScale = 4
             break
-        case temp >= 34 ? temp : null:
+        case nTemp >= 34 ? nTemp : null:
             sTempScale = 5
             break
     }
