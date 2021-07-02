@@ -1,20 +1,18 @@
-import * as Helpers from './_helpers'
 import * as Convert from './_conversions'
+import { fClean } from './_helpers'
 /**
  * Perform string replacement for UI strings.
  *
  * @param {string} string
- * @param {object} data
+ * @param {object} _oData
+ * @param {object} _oSettings
  * @returns {string} Formatted string
  */
-export const fFormatUIstr = function (string, data, _oSettings) {
+export const fFormatUIstr = function (string, _oData, _oSettings) {
     if (!string) return ''
     return string
-        .replace('{{forcast}}', Helpers.fClean(data.weather.description))
-        .replace(
-            '{{temp}}',
-            Convert.fTemp(Helpers.fClean(data.temp), _oSettings)
-        )
-        .replace('{{city}}', Helpers.fClean(data.city_name))
-        .replace('{{country}}', Helpers.fClean(data.country_code))
+        .replace('{{forcast}}', fClean(_oData.weather.description))
+        .replace('{{temp}}', Convert.fTemp(fClean(_oData.temp), _oSettings))
+        .replace('{{city}}', fClean(_oData.city_name))
+        .replace('{{country}}', fClean(_oData.country_code))
 }

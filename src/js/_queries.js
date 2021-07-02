@@ -1,4 +1,4 @@
-import * as Helpers from './_helpers'
+import { fClean } from './_helpers'
 
 /**
  * IP address based location API
@@ -6,51 +6,49 @@ import * as Helpers from './_helpers'
  * @returns {object} coordiantes object
  */
 export const fIPapi = async function (sIpapiLocationApi) {
-    const resp = await fetch(sIpapiLocationApi).then(function (resp) {
-        if (resp.ok) {
-            return resp.json()
+    const pResp = await fetch(sIpapiLocationApi).then(function (pResp) {
+        if (pResp.ok) {
+            return pResp.json()
         } else {
-            return Promise.reject(resp)
+            return Promise.reject(pResp)
         }
     })
-    return await resp
+    return await pResp
 }
 
 /**
  * Assembles the formatted query string for CF API requests
  *
  * @param {string} urlBase
- * @param {obj} loc Response from location API
+ * @param {obj} oLoc Response from oLocation API
  * @returns {string} Assembled url with query (cleaned)
  */
-export const fAssembledQuery = function (urlBase, loc, _oSettings) {
-    if (!loc) return
+export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
+    if (!oLoc) return
 
-    let sApiQuery = `${urlBase}&lat=${loc.latitude}&lon=${loc.longitude}`
+    let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`
 
-    if (!loc.latitude || !loc.longitude) {
+    if (!oLoc.latitude || !oLoc.longitude) {
         let sCity,
             sState,
             sCountry = ''
 
-        if ('city' in loc && loc.city) {
-            sCity = `&city=${loc.city}`
+        if ('city' in oLoc && oLoc.city) {
+            sCity = `&city=${oLoc.city}`
         }
-        if ('state' in loc && loc.state) {
-            sState = `&state=${loc.state}`
+        if ('state' in oLoc && oLoc.state) {
+            sState = `&state=${oLoc.state}`
         }
-        if ('country' in loc && loc.country_code) {
-            sCountry = `&country=${loc.country_code}`
+        if ('country' in oLoc && oLoc.country_code) {
+            sCountry = `&country=${oLoc.country_code}`
         }
 
         sApiQuery = `${urlBase}${sCity ?? ''}${sState ?? ''}${sCountry ?? ''}`
     }
 
-    _oSettings.debug
-        ? console.log('sApiQuery query:', Helpers.fClean(sApiQuery))
-        : ''
+    _oSettings.debug ? console.log('sApiQuery query:', fClean(sApiQuery)) : ''
 
-    return Helpers.fClean(sApiQuery)
+    return fClean(sApiQuery)
 }
 
 /**
@@ -59,24 +57,24 @@ export const fAssembledQuery = function (urlBase, loc, _oSettings) {
  * @returns {object} coordiantes object
  */
 const fGeoLocApi = async function () {
-    const options = {
+    const oOptions = {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0,
     }
 
-    const resp = new Promise(function (resolve, reject) {
+    const pResp = new Promise(function (resolve, reject) {
         navigator.geolocation.getCurrentPosition(
-            function (resp) {
-                resolve(resp.coords)
+            function (pResp) {
+                resolve(pResp.coords)
             },
-            function (resp) {
-                reject(resp)
+            function (pResp) {
+                reject(pResp)
             },
-            options
+            oOptions
         )
     })
-    return await resp
+    return await pResp
 }
 
 /**
@@ -85,23 +83,31 @@ const fGeoLocApi = async function () {
  * @param {string} [section='home']
  */
 export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
-    console.log('1')
     if (navigator.geolocation) {
         try {
-            _oSettings.debug ? console.log('2 Checking geoLoccation API.') : ''
+            _oSettings.debug
+                ? console.log(
+                      'fGetLocation: Checking geoLoccation API: fGeoLocApi.'
+                  )
+                : ''
             return await fGeoLocApi()
         } catch (e) {
             _oSettings.debug
-                ? console.warn('3 fGetLocation fGeoLocApi: ', e)
+                ? console.warn('fGetLocationL: failed using fGeoLocApi: ', e)
                 : ''
             try {
                 console.log('5')
                 _oSettings.debug
-                    ? console.warn('5 Falling back to IP lookup.')
+                    ? console.warn('Falling back to IP address lookup instead.')
                     : ''
                 return await fIPapi(sIpapiLocationApi)
             } catch (e) {
-                _oSettings.debug ? console.warn('fGetLocation IP API: ', e) : ''
+                _oSettings.debug
+                    ? console.warn(
+                          'fGetLocation: failed sIpapiLocationApi: ',
+                          e
+                      )
+                    : ''
             }
         }
     }
@@ -110,18 +116,18 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
 /**
  * Fetch the weather for a user's location.
  *
- * @param {object} loc
+ * @param {object} oLoc
  * @returns {object} weather object
  */
-export const fGetWeather = async function (loc, sWeatherApi, _oSettings) {
-    const resp = await fetch(
-        fAssembledQuery(sWeatherApi, loc, _oSettings)
-    ).then(function (resp) {
-        if (resp.ok) {
-            return resp.json()
+export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
+    const pResp = await fetch(
+        fAssembledQuery(sWeatherApi, oLoc, _oSettings)
+    ).then(function (pResp) {
+        if (pResp.ok) {
+            return pResp.json()
         } else {
-            return Promise.reject(resp)
+            return Promise.reject(pResp)
         }
     })
-    return await resp
+    return await pResp
 }

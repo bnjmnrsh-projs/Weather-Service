@@ -1,28 +1,30 @@
 import * as Convert from '../_conversions'
-import * as Helpers from '../_helpers'
 import * as Icons from '../_icons'
 import * as Scales from '../_scales'
 import * as StrReplace from '../_strings'
+import { fClean } from '../_helpers'
 
 /**
  * Renders the app's header
  *
- * @param {array} data
+ * @param {array} _oData
  * @returns {string}
  */
-export const fRenderHUD = function (data, _oSettings) {
-    console.log('fRenderHUD: ', data)
-    const sIcon = Icons.fGetWeatherIcon(data)
+export const fRenderHUD = function (_oData, _oSettings) {
+    console.log('fRenderHUD: ', _oData)
+    const sIcon = Icons.fGetWeatherIcon(_oData)
     return `
-        <header id="hud" class="" data-temp="${Scales.fTempDataPt(data.temp)}">
+        <header id="hud" class="" data-temp="${Scales.fTempDataPt(
+            _oData.temp
+        )}">
             <h3>
                     <img class="weather-icon" alt="${StrReplace.fFormatUIstr(
                         _oSettings.airaForcast,
-                        data,
+                        _oData,
                         _oSettings
                     )}" src="./svg/icons/weather/svg/${sIcon}.svg" />
                 <span aria-hidden="true">${Convert.fTemp(
-                    Helpers.fClean(data.temp),
+                    fClean(_oData.temp),
                     _oSettings
                 )}</span>
             </h3>
@@ -30,14 +32,14 @@ export const fRenderHUD = function (data, _oSettings) {
                 <li aria-hidden="true">
                     ${StrReplace.fFormatUIstr(
                         _oSettings.forcast,
-                        data,
+                        _oData,
                         _oSettings
                     ).toLowerCase()}
                 </li>
                 <li>
                     ${StrReplace.fFormatUIstr(
                         _oSettings.location,
-                        data,
+                        _oData,
                         _oSettings
                     )}
                 </li>
