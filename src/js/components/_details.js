@@ -101,4 +101,5 @@ export const fRenderDetails = function (_oData, _oSettings) {
             </ul>
         </div>
         `
+    return fUIstr(template, _oData, _oSettings)
 }
