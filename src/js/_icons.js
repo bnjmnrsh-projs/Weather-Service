@@ -120,3 +120,21 @@ export const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
 
     return aIconData
 }
+
+export const fSetNodeAttrs = function (sEl, props = {}) {
+    const template = document.createElement('template')
+    sEl.trim()
+    template.innerHtml = sEl
+
+    if (props.hasOwnProperty('css')) {
+        template.css(props.css)
+    }
+    if (props.hasOwnProperty('data_temp')) {
+        template.setAttribute('data-temp', props.data_temp)
+    }
+    if (props.hasOwnProperty('data_uv')) {
+        template.setAttribute('data-uv', props.data_uv)
+    }
+
+    return template.content.firstChild
+}
