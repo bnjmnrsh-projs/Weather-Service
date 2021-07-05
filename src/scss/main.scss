@@ -354,16 +354,16 @@ span.inline-icon {
     // border-right: none;
 }
 
-#forcast {
+#forecast {
     margin: 0.2rem 0.3rem;
 }
-#forcast ul {
+#forecast ul {
     display: flex;
     flex-direction: row;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
 }
-#forcast ul li {
+#forecast ul li {
     background-color: var(--bg-md);
     border-radius: 2px;
     width: 50%;
@@ -379,28 +379,28 @@ span.inline-icon {
     align-items: center;
     scroll-snap-align: start end;
 }
-#forcast ul li:first-child {
+#forecast ul li:first-child {
     border-bottom-left-radius: 10px;
 }
-#forcast ul li:last-child {
+#forecast ul li:last-child {
     margin-right: 0.1rem;
     border-bottom-right-radius: 10px;
 }
-#forcast h4 {
+#forecast h4 {
     margin: 0.3rem;
     text-align: left;
 }
-#forcast h5 {
+#forecast h5 {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
 }
-#forcast .forecast-description {
+#forecast .forecast-description {
     font-size: 0.7rem;
     margin-top: 0;
 }
-#forcast .weather-icon {
+#forecast .weather-icon {
     width: 80%;
     height: auto;
 }
@@ -498,7 +498,7 @@ span.inline-icon {
         color: var(--text);
     }
     .loading-icon,
-    #forcast .weather-icon,
+    #forecast .weather-icon,
     #hud .weather-icon {
         filter: invert(95%) hue-rotate(180deg)
             drop-shadow(2px 3px 1px var(--icon-dk));
@@ -600,33 +600,33 @@ span.inline-icon {
         bottom: 0.2rem;
     }
 
-    // #forcast ul {
+    // #forecast ul {
     //     display: flex;
     //     flex-direction: column;
     // }
 
-    // #forcast ul li {
+    // #forecast ul li {
     //     border-radius: 2px;
     //     width: 100%;
     //     padding: 0;
     //     margin: 0;
     //     box-shadow: var(--bg-dk) 1px 1px 2px;
     // }
-    // #forcast ul li:first-child {
+    // #forecast ul li:first-child {
     //     margin-right: 0;
     //     border-bottom-left-radius: 2px;
     // }
-    // #forcast ul li:last-child {
+    // #forecast ul li:last-child {
     //     margin-top: 0.3em;
     //     margin-left: 0;
     //     border-bottom-right-radius: 10px;
     //     border-bottom-left-radius: 10px;
     // }
-    // #forcast ul li header {
+    // #forecast ul li header {
     //     padding: 0.3rem;
     // }
 
-    #forcast .weather-icon {
+    #forecast .weather-icon {
         width: 45%;
         height: auto;
     }

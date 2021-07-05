@@ -33,7 +33,7 @@ export const fUIstr = function (
     _oStrings = _oTextStrings
 ) {
     const CURRENT = _oData.CURRENT.data[0]
-    const FORCAST = _oData.FORCAST
+    const FORECAST = _oData.FORECAST
 
     if (!string) return ''
     return (
@@ -73,7 +73,7 @@ export const fHUDstr = function (
     _oStrings = _oTextStrings
 ) {
     const CURRENT = _oData.CURRENT.data[0]
-    const FORCAST = _oData.FORCAST
+    const FORECAST = _oData.FORECAST
 
     if (!string) return ''
     return (

@@ -51,7 +51,7 @@ export const oCloudCover = {
 /**
  * Returns the string name of the weather icon
  *
- * @param {object} oData Either the current, daily, or iHourly forcast weather object
+ * @param {object} oData Either the current, daily, or iHourly forecast weather object
  * @param {string || int} [iHour]
  * @returns string
  */
