@@ -121,20 +121,46 @@ export const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
     return aIconData
 }
 
-export const fSetNodeAttrs = function (sEl, props = {}) {
-    const template = document.createElement('template')
-    sEl.trim()
-    template.innerHtml = sEl
+/**
+ * Takes a string based representation of a DOM element, and adds inline style and/or data-* attributes to it.
+ *
+ * @param {string} sEl
+ * @param {object} props
+ * @returns {string}
+ *
+ * The props object may contain a top level `style` propery for inline css string
+ * and or a `data` object which will be mapped to data-* attributes on the element.
+ *
+ *  `<span class="inline-icon">
+ *    ${Icons.fSetStringElAttrs(oIcons.sWindDirection, {
+ *        style: `transform: rotate(${sWindDeg}deg)`,
+ *        class: 'some-class',
+ *        data: { temp: '6' },
+ *    })}
+ *  </span>`
+ */
 
-    if (props.hasOwnProperty('css')) {
-        template.css(props.css)
-    }
-    if (props.hasOwnProperty('data_temp')) {
-        template.setAttribute('data-temp', props.data_temp)
-    }
-    if (props.hasOwnProperty('data_uv')) {
-        template.setAttribute('data-uv', props.data_uv)
-    }
+export const fSetStringElAttrs = function (sEl, props = {}) {
+    if ('content' in document.createElement('template')) {
+        const nEl = document.createElement('div')
+        nEl.innerHTML = sEl.trim()
+        const nTarget = nEl.querySelector('div >:first-child')
 
-    return template.content.firstChild
+        if (props.hasOwnProperty('style')) {
+            nTarget.setAttribute('style', props.style)
+        }
+        if (props.hasOwnProperty('class')) {
+            nTarget.classList.add(props.class)
+        }
+        if (
+            props.hasOwnProperty('data') &&
+            Object.keys(props.data).length > 0
+        ) {
+            Object.keys(props.data).map((key) => {
+                nTarget.setAttribute(`data-${key}`, props.data[key])
+            })
+        }
+        return nEl.innerHTML
+    }
+    return ''
 }
