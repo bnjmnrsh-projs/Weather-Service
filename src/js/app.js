@@ -16,12 +16,9 @@ import { fErrorDisplay } from './components/_errors'
 const weatherApp = function (_oSettings = {}) {
     const _oDefaults = {
         target: '#app',
-        KEY: '',
         units: 'M',
-        forcast: `{{forcast}}`,
-        airaForcast: `The weather is currently: {{forcast}} at {{temp}}.`,
-        location: `{{city}}, {{country}}`,
         debug: false,
+        dev: false,
     }
 
     // Merge settings with defaults
@@ -103,10 +100,9 @@ const weatherApp = function (_oSettings = {}) {
 
 // with debugging and Imperial Units
 const settings = {
-    forcast: `Currently: {{forcast}}`,
-    units: 'I',
+    units: 'M',
     debug: true,
-    dev: false,
+    dev: true,
 }
 
 weatherApp(settings)
