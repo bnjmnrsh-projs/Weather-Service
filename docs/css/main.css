@@ -114,10 +114,6 @@ ul.unstyled {
 	transition: 1s all ease;
 }
 
-svg {
-	transition: 1s all ease;
-}
-
 span.inline-icon {
 	display: flex;
 	flex-direction: row;
@@ -401,11 +397,9 @@ span.inline-icon {
 @keyframes rotating {
 	from {
 		transform: rotate(0deg);
-		opacity: 0;
 	}
 	to {
 		transform: rotate(360deg);
-		opacity: 1;
 	}
 }
 .loading-bg {
