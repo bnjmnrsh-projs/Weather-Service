@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap');
 
 :root {
-    --text: #181a1c;
+    --text: #282a2d;
     --bg-lt: #f0e9e7;
     --bg: #c7c0be;
     --bg-md: #d8d5d2;
@@ -53,6 +53,7 @@ body {
     align-items: center;
     flex-wrap: nowrap;
     min-height: 100vh;
+    color: var(--text);
 }
 
 body footer {
@@ -110,6 +111,10 @@ ul.unstyled {
     border-radius: 15px;
     background-color: var(--icon-nutral);
     padding: 2px;
+    transition: 1s all ease;
+}
+
+svg {
     transition: 1s all ease;
 }
 
@@ -280,12 +285,12 @@ span.inline-icon {
     background-image: url(../svg/graph.svg);
     background-position: left -1px bottom -1px;
     border: 1px solid var(--bg-md);
-    height: 2rem;
+    height: 1rem;
     width: calc(100% + 1.6rem);
     position: relative;
     overflow: hidden;
     font-size: 0.6em;
-    transition: 0.5s ease;
+    transition: all 0.5s ease;
     margin-bottom: -0.9em;
     margin: 0 -0.5rem -0.5rem -0.5rem;
     border-bottom-right-radius: 2px;
@@ -295,7 +300,7 @@ span.inline-icon {
 .visibility .visibility-graph::before,
 .visibility .visibility-graph::after {
     position: absolute;
-    bottom: 0.5rem;
+    bottom: 0.2rem;
     z-index: 1;
 }
 
@@ -312,29 +317,30 @@ span.inline-icon {
 .visibility .visibility-graph .distance {
     background: linear-gradient(
         to left,
-        var(--bg-dk) calc(var(--distance) - 10px),
-        transparent 0
+        hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px) var(--bg-dk),
+        calc(var(--distance) - 20px)
     );
-    border-right: 90px solid var(--bg-dk);
-    filter: blur(10px);
+    border-right: 80px solid var(--bg-dk);
+    padding-left: 10px;
+
     background-repeat: no-repeat;
     overflow: hidden;
     position: absolute;
-    bottom: -50%;
-    right: -10px;
-    width: 100%;
     height: 200%;
+    width: calc(100% - (10px + 5rem));
     z-index: 0;
+    will-change: transform;
+    animation: distance-loading 2s ease forwards;
 }
 
-.sun-up-down {
+.sun-rise-set {
     // display: flex;
     // flex-direction: row;
     // justify-content: space-evenly;
     // line-height: 1.5em;
     // text-align: center;
 }
-.sun-up-down span {
+.sun-rise-set span {
     // display: flex;
     // justify-content: space-evenly;
     // align-items: center;
@@ -344,20 +350,20 @@ span.inline-icon {
     // text-align: center;
 }
 
-.sun-up-down span:last-of-type {
+.sun-rise-set span:last-of-type {
     // border-right: none;
 }
 
-#forcast {
+#forecast {
     margin: 0.2rem 0.3rem;
 }
-#forcast ul {
+#forecast ul {
     display: flex;
     flex-direction: row;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
 }
-#forcast ul li {
+#forecast ul li {
     background-color: var(--bg-md);
     border-radius: 2px;
     width: 50%;
@@ -373,28 +379,28 @@ span.inline-icon {
     align-items: center;
     scroll-snap-align: start end;
 }
-#forcast ul li:first-child {
+#forecast ul li:first-child {
     border-bottom-left-radius: 10px;
 }
-#forcast ul li:last-child {
+#forecast ul li:last-child {
     margin-right: 0.1rem;
     border-bottom-right-radius: 10px;
 }
-#forcast h4 {
+#forecast h4 {
     margin: 0.3rem;
     text-align: left;
 }
-#forcast h5 {
+#forecast h5 {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
 }
-#forcast .forecast-description {
+#forecast .forecast-description {
     font-size: 0.7rem;
     margin-top: 0;
 }
-#forcast .weather-icon {
+#forecast .weather-icon {
     width: 80%;
     height: auto;
 }
@@ -403,9 +409,11 @@ span.inline-icon {
 @keyframes rotating {
     from {
         transform: rotate(0deg);
+        opacity: 0;
     }
     to {
         transform: rotate(360deg);
+        opacity: 1;
     }
 }
 
@@ -430,6 +438,15 @@ span.inline-icon {
     }
     100% {
         background-position: 0% 50%;
+    }
+}
+
+@keyframes distance-loading {
+    0% {
+        transform: translateX(150%);
+    }
+    100% {
+        transform: translateX(0%);
     }
 }
 
@@ -481,7 +498,7 @@ span.inline-icon {
         color: var(--text);
     }
     .loading-icon,
-    #forcast .weather-icon,
+    #forecast .weather-icon,
     #hud .weather-icon {
         filter: invert(95%) hue-rotate(180deg)
             drop-shadow(2px 3px 1px var(--icon-dk));
@@ -509,10 +526,10 @@ span.inline-icon {
     .visibility .visibility-graph .distance {
         background: linear-gradient(
             to left,
-            var(--text) calc(var(--distance) - 10px),
-            transparent 0
+            var(--text) calc(var(--distance) - 20px),
+            hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px)
         );
-        border-right: 30px solid var(--text);
+        border-right: 80px solid var(--text);
     }
 
     #details .inline-icon.svg-wi-sunrise,
@@ -583,33 +600,33 @@ span.inline-icon {
         bottom: 0.2rem;
     }
 
-    // #forcast ul {
+    // #forecast ul {
     //     display: flex;
     //     flex-direction: column;
     // }
 
-    // #forcast ul li {
+    // #forecast ul li {
     //     border-radius: 2px;
     //     width: 100%;
     //     padding: 0;
     //     margin: 0;
     //     box-shadow: var(--bg-dk) 1px 1px 2px;
     // }
-    // #forcast ul li:first-child {
+    // #forecast ul li:first-child {
     //     margin-right: 0;
     //     border-bottom-left-radius: 2px;
     // }
-    // #forcast ul li:last-child {
+    // #forecast ul li:last-child {
     //     margin-top: 0.3em;
     //     margin-left: 0;
     //     border-bottom-right-radius: 10px;
     //     border-bottom-left-radius: 10px;
     // }
-    // #forcast ul li header {
+    // #forecast ul li header {
     //     padding: 0.3rem;
     // }
 
-    #forcast .weather-icon {
+    #forecast .weather-icon {
         width: 45%;
         height: auto;
     }

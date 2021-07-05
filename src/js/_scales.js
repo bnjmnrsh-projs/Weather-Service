@@ -1,7 +1,7 @@
 /**
  * Generate a visual scale based on 5km
  *
- * @param {float} vis
+ * @param {float} vis (expects km units)
  */
 export const fSetVisabilityScale = function (vis) {
     const distance = (parseFloat(vis) / 5) * 100

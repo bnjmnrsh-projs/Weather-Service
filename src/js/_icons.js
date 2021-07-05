@@ -1,4 +1,4 @@
-import * as Helpers from './_helpers'
+import { fClean } from './_helpers'
 
 export const oWeather = {
     200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
@@ -51,7 +51,7 @@ export const oCloudCover = {
 /**
  * Returns the string name of the weather icon
  *
- * @param {object} oData Either the current, daily, or iHourly forcast weather object
+ * @param {object} oData Either the current, daily, or iHourly forecast weather object
  * @param {string || int} [iHour]
  * @returns string
  */
@@ -61,16 +61,16 @@ export const fGetWeatherIcon = function (oData, iHour) {
     let iCode, sPod
     if (!iHour && oData.hasOwnProperty('pod')) {
         // Current weather object
-        sPod = Helpers.fClean(oData.sPod) === 'd' ? 0 : 1
-        iCode = parseInt(Helpers.fClean(oData.weather.code))
+        sPod = fClean(oData.sPod) === 'd' ? 0 : 1
+        iCode = parseInt(fClean(oData.weather.code))
     } else if ('hour' in oData) {
         // Forcast weather object (hourly)
-        sPod = Helpers.fClean(oData[iHour].sPod) === 'd' ? 0 : 1
-        iCode = parseInt(Helpers.fClean(oData[iHour].weather.code))
+        sPod = fClean(oData[iHour].sPod) === 'd' ? 0 : 1
+        iCode = parseInt(fClean(oData[iHour].weather.code))
     } else {
         // Forcast weather object (days)
         sPod = 1
-        iCode = parseInt(Helpers.fClean(oData.weather.code))
+        iCode = parseInt(fClean(oData.weather.code))
     }
     return oWeather[iCode][sPod]
 }
@@ -119,4 +119,48 @@ export const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
     )
 
     return aIconData
+}
+
+/**
+ * Takes a string based representation of a DOM element, and adds inline style and/or data-* attributes to it.
+ *
+ * @param {string} sEl
+ * @param {object} props
+ * @returns {string}
+ *
+ * The props object may contain a top level `style` propery for inline css string
+ * and or a `data` object which will be mapped to data-* attributes on the element.
+ *
+ *  `<span class="inline-icon">
+ *    ${Icons.fSetStringElAttrs(oIcons.sWindDirection, {
+ *        style: `transform: rotate(${sWindDeg}deg)`,
+ *        class: 'some-class',
+ *        data: { temp: '6' },
+ *    })}
+ *  </span>`
+ */
+
+export const fSetStringElAttrs = function (sEl, props = {}) {
+    if ('content' in document.createElement('template')) {
+        const nEl = document.createElement('div')
+        nEl.innerHTML = sEl.trim()
+        const nTarget = nEl.querySelector('div >:first-child')
+
+        if (props.hasOwnProperty('style')) {
+            nTarget.setAttribute('style', props.style)
+        }
+        if (props.hasOwnProperty('class')) {
+            nTarget.classList.add(props.class)
+        }
+        if (
+            props.hasOwnProperty('data') &&
+            Object.keys(props.data).length > 0
+        ) {
+            Object.keys(props.data).map((key) => {
+                nTarget.setAttribute(`data-${key}`, props.data[key])
+            })
+        }
+        return nEl.innerHTML
+    }
+    return ''
 }

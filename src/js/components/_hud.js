@@ -1,7 +1,6 @@
-import * as Convert from '../_conversions'
-import * as Icons from '../_icons'
-import * as Scales from '../_scales'
-import * as StrReplace from '../_strings'
+import { fGetWeatherIcon } from '../_icons'
+import { fTempDataPt } from '../_scales'
+import { fHUDstr } from '../_strings'
 import { fClean } from '../_helpers'
 
 /**
@@ -11,39 +10,23 @@ import { fClean } from '../_helpers'
  * @returns {string}
  */
 export const fRenderHUD = function (_oData, _oSettings) {
-    console.log('fRenderHUD: ', _oData)
-    const sIcon = Icons.fGetWeatherIcon(_oData)
-    return `
-        <header id="hud" class="" data-temp="${Scales.fTempDataPt(
-            _oData.temp
-        )}">
+    _oSettings.log ? console.log('fRenderHUD: ', _oData) : ''
+
+    const oCURRENT = _oData.CURRENT.data[0]
+    const sIconName = fGetWeatherIcon(oCURRENT)
+
+    const template = `<header
+        id="hud" class="" data-temp="${fTempDataPt(oCURRENT.temp)}">
             <h3>
-                    <img class="weather-icon" alt="${StrReplace.fFormatUIstr(
-                        _oSettings.airaForcast,
-                        _oData,
-                        _oSettings
-                    )}" src="./svg/icons/weather/svg/${sIcon}.svg" />
-                <span aria-hidden="true">${Convert.fTemp(
-                    fClean(_oData.temp),
-                    _oSettings
-                )}</span>
-            </h3>
-            <ul class="unstyled">
-                <li aria-hidden="true">
-                    ${StrReplace.fFormatUIstr(
-                        _oSettings.forcast,
-                        _oData,
-                        _oSettings
-                    ).toLowerCase()}
-                </li>
-                <li>
-                    ${StrReplace.fFormatUIstr(
-                        _oSettings.location,
-                        _oData,
-                        _oSettings
-                    )}
-                </li>
+                <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
+                <span aria-hidden="true">{{temp}}</span>
+                </h3>
+                <ul class="unstyled">
+                <li aria-hidden="true">{{now}} {{weather_description}}</li>
+                <li hidden>{{aira_weather_description}}</li>
+                <li>{{city}}, {{country}}</li>
             </ul>
         </header>
         `
+    return fHUDstr(template, _oData, _oSettings)
 }

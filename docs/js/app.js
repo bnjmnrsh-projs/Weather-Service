@@ -152,7 +152,7 @@
     /**
      * Generate a visual scale based on 5km
      *
-     * @param {float} vis
+     * @param {float} vis (expects km units)
      */
     const fSetVisabilityScale = function (vis) {
         const distance = (parseFloat(vis) / 5) * 100;
@@ -229,6 +229,171 @@
                 break
         }
         return sUVclass
+    };
+
+    const oWeather = {
+        200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        201: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        202: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        230: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        231: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        232: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        233: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
+        300: ['wi-day-rain', 'wi-night-alt-rain'],
+        301: ['wi-day-rain', 'wi-night-alt-rain'],
+        302: ['wi-day-rain', 'wi-night-alt-rain'],
+        500: ['wi-day-rain', 'wi-night-alt-rain'],
+        501: ['wi-day-rain', 'wi-night-alt-rain'],
+        502: ['wi-day-rain-wind', 'wi-night-alt-rain-wind'],
+        511: ['wi-day-sleet', 'wi-night-alt-sleet'],
+        520: ['wi-day-showers', 'wi-night-alt-showers'],
+        521: ['wi-day-showers', 'wi-night-alt-showers'],
+        522: ['wi-day-rain', 'wi-night-alt-rain'],
+        600: ['wi-day-snow', 'wi-night-alt-snow'],
+        602: ['wi-day-snow', 'wi-night-alt-snow'],
+        610: ['wi-day-snow-thunderstorm', 'wi-night-alt-snow-thunderstorm'],
+        611: ['wi-day-snow-wind', 'wi-night-alt-snow-wind'],
+        612: ['wi-day-snow-wind', 'wi-night-alt-snow-wind'],
+        622: ['wi-day-snow-thunderstorm', 'wi-night-alt-snow-thunderstorm'],
+        623: ['wi-day-snow', 'wi-night-alt-snow'],
+        700: ['wi-day-fog', 'wi-night-fog'],
+        711: ['wi-day-fog', 'wi-night-fog'],
+        721: ['wi-day-fog', 'wi-night-fog'],
+        731: ['wi-day-fog', 'wi-night-fog'],
+        741: ['wi-day-fog', 'wi-night-fog'],
+        751: ['wi-day-fog', 'wi-night-fog'],
+        800: ['wi-day-sunny', 'wi-night-clear'],
+        801: ['wi-day-cloudy', 'wi-night-alt-cloudy'],
+        802: ['wi-day-cloudy-high', 'wi-night-alt-cloudy-high'],
+        803: ['wi-day-cloudy-high', 'wi-night-partly-cloudy'],
+        804: ['wi-cloudy', 'wi-cloudy'],
+        900: ['wi-rain-mix', 'wi-rain-mix'],
+    };
+
+    const oCloudCover = {
+        0: ['wi-day-sunny', 'wi-night-clear'],
+        1: ['wi-day-cloudy-high', 'wi-night-alt-cloudy-high'],
+        2: ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
+        3: ['wi-cloud', 'wi-cloud'],
+        4: ['wi-cloudy', 'wi-cloudy'],
+        5: ['dark-cloudy', 'dark-cloudy'],
+    };
+
+    /**
+     * Returns the string name of the weather icon
+     *
+     * @param {object} oData Either the current, daily, or iHourly forecast weather object
+     * @param {string || int} [iHour]
+     * @returns string
+     */
+    const fGetWeatherIcon = function (oData, iHour) {
+        if (!oData) return
+
+        let iCode, sPod;
+        if (!iHour && oData.hasOwnProperty('pod')) {
+            // Current weather object
+            sPod = fClean(oData.sPod) === 'd' ? 0 : 1;
+            iCode = parseInt(fClean(oData.weather.code));
+        } else if ('hour' in oData) {
+            // Forcast weather object (hourly)
+            sPod = fClean(oData[iHour].sPod) === 'd' ? 0 : 1;
+            iCode = parseInt(fClean(oData[iHour].weather.code));
+        } else {
+            // Forcast weather object (days)
+            sPod = 1;
+            iCode = parseInt(fClean(oData.weather.code));
+        }
+        return oWeather[iCode][sPod]
+    };
+
+    /**
+     * Select the cloud iCoverage icon based on percentage value
+     *
+     * @param {int} iCoverage A percentage figure 0-100
+     * @param {string} sPod Point of Day
+     * @returns {string} the string name of the icon
+     */
+    const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
+        if (typeof iCoverage !== 'number') return
+
+        // set day or night icon set
+        sPod = sPod = 0 ;
+
+        const icons = oCloudCover;
+
+        iCoverage = parseInt(iCoverage);
+
+        let aIconData = '';
+
+        switch (iCoverage) {
+            case iCoverage >= 0 && iCoverage < 16 ? iCoverage : null:
+                aIconData = [icons[0][sPod], 0];
+                break
+            case iCoverage >= 16 && iCoverage < 32 ? iCoverage : null:
+                aIconData = [icons[1][sPod], 1];
+                break
+            case iCoverage >= 32 && iCoverage < 48 ? iCoverage : null:
+                aIconData = [icons[2][sPod], 2];
+                break
+            case iCoverage >= 48 && iCoverage < 65 ? iCoverage : null:
+                aIconData = [icons[3][sPod], 3];
+                break
+            case iCoverage >= 65 && iCoverage < 83 ? iCoverage : null:
+                aIconData = [icons[4][sPod], 4];
+                break
+            case iCoverage >= 83 && iCoverage <= 100 ? iCoverage : null:
+                aIconData = [icons[5][sPod], 5];
+                break
+        }
+        aIconData.push(
+            document.querySelector(`#svgs .svg-${aIconData[0]}`).outerHTML
+        );
+
+        return aIconData
+    };
+
+    /**
+     * Takes a string based representation of a DOM element, and adds inline style and/or data-* attributes to it.
+     *
+     * @param {string} sEl
+     * @param {object} props
+     * @returns {string}
+     *
+     * The props object may contain a top level `style` propery for inline css string
+     * and or a `data` object which will be mapped to data-* attributes on the element.
+     *
+     *  `<span class="inline-icon">
+     *    ${Icons.fSetStringElAttrs(oIcons.sWindDirection, {
+     *        style: `transform: rotate(${sWindDeg}deg)`,
+     *        class: 'some-class',
+     *        data: { temp: '6' },
+     *    })}
+     *  </span>`
+     */
+
+    const fSetStringElAttrs = function (sEl, props = {}) {
+        if ('content' in document.createElement('template')) {
+            const nEl = document.createElement('div');
+            nEl.innerHTML = sEl.trim();
+            const nTarget = nEl.querySelector('div >:first-child');
+
+            if (props.hasOwnProperty('style')) {
+                nTarget.setAttribute('style', props.style);
+            }
+            if (props.hasOwnProperty('class')) {
+                nTarget.classList.add(props.class);
+            }
+            if (
+                props.hasOwnProperty('data') &&
+                Object.keys(props.data).length > 0
+            ) {
+                Object.keys(props.data).map((key) => {
+                    nTarget.setAttribute(`data-${key}`, props.data[key]);
+                });
+            }
+            return nEl.innerHTML
+        }
+        return ''
     };
 
     /**
@@ -325,192 +490,10 @@
         }
     };
 
-    const oWeather = {
-        200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        201: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        202: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        230: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        231: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        232: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        233: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
-        300: ['wi-day-rain', 'wi-night-alt-rain'],
-        301: ['wi-day-rain', 'wi-night-alt-rain'],
-        302: ['wi-day-rain', 'wi-night-alt-rain'],
-        500: ['wi-day-rain', 'wi-night-alt-rain'],
-        501: ['wi-day-rain', 'wi-night-alt-rain'],
-        502: ['wi-day-rain-wind', 'wi-night-alt-rain-wind'],
-        511: ['wi-day-sleet', 'wi-night-alt-sleet'],
-        520: ['wi-day-showers', 'wi-night-alt-showers'],
-        521: ['wi-day-showers', 'wi-night-alt-showers'],
-        522: ['wi-day-rain', 'wi-night-alt-rain'],
-        600: ['wi-day-snow', 'wi-night-alt-snow'],
-        602: ['wi-day-snow', 'wi-night-alt-snow'],
-        610: ['wi-day-snow-thunderstorm', 'wi-night-alt-snow-thunderstorm'],
-        611: ['wi-day-snow-wind', 'wi-night-alt-snow-wind'],
-        612: ['wi-day-snow-wind', 'wi-night-alt-snow-wind'],
-        622: ['wi-day-snow-thunderstorm', 'wi-night-alt-snow-thunderstorm'],
-        623: ['wi-day-snow', 'wi-night-alt-snow'],
-        700: ['wi-day-fog', 'wi-night-fog'],
-        711: ['wi-day-fog', 'wi-night-fog'],
-        721: ['wi-day-fog', 'wi-night-fog'],
-        731: ['wi-day-fog', 'wi-night-fog'],
-        741: ['wi-day-fog', 'wi-night-fog'],
-        751: ['wi-day-fog', 'wi-night-fog'],
-        800: ['wi-day-sunny', 'wi-night-clear'],
-        801: ['wi-day-cloudy', 'wi-night-alt-cloudy'],
-        802: ['wi-day-cloudy-high', 'wi-night-alt-cloudy-high'],
-        803: ['wi-day-cloudy-high', 'wi-night-partly-cloudy'],
-        804: ['wi-cloudy', 'wi-cloudy'],
-        900: ['wi-rain-mix', 'wi-rain-mix'],
-    };
-
-    const oCloudCover = {
-        0: ['wi-day-sunny', 'wi-night-clear'],
-        1: ['wi-day-cloudy-high', 'wi-night-alt-cloudy-high'],
-        2: ['wi-day-sunny-overcast', 'wi-night-partly-cloudy'],
-        3: ['wi-cloud', 'wi-cloud'],
-        4: ['wi-cloudy', 'wi-cloudy'],
-        5: ['dark-cloudy', 'dark-cloudy'],
-    };
-
-    /**
-     * Returns the string name of the weather icon
-     *
-     * @param {object} oData Either the current, daily, or iHourly forcast weather object
-     * @param {string || int} [iHour]
-     * @returns string
-     */
-    const fGetWeatherIcon = function (oData, iHour) {
-        if (!oData) return
-
-        let iCode, sPod;
-        if (!iHour && oData.hasOwnProperty('pod')) {
-            // Current weather object
-            sPod = fClean(oData.sPod) === 'd' ? 0 : 1;
-            iCode = parseInt(fClean(oData.weather.code));
-        } else if ('hour' in oData) {
-            // Forcast weather object (hourly)
-            sPod = fClean(oData[iHour].sPod) === 'd' ? 0 : 1;
-            iCode = parseInt(fClean(oData[iHour].weather.code));
-        } else {
-            // Forcast weather object (days)
-            sPod = 1;
-            iCode = parseInt(fClean(oData.weather.code));
-        }
-        return oWeather[iCode][sPod]
-    };
-
-    /**
-     * Select the cloud iCoverage icon based on percentage value
-     *
-     * @param {int} iCoverage A percentage figure 0-100
-     * @param {string} sPod Point of Day
-     * @returns {string} the string name of the icon
-     */
-    const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
-        if (typeof iCoverage !== 'number') return
-
-        // set day or night icon set
-        sPod = sPod = 0 ;
-
-        const icons = oCloudCover;
-
-        iCoverage = parseInt(iCoverage);
-
-        let aIconData = '';
-
-        switch (iCoverage) {
-            case iCoverage >= 0 && iCoverage < 16 ? iCoverage : null:
-                aIconData = [icons[0][sPod], 0];
-                break
-            case iCoverage >= 16 && iCoverage < 32 ? iCoverage : null:
-                aIconData = [icons[1][sPod], 1];
-                break
-            case iCoverage >= 32 && iCoverage < 48 ? iCoverage : null:
-                aIconData = [icons[2][sPod], 2];
-                break
-            case iCoverage >= 48 && iCoverage < 65 ? iCoverage : null:
-                aIconData = [icons[3][sPod], 3];
-                break
-            case iCoverage >= 65 && iCoverage < 83 ? iCoverage : null:
-                aIconData = [icons[4][sPod], 4];
-                break
-            case iCoverage >= 83 && iCoverage <= 100 ? iCoverage : null:
-                aIconData = [icons[5][sPod], 5];
-                break
-        }
-        aIconData.push(
-            document.querySelector(`#svgs .svg-${aIconData[0]}`).outerHTML
-        );
-
-        return aIconData
-    };
-
-    /**
-     * Perform string replacement for UI strings.
-     *
-     * @param {string} string
-     * @param {object} _oData
-     * @param {object} _oSettings
-     * @returns {string} Formatted string
-     */
-    const fFormatUIstr = function (string, _oData, _oSettings) {
-        if (!string) return ''
-        return string
-            .replace('{{forcast}}', fClean(_oData.weather.description))
-            .replace('{{temp}}', fTemp(fClean(_oData.temp), _oSettings))
-            .replace('{{city}}', fClean(_oData.city_name))
-            .replace('{{country}}', fClean(_oData.country_code))
-    };
-
-    /**
-     * Renders the app's header
-     *
-     * @param {array} _oData
-     * @returns {string}
-     */
-    const fRenderHUD = function (_oData, _oSettings) {
-        console.log('fRenderHUD: ', _oData);
-        const sIcon = fGetWeatherIcon(_oData);
-        return `
-        <header id="hud" class="" data-temp="${fTempDataPt(
-            _oData.temp
-        )}">
-            <h3>
-                    <img class="weather-icon" alt="${fFormatUIstr(
-                        _oSettings.airaForcast,
-                        _oData,
-                        _oSettings
-                    )}" src="./svg/icons/weather/svg/${sIcon}.svg" />
-                <span aria-hidden="true">${fTemp(
-                    fClean(_oData.temp),
-                    _oSettings
-                )}</span>
-            </h3>
-            <ul class="unstyled">
-                <li aria-hidden="true">
-                    ${fFormatUIstr(
-                        _oSettings.forcast,
-                        _oData,
-                        _oSettings
-                    ).toLowerCase()}
-                </li>
-                <li>
-                    ${fFormatUIstr(
-                        _oSettings.location,
-                        _oData,
-                        _oSettings
-                    )}
-                </li>
-            </ul>
-        </header>
-        `
-    };
-
     /**
      * Possible Weatherbit.io date responses via our Cloudflare Worker:
      *
-     * 1) CURRENT.data[0].ob_time: "2021-06-30 18:58"
+     * 1) CURRENT.data[0].ob_time: "2021-06-30 18:58" <- the space will throw an errror on safari
      * 2) CURRENT.data[0].datetime: "2021-06-30:19" <- will not convert to valid date object
      * 3) DAILY.data[x].datetime: "2021-06-30"
      * 4) DAILY.data[x].valid_date: "2021-06-30"
@@ -528,9 +511,11 @@
      * @returns {string} date as string with time component
      */
     function fAddTimeToDateString(sDate) {
-        if (sDate.length >= 16) return sDate
+        // If we have recieved ob_time, repalce the space with a 'T'
+        if (sDate.length >= 16) return sDate.replace(' ', 'T')
+
         // Will produce a string that can be converted into a valid date object
-        const new_sDate = `${sDate} 00:00`;
+        const new_sDate = `${sDate}T00:00`;
         const oDate = new Date(new_sDate);
 
         // test to see if we now have string which creates a valid date
@@ -558,7 +543,7 @@
         }
 
         if (_oSettings.units === 'M') return sTime24
-
+        console.log('sTime24', sTime24);
         const [sHours, minutes] = sTime24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1);
         const period = +sHours < 12 ? 'AM' : 'PM';
         const hours = +sHours % 12 || 12;
@@ -577,6 +562,7 @@
      */
     const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
         let oDate, aTime;
+        console.log('sDate', sDate);
         if (sDate !== '') {
             oDate = new Date(fAddTimeToDateString(sDate));
         } else {
@@ -587,16 +573,15 @@
         } else {
             aTime = [oDate.getUTCHours(), oDate.getUTCMinutes()];
         }
+        const aDate = [
+            oDate.getUTCFullYear(),
+            oDate.getUTCMonth(),
+            oDate.getUTCDate(),
+            aTime[0],
+            aTime[1],
+        ];
 
-        const oDateUtc = new Date(
-            Date.UTC(
-                oDate.getUTCFullYear(),
-                oDate.getUTCMonth(),
-                oDate.getUTCDate(),
-                aTime[0],
-                aTime[1]
-            )
-        );
+        const oDateUtc = new Date(Date.UTC(...aDate));
 
         if (_oSettings.debug === true) {
             console.log('fGetLocalTime provided sTime24: ', sTime24);
@@ -605,7 +590,7 @@
                 `${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`
             );
         }
-
+        console.log(oDate);
         return fTime(`${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`, _oSettings)
     };
 
@@ -616,10 +601,7 @@
      * @returns {string}
      */
     const fGetWeekday = function (sDate) {
-        console.log('fGetWeekday:', sDate);
         const oDate = new Date(fAddTimeToDateString(sDate));
-        console.log('fGetWeekday fAddTimeToDateString', fAddTimeToDateString(sDate));
-        console.log('fGetWeekday: oDate', oDate);
 
         // test our oDate object
         if (!oDate || typeof oDate.getMonth !== 'function') {
@@ -655,13 +637,175 @@
         return sFormatedDate
     };
 
+    const _oTextStrings = {
+        en: {
+            now: 'Currently: ',
+            aira_now: 'The weather is currently: ',
+            feels_like: 'Feels Like:',
+            uv: 'UV:',
+            cloud: 'Cloud:',
+            snow: 'Snow:',
+            percip: 'Rain:',
+            wind: 'Wind:',
+            aira_winds: 'Winds traveling at',
+            aira_winds_join: 'from the',
+            vis: 'Visibility:',
+            sun: 'Sun:',
+            moon: 'Moon:',
+        },
+    };
+
     /**
-     * Renders individual upcoming forcast li elements
+     * Perform string replacement for strings in the HUD component.
+     *
+     * @param {string} string
+     * @param {object} _oData
+     * @param {object} _oSettings
+     * @returns {string} Formatted string
+     */
+    const fHUDstr = function (
+        string,
+        _oData,
+        _oSettings,
+        _oStrings = _oTextStrings
+    ) {
+        const oCURRENT = _oData.CURRENT.data[0];
+
+        if (!string) return ''
+        return (
+            string
+                // HUD
+                .replace('{{now}}', _oStrings.en.now)
+                .replace(
+                    '{{aira_weather_description}}',
+                    `${_oStrings.en.aira_now} ${fClean(
+                    oCURRENT.weather.description
+                )}`
+                )
+                .replace(
+                    '{{weather_description}}',
+                    fClean(oCURRENT.weather.description).toLowerCase()
+                )
+                .replace(
+                    '{{temp}}',
+                    fTemp(fClean(oCURRENT.temp), _oSettings)
+                )
+                .replace('{{city}}', fClean(oCURRENT.city_name))
+                .replace('{{country}}', fClean(oCURRENT.country_code))
+        )
+    };
+
+    /**
+     * Perform string replacement for strings in the details component.
+     *
+     * @param {string} string
+     * @param {object} _oData
+     * @param {object} _oSettings
+     * @returns {string} Formatted string
+     */
+    const fDetsStr = function (
+        string,
+        _oData,
+        _oSettings,
+        _oStrings = _oTextStrings
+    ) {
+        const oCURRENT = _oData.CURRENT.data[0];
+
+        if (!string) return ''
+        return (
+            string
+                // HUD
+                // Details
+                .replace('{{feels_like}}', _oStrings.en.feels_like)
+                .replace(
+                    '{{app_temp}}',
+                    fTemp(fClean(oCURRENT.app_temp), _oSettings)
+                )
+                .replace('{{uv}}', _oStrings.en.uv)
+                .replace('{{uv_index}}', fClean(oCURRENT.uv.toFixed(2)))
+
+                .replace('{{cloud}}', _oStrings.en.cloud)
+                .replace('{{cloud_percent}}', `${fClean(oCURRENT.clouds)}%`)
+                .replace('{{snow}}', _oStrings.en.snow)
+                .replace(
+                    '{{snow_percip}}',
+                    fPercip(fClean(oCURRENT.snow), _oSettings)
+                )
+                .replace('{{rain}}', _oStrings.en.percip)
+                .replace(
+                    '{{rain_percip}}',
+                    fPercip(fClean(oCURRENT.precip), _oSettings)
+                )
+                .replace('{{aira_winds}}', _oStrings.en.aira_winds)
+                .replace('{{aira_winds_join}}', _oStrings.en.aira_winds_join)
+
+                .replace('{{wind}}', _oStrings.en.wind)
+                .replace(
+                    '{{wind_speed}}',
+                    fKmPerHour(fClean(oCURRENT.wind_spd), _oSettings)
+                )
+                .replace('{{wind_direction}}', fClean(oCURRENT.wind_cdir))
+                .replace('{{vis}}', _oStrings.en.vis)
+                .replace(
+                    '{{vis_distance}}',
+                    fKm(fClean(oCURRENT.vis), _oSettings)
+                )
+                .replace('{{sun_rise_set}}', _oStrings.en.sun)
+                .replace(
+                    '{{sun_rise}}',
+                    fGetLocalTime(
+                        fClean(oCURRENT.ob_time),
+                        _oSettings,
+                        fClean(oCURRENT.sunrise)
+                    )
+                )
+                .replace(
+                    '{{sun_set}}',
+                    fGetLocalTime(
+                        fClean(oCURRENT.ob_time),
+                        _oSettings,
+                        fClean(oCURRENT.sunset)
+                    )
+                )
+                .replace('{{moon}}', _oStrings.en.moon)
+        )
+    };
+
+    /**
+     * Renders the app's header
+     *
+     * @param {array} _oData
+     * @returns {string}
+     */
+    const fRenderHUD = function (_oData, _oSettings) {
+        _oSettings.log ? console.log('fRenderHUD: ', _oData) : '';
+
+        const oCURRENT = _oData.CURRENT.data[0];
+        const sIconName = fGetWeatherIcon(oCURRENT);
+
+        const template = `<header
+        id="hud" class="" data-temp="${fTempDataPt(oCURRENT.temp)}">
+            <h3>
+                <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
+                <span aria-hidden="true">{{temp}}</span>
+                </h3>
+                <ul class="unstyled">
+                <li aria-hidden="true">{{now}} {{weather_description}}</li>
+                <li hidden>{{aira_weather_description}}</li>
+                <li>{{city}}, {{country}}</li>
+            </ul>
+        </header>
+        `;
+        return fHUDstr(template, _oData, _oSettings)
+    };
+
+    /**
+     * Renders individual upcoming forecast li elements
      *
      * @param {object} _oForecast
      * @returns {string}
      */
-    const fRenderForcastList = function (_oForecast, _oSettings) {
+    const fRenderForecastList = function (_oForecast, _oSettings) {
         console.log('fRenderForcast: ', _oForecast);
         console.log('_oSettings: ', _oSettings);
 
@@ -672,11 +816,11 @@
                 fClean(_oForecast[el].temp))}">
                         <header datetime="${fClean(
                             _oForecast[el].datetime
-                        )}" aria-description="The forcast for">${fGetWeekday(fClean(_oForecast[el].datetime))} ${fGetDayOrdinal(fClean(_oForecast[el].datetime))}</header>
+                        )}" aria-description="The forecast for">${fGetWeekday(fClean(_oForecast[el].datetime))} ${fGetDayOrdinal(fClean(_oForecast[el].datetime))}</header>
                         <img class="weather-icon" alt="${fClean(
                             _oForecast[el].weather.description
                         )}" src="./svg/icons/weather/svg/${fGetWeatherIcon(_oForecast[el])}.svg" />
-                        <p class="_oForecast-description" aria-hidden="true">${fClean(
+                        <p class="forecast-description" aria-hidden="true">${fClean(
                             _oForecast[el].weather.description.toLowerCase()
                         )}</p>
                          <span><stong>${fTemp(
@@ -694,16 +838,16 @@
     };
 
     /**
-     * Renders the app's upcoming forcast section
+     * Renders the app's upcoming forecast section
      *
      * @param {object} _oForecast
      * @returns {string}
      */
-    const fRenderForcast = function (_oForecast, _oSettings) {
+    const fRenderForecast = function (_oForecast, _oSettings) {
         return `
-        <div id="forcast" aria-description="The weather forcast for the next 16 days.">
+        <div id="forecast" aria-description="The weather forecast for the next 16 days.">
             <ul class="unstyled">
-                ${fRenderForcastList(_oForecast, _oSettings)}
+                ${fRenderForecastList(_oForecast, _oSettings)}
             </ul>
         </div>
         `
@@ -785,95 +929,92 @@
      * @returns {string}
      */
     const fRenderDetails = function (_oData, _oSettings) {
-        const sWindDirection = fClean(_oData.wind_cdir_full);
-        const sWindDeg = fClean(_oData.wind_dir);
-        const iconCloud = fGetCloudCoverIcon(_oData.clouds);
-        const oMoon = fPhase(_oData.obj_time, _oSettings);
+        const oCURRENT = _oData.CURRENT.data[0];
+        fClean(oCURRENT.wind_cdir_full);
+        fClean(oCURRENT.wind_dir);
+        const iconCloud = fGetCloudCoverIcon(oCURRENT.clouds);
+        const oMoon = fPhase(oCURRENT.obj_time, _oSettings);
+        const oIcons = _oSettings.icon;
 
-        return `
+        const template = `
         <div id="details">
             <ul class="unstyled">
                 <li class="feels-like">
-                <span class="left-col">Feels like:
-                    ${fTemp(fClean(_oData.app_temp), _oSettings)}
-                </span>
-                <svg alt="" height="25" width="25" class="inline-icon svg-wi-thermometer" data-temp="${fTempDataPt(
-                    fClean(_oData.app_temp)
-                )}" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m9.91 19.56c0-.85.2-1.64.59-2.38s.94-1.35 1.65-1.84v-9.92c0-.8.27-1.48.82-2.03s1.23-.84 2.03-.84c.81 0 1.49.28 2.04.83.55.56.83 1.23.83 2.03v9.92c.71.49 1.25 1.11 1.64 1.84s.58 1.53.58 2.38c0 .92-.23 1.78-.68 2.56s-1.07 1.4-1.85 1.85-1.63.68-2.56.68c-.92 0-1.77-.23-2.55-.68s-1.4-1.07-1.86-1.85-.68-1.63-.68-2.55zm1.76 0c0 .93.33 1.73.98 2.39s1.44.99 2.36.99c.93 0 1.73-.33 2.4-1s1.01-1.46 1.01-2.37c0-.62-.16-1.2-.48-1.73s-.76-.94-1.32-1.23l-.28-.14c-.1-.04-.15-.14-.15-.29v-10.76c0-.32-.11-.59-.34-.81-.23-.21-.51-.32-.85-.32-.32 0-.6.11-.83.32s-.34.48-.34.81v10.74c0 .15-.05.25-.14.29l-.27.14c-.55.29-.98.7-1.29 1.23s-.46 1.1-.46 1.74zm.78 0c0 .71.24 1.32.73 1.82s1.07.75 1.76.75 1.28-.25 1.79-.75.76-1.11.76-1.81c0-.63-.22-1.19-.65-1.67s-.96-.77-1.58-.85v-7.36c0-.06-.03-.13-.1-.19-.07-.07-.14-.1-.22-.1-.09 0-.16.03-.21.08-.05.06-.08.12-.08.21v7.34c-.61.09-1.13.37-1.56.85-.43.49-.64 1.04-.64 1.68z"/></svg>
+                    <span class="left-col">{{feels_like}} {{app_temp}}</span>
+                    ${fSetStringElAttrs(_oSettings.icon.sThermometer, {
+                        class: 'inline-icon',
+                        data: {
+                            temp: fTempDataPt(fClean(oCURRENT.app_temp)),
+                        },
+                    })}
+                </li>
                 ${
-                    _oData.uv
-                        ? '<li class="uv-index"><span class="left-col">UV Index: ' +
-                          fClean(_oData.uv.toFixed(2)) +
-                          '</span><svg alt="" height="25" width="25" class="inline-icon svg-wi-day-sunny" data-uv="' +
-                          fUvDataPt(fClean(_oData.uv)) +
-                          '" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z"/></svg>'
+                    oCURRENT.uv
+                        ? `<li class="uv-index">
+                            <span class="left-col">{{uv}} {{uv_index}}</span>
+                            ${fSetStringElAttrs(
+                                _oSettings.icon.sSunnyDay,
+                                {
+                                    class: 'inline-icon',
+                                    data: {
+                                        uv: fUvDataPt(
+                                            fClean(oCURRENT.uv)),
+                                    },
+                                }
+                            )}
+                          </li>`
                         : ''
                 }
-                <li class="cloud-cover"><span class="left-col">Cloud:
-                    ${fClean(_oData.clouds)}% </span>
+                <li class="cloud-cover">
+                    <span class="left-col">{{cloud}} {{cloud_percent}}</span>
                     ${iconCloud[2]}
+                </li>
                 ${
-                    _oData.snow
-                        ? '<li><span class="left-col">Snow: ' +
-                          fPercip(fClean(_oData.snow), _oSettings) +
-                          '</span>' +
-                          _oSettings.nSnow +
-                          '</li>'
+                    oCURRENT.snow
+                        ? `<li>
+                            <span class="left-col">{{snow}} {{snow_percip}}</span>
+                            ${oIcons.sSnow}
+                          </li>`
                         : ''
                 }
                 <li class="precipitation">
-                    <span class="left-col">Precip:
-                          ${fPercip(fClean(_oData.precip), _oSettings)}
-                          </span>${_oSettings.nRaindrop}
+                    <span class="left-col">{{rain}} {{rain_percip}}</span>
+                    ${oIcons.sRaindrop}
                 </li>
-                <li class="windspeed"><span class="left-col">
-                    <span aria-description="Winds traveling from ${sWindDirection}">
-                        Windspeed:
-                        ${fKmPerHour(
-                            fClean(_oData.wind_spd),
-                            _oSettings
-                        )}&nbsp;|&nbsp;${fClean(_oData.wind_cdir)}
-                    </span></span>
+                <li class="windspeed" aria-description="{{aira_winds}} ">
+                    <span class="left-col">
+                        {{wind}} {{wind_speed}}<span aira-hidden>&nbsp;|&nbsp;</span><span hidden>{{aira_winds_join}}</span> {{wind_direction}}
+                    </span>
                     <span class="inline-icon">
-                        <svg alt="" height="25" width="25" class="compass"  style="transform: rotate(${sWindDeg}deg)" enable-background="new 0 0 30 30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="m3.74 14.5c0-2.04.51-3.93 1.52-5.66s2.38-3.1 4.11-4.11 3.61-1.51 5.64-1.51c1.52 0 2.98.3 4.37.89s2.58 1.4 3.59 2.4 1.81 2.2 2.4 3.6.89 2.85.89 4.39c0 1.52-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.59-2.2 1.8-3.59 2.39-2.84.89-4.37.89-3-.3-4.39-.89-2.59-1.4-3.6-2.4-1.8-2.2-2.4-3.58-.88-2.84-.88-4.37zm2.48 0c0 2.37.86 4.43 2.59 6.18 1.73 1.73 3.79 2.59 6.2 2.59 1.58 0 3.05-.39 4.39-1.18s2.42-1.85 3.21-3.2 1.19-2.81 1.19-4.39-.4-3.05-1.19-4.4-1.86-2.42-3.21-3.21-2.81-1.18-4.39-1.18-3.05.39-4.39 1.18-2.42 1.86-3.22 3.21-1.18 2.82-1.18 4.4zm4.89 5.85 3.75-13.11c.01-.1.06-.15.15-.15s.14.05.15.15l3.74 13.11c.04.11.03.19-.02.25s-.13.06-.24 0l-3.47-1.3c-.1-.04-.2-.04-.29 0l-3.5 1.3c-.1.06-.17.06-.21 0s-.08-.15-.06-.25z"/></svg>
-                        ${_oSettings.nWind}
+                        ${fSetStringElAttrs(oIcons.sWindDirection, {
+                            style: `transform: rotate(${fClean(
+                                oCURRENT.wind_dir
+                            )}deg)`,
+                        })}
+                        ${oIcons.sWind}
                     </span>
                 </li>
                 <li class="visibility">
                     <div class="visibility-wrap">
-                        <span class="left-col">Visibility:
-                          ${fKm(fClean(_oData.vis), _oSettings)}
-                        </span>
-                        ${_oSettings.nBinoculars}
+                        <span class="left-col">{{vis}} {{vis_distance}}</span>
+                        ${oIcons.sBinoculars}
                     </div>
                     <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
                 </li>
-                <li class="sun-up-down">
-                    <span class="left-col">
-                        ${fGetLocalTime(
-                            fClean(_oData.ob_time),
-                            _oSettings,
-                            fClean(_oData.sunrise)
-                        )}
-                        |
-                        ${fGetLocalTime(
-                            fClean(_oData.ob_time),
-                            _oSettings,
-                            fClean(_oData.sunset)
-                        )}
-                    </span>
-                    ${_oSettings.nSunrise}
+                <li class="sun-rise-set">
+                    <span class="left-col">{{sun_rise_set}} {{sun_rise}} | {{sun_set}}</span>
+                    ${oIcons.sSunrise}
                 </li>
                 <li class="moonphase">
-                    <span class="left-col">Moon: ${oMoon.name}</span>
+                    <span class="left-col">{{moon}} ${oMoon.name}</span>
                     <img class="inline-icon moon"
                         alt=""
                         height="25" width="25"
                         src="./svg/icons/moon/svg/${oMoon.phase}.svg"/>
                 </li>
             </ul>
-        </div>
-        `
+        </div>`;
+        return fDetsStr(template, _oData, _oSettings)
     };
 
     /**
@@ -914,12 +1055,9 @@
     const weatherApp = function (_oSettings = {}) {
         const _oDefaults = {
             target: '#app',
-            KEY: '',
             units: 'M',
-            forcast: `{{forcast}}`,
-            airaForcast: `The weather is currently: {{forcast}} at {{temp}}.`,
-            location: `{{city}}, {{country}}`,
             debug: false,
+            dev: false,
         };
 
         // Merge settings with defaults
@@ -939,31 +1077,35 @@
         // SVGs are staged in HTML for details section,
         // the remainder of images are inlined(except Cloudcover & Moon, loaded dynamically)
         const nIcons = document.querySelector('#svgs');
+        _oSettings.icon = {
+            // degrees/compass inline
+            sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
+            sThermometer: nIcons.querySelector('.svg-wi-thermometer').outerHTML,
+            sWindDirection: nIcons.querySelector('.svg-wi-wind-deg').outerHTML,
+            sSnow: nIcons.querySelector('.svg-wi-snow').outerHTML,
 
-        // degrees/compass inline
-        _oSettings.nWind = nIcons.querySelector('.svg-wi-strong-wind').outerHTML;
-        _oSettings.nSnow = nIcons.querySelector('.svg-wi-snow').outerHTML;
-
-        // cloud lodaded dynamically
-        _oSettings.nRaindrop = nIcons.querySelector('.svg-wi-raindrop').outerHTML;
-        _oSettings.nBinoculars = nIcons.querySelector('.svg-binoculars').outerHTML;
-        _oSettings.nSunrise = nIcons.querySelector('.svg-wi-sunrise').outerHTML;
-        _oSettings.nSunset = nIcons.querySelector('.svg-wi-sunset').outerHTML;
-        // moon phases loaded as <img>
+            // cloud lodaded dynamically
+            sRaindrop: nIcons.querySelector('.svg-wi-raindrop').outerHTML,
+            sBinoculars: nIcons.querySelector('.svg-binoculars').outerHTML,
+            sSunrise: nIcons.querySelector('.svg-wi-sunrise').outerHTML,
+            sSunset: nIcons.querySelector('.svg-wi-sunset').outerHTML,
+            sSunnyDay: nIcons.querySelector('.svg-wi-day-sunny').outerHTML,
+            // moon phases loaded as <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+        };
 
         /**
          * Build the UI
          *
          * @param {array} data
          */
-        const fBuildUI = function (_oWeather) {
+        const fBuildUI = function (_oData) {
             app.innerHTML =
-                fRenderHUD(_oWeather.CURRENT.data[0], _oSettings) +
-                fRenderDetails(_oWeather.CURRENT.data[0], _oSettings) +
-                fRenderForcast(_oWeather.DAILY.data, _oSettings);
+                fRenderHUD(_oData, _oSettings) +
+                fRenderDetails(_oData, _oSettings) +
+                fRenderForecast(_oData.DAILY.data, _oSettings);
 
             // Adjust the visibility 'fogg' bar in the details section
-            fSetVisabilityScale(_oWeather.CURRENT.data[0].vis);
+            fSetVisabilityScale(_oData.CURRENT.data[0].vis);
         };
 
         /**
@@ -997,8 +1139,7 @@
 
     // with debugging and Imperial Units
     const settings = {
-        forcast: `Currently: {{forcast}}`,
-        units: 'I',
+        units: 'M',
         debug: true,
         dev: false,
     };
