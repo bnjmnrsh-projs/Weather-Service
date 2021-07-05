@@ -10,7 +10,7 @@ import { fClean } from '../_helpers'
  * @param {object} _oForecast
  * @returns {string}
  */
-const fRenderForcastList = function (_oForecast, _oSettings) {
+const fRenderForecastList = function (_oForecast, _oSettings) {
     console.log('fRenderForcast: ', _oForecast)
     console.log('_oSettings: ', _oSettings)
 
@@ -50,11 +50,11 @@ const fRenderForcastList = function (_oForecast, _oSettings) {
  * @param {object} _oForecast
  * @returns {string}
  */
-export const fRenderForcast = function (_oForecast, _oSettings) {
+export const fRenderForecast = function (_oForecast, _oSettings) {
     return `
         <div id="forcast" aria-description="The weather forcast for the next 16 days.">
             <ul class="unstyled">
-                ${fRenderForcastList(_oForecast, _oSettings)}
+                ${fRenderForecastList(_oForecast, _oSettings)}
             </ul>
         </div>
         `

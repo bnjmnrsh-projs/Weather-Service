@@ -2,7 +2,7 @@ import * as Queries from './_queries'
 import * as Scales from './_scales'
 
 import { fRenderHUD } from './components/_hud'
-import { fRenderForcast } from './components/_forcast'
+import { fRenderForecast } from './components/_forecast'
 import { fRenderDetails } from './components/_details'
 import { fErrorDisplay } from './components/_errors'
 
@@ -62,14 +62,14 @@ const weatherApp = function (_oSettings = {}) {
      *
      * @param {array} data
      */
-    const fBuildUI = function (_oWeather) {
+    const fBuildUI = function (_oData) {
         app.innerHTML =
-            fRenderHUD(_oWeather.CURRENT.data[0], _oSettings) +
-            fRenderDetails(_oWeather.CURRENT.data[0], _oSettings) +
-            fRenderForcast(_oWeather.DAILY.data, _oSettings)
+            fRenderHUD(_oData, _oSettings) +
+            fRenderDetails(_oData, _oSettings) +
+            fRenderForecast(_oData.DAILY.data, _oSettings)
 
         // Adjust the visibility 'fogg' bar in the details section
-        Scales.fSetVisabilityScale(_oWeather.CURRENT.data[0].vis)
+        Scales.fSetVisabilityScale(_oData.CURRENT.data[0].vis)
     }
 
     /**
