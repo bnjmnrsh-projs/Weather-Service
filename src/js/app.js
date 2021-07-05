@@ -95,7 +95,7 @@ const weatherApp = function (_oSettings = {}) {
             nApp.innerHTML = fErrorDisplay(e)
         }
     }
-    // fInit()
+    fInit()
 }
 
 // with debugging and Imperial Units
