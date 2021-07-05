@@ -102,7 +102,7 @@ const weatherApp = function (_oSettings = {}) {
 const settings = {
     units: 'M',
     debug: true,
-    dev: true,
+    dev: false,
 }
 
 weatherApp(settings)

@@ -1141,7 +1141,7 @@
     const settings = {
         units: 'M',
         debug: true,
-        dev: true,
+        dev: false,
     };
 
     weatherApp(settings);
