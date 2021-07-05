@@ -41,17 +41,21 @@ const weatherApp = function (_oSettings = {}) {
     // SVGs are staged in HTML for details section,
     // the remainder of images are inlined(except Cloudcover & Moon, loaded dynamically)
     const nIcons = document.querySelector('#svgs')
+    _oSettings.icon = {
+        // degrees/compass inline
+        sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
+        sThermometer: nIcons.querySelector('.svg-wi-thermometer').outerHTML,
+        sWindDirection: nIcons.querySelector('.svg-wi-wind-deg').outerHTML,
+        sSnow: nIcons.querySelector('.svg-wi-snow').outerHTML,
 
-    // degrees/compass inline
-    _oSettings.nWind = nIcons.querySelector('.svg-wi-strong-wind').outerHTML
-    _oSettings.nSnow = nIcons.querySelector('.svg-wi-snow').outerHTML
-
-    // cloud lodaded dynamically
-    _oSettings.nRaindrop = nIcons.querySelector('.svg-wi-raindrop').outerHTML
-    _oSettings.nBinoculars = nIcons.querySelector('.svg-binoculars').outerHTML
-    _oSettings.nSunrise = nIcons.querySelector('.svg-wi-sunrise').outerHTML
-    _oSettings.nSunset = nIcons.querySelector('.svg-wi-sunset').outerHTML
-    // moon phases loaded as <img>
+        // cloud lodaded dynamically
+        sRaindrop: nIcons.querySelector('.svg-wi-raindrop').outerHTML,
+        sBinoculars: nIcons.querySelector('.svg-binoculars').outerHTML,
+        sSunrise: nIcons.querySelector('.svg-wi-sunrise').outerHTML,
+        sSunset: nIcons.querySelector('.svg-wi-sunset').outerHTML,
+        sSunnyDay: nIcons.querySelector('.svg-wi-day-sunny').outerHTML,
+        // moon phases loaded as <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+    }
 
     /**
      * Build the UI
