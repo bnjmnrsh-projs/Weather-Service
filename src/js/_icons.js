@@ -1,4 +1,4 @@
-import * as Helpers from './_helpers'
+import { fClean } from './_helpers'
 
 export const oWeather = {
     200: ['wi-day-thunderstorm', 'wi-night-alt-thunderstorm'],
@@ -61,16 +61,16 @@ export const fGetWeatherIcon = function (oData, iHour) {
     let iCode, sPod
     if (!iHour && oData.hasOwnProperty('pod')) {
         // Current weather object
-        sPod = Helpers.fClean(oData.sPod) === 'd' ? 0 : 1
-        iCode = parseInt(Helpers.fClean(oData.weather.code))
+        sPod = fClean(oData.sPod) === 'd' ? 0 : 1
+        iCode = parseInt(fClean(oData.weather.code))
     } else if ('hour' in oData) {
         // Forcast weather object (hourly)
-        sPod = Helpers.fClean(oData[iHour].sPod) === 'd' ? 0 : 1
-        iCode = parseInt(Helpers.fClean(oData[iHour].weather.code))
+        sPod = fClean(oData[iHour].sPod) === 'd' ? 0 : 1
+        iCode = parseInt(fClean(oData[iHour].weather.code))
     } else {
         // Forcast weather object (days)
         sPod = 1
-        iCode = parseInt(Helpers.fClean(oData.weather.code))
+        iCode = parseInt(fClean(oData.weather.code))
     }
     return oWeather[iCode][sPod]
 }
