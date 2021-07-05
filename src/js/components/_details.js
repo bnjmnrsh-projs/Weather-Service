@@ -68,7 +68,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
                 </li>
                 <li class="windspeed" aria-description="{{aira_winds}} ">
                     <span class="left-col">
-                        {{wind}} {{wind_speed}}<span aira-hidden>&nbsp;|&nbsp;</span><span hidden>{{aira_winds_join}}</span> {{wind_direction}}
+                        {{wind}} {{wind_speed}}<span aira-hidden>&nbsp;|&nbsp;</span><span hidden>{{aira_winds_join}}</span>{{wind_direction}}
                     </span>
                     <span class="inline-icon">
                         ${Icons.fSetStringElAttrs(oIcons.sWindDirection, {
