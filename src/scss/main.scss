@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap');
 
 :root {
-    --text: #181a1c;
+    --text: #282a2d;
     --bg-lt: #f0e9e7;
     --bg: #c7c0be;
     --bg-md: #d8d5d2;
@@ -53,6 +53,7 @@ body {
     align-items: center;
     flex-wrap: nowrap;
     min-height: 100vh;
+    color: var(--text);
 }
 
 body footer {
