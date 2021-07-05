@@ -714,7 +714,6 @@
         if (!string) return ''
         return (
             string
-                // HUD
                 // Details
                 .replace('{{feels_like}}', _oStrings.en.feels_like)
                 .replace(
@@ -988,7 +987,7 @@
                     <span class="inline-icon">
                         ${fSetStringElAttrs(oIcons.sWindDirection, {
                             style: `transform: rotate(${fClean(
-                                oCURRENT.wind_dir
+                                oCURRENT.wind_dir + 180
                             )}deg)`,
                         })}
                         ${oIcons.sWind}

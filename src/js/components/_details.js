@@ -73,7 +73,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
                     <span class="inline-icon">
                         ${Icons.fSetStringElAttrs(oIcons.sWindDirection, {
                             style: `transform: rotate(${fClean(
-                                oCURRENT.wind_dir
+                                oCURRENT.wind_dir + 180
                             )}deg)`,
                         })}
                         ${oIcons.sWind}

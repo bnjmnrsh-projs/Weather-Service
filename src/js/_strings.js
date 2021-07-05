@@ -79,7 +79,6 @@ export const fDetsStr = function (
     if (!string) return ''
     return (
         string
-            // HUD
             // Details
             .replace('{{feels_like}}', _oStrings.en.feels_like)
             .replace(
