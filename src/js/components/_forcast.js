@@ -27,7 +27,7 @@ const fRenderForcastList = function (_oForecast, _oSettings) {
                         <img class="weather-icon" alt="${fClean(
                             _oForecast[el].weather.description
                         )}" src="./svg/icons/weather/svg/${Icons.fGetWeatherIcon(_oForecast[el])}.svg" />
-                        <p class="_oForecast-description" aria-hidden="true">${fClean(
+                        <p class="forecast-description" aria-hidden="true">${fClean(
                             _oForecast[el].weather.description.toLowerCase()
                         )}</p>
                          <span><stong>${Convert.fTemp(
