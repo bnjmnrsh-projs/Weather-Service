@@ -58,7 +58,7 @@ export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
  */
 const fGeoLocApi = async function () {
     const oOptions = {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         timeout: 5000,
         maximumAge: 0,
     }
