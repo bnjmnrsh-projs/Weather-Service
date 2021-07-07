@@ -4,7 +4,7 @@ import * as Scales from './_scales'
 import { fRenderHUD } from './components/_hud'
 import { fRenderForecast } from './components/_forecast'
 import { fRenderDetails } from './components/_details'
-import { fErrorDisplay } from './components/_errors'
+import { fRenderErrors } from './components/_errors'
 
 /**
  * The Weather Service
@@ -38,6 +38,7 @@ const weatherApp = function (_oSettings = {}) {
     // SVGs are staged in HTML for details section,
     // the remainder of images are inlined(except Cloudcover & Moon, loaded dynamically)
     const nIcons = document.querySelector('#svgs')
+
     _oSettings.icon = {
         // degrees/compass inline
         sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
@@ -92,7 +93,7 @@ const weatherApp = function (_oSettings = {}) {
             fBuildUI(_oWeather)
         } catch (e) {
             console.error('init error: ', e)
-            nApp.innerHTML = fErrorDisplay(e)
+            nApp.innerHTML = fRenderErrors(e)
         }
     }
     fInit()

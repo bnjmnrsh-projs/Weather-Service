@@ -4,7 +4,7 @@
  * @param {obj} err
  * @returns
  */
-export const fErrorDisplay = function (err) {
+export const fRenderErrors = function (err) {
     return `<div id="hud">
                 <div id="ohnos">
                     <h3><span aria-hidden="true">⥀.⥀<br /></span>Oh Nooos!</h3>
