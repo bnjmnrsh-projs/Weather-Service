@@ -10,6 +10,7 @@
     --bg-md: #d8d5d2;
     --bg-dk: #aba7a6;
     --bg-vdk: #686462;
+    --bg-lite: var(--text);
     --icon-nutral: rgba(128, 128, 128, 0.125);
     --icon-dk: rgba(29, 27, 27, 0.564);
 
@@ -58,7 +59,7 @@ body {
 
 body footer {
     font-size: 0.8rem;
-    background-color: var(--text);
+    background-color: var(--bg-lite);
     padding: 0.5rem 0;
     color: var(--bg-lt);
     width: 100vw;
@@ -524,10 +525,10 @@ span.inline-icon {
     .visibility .visibility-graph .distance {
         background: linear-gradient(
             to left,
-            var(--text) calc(var(--distance) - 20px),
+            var(--bg-lite) calc(var(--distance) - 20px),
             hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px)
         );
-        border-right: 80px solid var(--text);
+        border-right: 80px solid var(--bg-lite);
     }
 
     #details .inline-icon.svg-wi-sunrise,
