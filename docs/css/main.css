@@ -11,6 +11,7 @@
 	--bg-md: #d8d5d2;
 	--bg-dk: #aba7a6;
 	--bg-vdk: #686462;
+	--bg-lite: var(--text);
 	--icon-nutral: rgba(128, 128, 128, 0.125);
 	--icon-dk: rgba(29, 27, 27, 0.564);
 	--sunrise: rgba(227, 227, 32, 0.68);
@@ -55,7 +56,7 @@ body {
 
 body footer {
 	font-size: 0.8rem;
-	background-color: var(--text);
+	background-color: var(--bg-lite);
 	padding: 0.5rem 0;
 	color: var(--bg-lt);
 	width: 100vw;
@@ -96,6 +97,16 @@ ul.unstyled {
 	max-width: 10rem;
 	margin-bottom: 3rem;
 	flex: 1;
+}
+
+.sr-only:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
 }
 
 .loading-icon {
@@ -245,7 +256,7 @@ span.inline-icon {
 #details ul {
 	display: flex;
 	flex-wrap: wrap;
-	margin: 0 0.1rem;
+	margin: 0 0.15rem;
 }
 
 #details ul li {
@@ -503,8 +514,8 @@ span.inline-icon {
 	}
 
 	.visibility .visibility-graph .distance {
-		background: linear-gradient(to left, var(--text) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
-		border-right: 80px solid var(--text);
+		background: linear-gradient(to left, var(--bg-lite) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
+		border-right: 80px solid var(--bg-lite);
 	}
 
 	#details .inline-icon.svg-wi-sunrise,

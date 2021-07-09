@@ -75,7 +75,7 @@
      */
     const fGeoLocApi = async function () {
         const oOptions = {
-            enableHighAccuracy: true,
+            enableHighAccuracy: false,
             timeout: 5000,
             maximumAge: 0,
         };
@@ -1022,7 +1022,7 @@
      * @param {obj} err
      * @returns
      */
-    const fErrorDisplay = function (err) {
+    const fRenderErrors = function (err) {
         return `<div id="hud">
                 <div id="ohnos">
                     <h3><span aria-hidden="true">⥀.⥀<br /></span>Oh Nooos!</h3>
@@ -1076,6 +1076,7 @@
         // SVGs are staged in HTML for details section,
         // the remainder of images are inlined(except Cloudcover & Moon, loaded dynamically)
         const nIcons = document.querySelector('#svgs');
+
         _oSettings.icon = {
             // degrees/compass inline
             sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
@@ -1130,7 +1131,7 @@
                 fBuildUI(_oWeather);
             } catch (e) {
                 console.error('init error: ', e);
-                nApp.innerHTML = fErrorDisplay(e);
+                nApp.innerHTML = fRenderErrors(e);
             }
         };
         fInit();
