@@ -1,0 +1,53 @@
+/**
+* Icon syles
+*/
+
+.inline-icon {
+    display: inline-block;
+    height: 1.5rem;
+    width: auto;
+    border-radius: 15px;
+    background-color: var(--icon-nutral);
+    padding: 2px;
+    transition: 1s all ease;
+}
+
+span.inline-icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.weather-icon {
+    filter: drop-shadow(2px 3px 1px var(--icon-dk));
+}
+
+.inline-icon.svg-sunrise {
+    background-color: var(--sunrise);
+}
+.inline-icon.svg-sunset {
+    background-color: var(--sunset);
+}
+.inline-icon.moon {
+    background-color: var(--yellow-lt);
+    padding: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .inline-icon {
+        background-color: var(--icon-nutral);
+    }
+
+    .loading-icon,
+    #forecast .weather-icon,
+    #hud .weather-icon {
+        filter: invert(95%) hue-rotate(180deg)
+            drop-shadow(2px 3px 1px var(--icon-dk));
+    }
+
+    .feels-like .svg-wi-thermometer,
+    .uv-index .svg-wi-day-sunny {
+        fill: var(--bg-vdk);
+    }
+}

@@ -1,7 +1,7 @@
 /*! BuildToolsCookbook v1.0.0 | (c) 2021 bnjmnrsh@gmail.com | MIT License | git+ssh://git@github.com/bnjmnrsh-projs/Weather-Service.git */
 /**
- * @section Base Styles
- */
+ * Top-level imports
+*/
 @import url("https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap");
 :root {
@@ -31,8 +31,113 @@
 	--uv-5: rgba(255, 38, 0, 0.5);
 	--distance: 0%;
 	--scale-bg: rgba(98, 216, 255, 0.509);
+	--brkpt-sm: 545px;
+	--brkpt-lg: 1500px;
 }
 
+@media (prefers-color-scheme: dark) {
+	:root {
+		--text: #e5e9ee;
+		--bg-lt: #747171;
+		--bg: #282626;
+		--bg-md: #494848;
+		--bg-dk: #413f3f;
+		--bg-vdk: #2e2e2e;
+		--icon-nutral: hsla(0, 0%, 25%, 0.5);
+		--icon-dk: hsla(0, 0%, 50%, 0.5);
+	}
+}
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+	margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role=list],
+ol[role=list] {
+	list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+	scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+	min-height: 100vh;
+	text-rendering: optimizeSpeed;
+	line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+	text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+	max-width: 100%;
+	display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+	html:focus-within {
+		scroll-behavior: auto;
+	}
+
+	*,
+*::before,
+*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+/**
+ * CSS utility classes
+*/
+/** Screen reader only styles */
+.sr-only:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/**
+ * @section Base Styles
+ */
 html {
 	font-size: 100%;
 	font-family: "Ubuntu Mono", monospace;
@@ -99,56 +204,68 @@ ul.unstyled {
 	flex: 1;
 }
 
-.sr-only:not(:focus):not(:active) {
-	clip: rect(0 0 0 0);
-	clip-path: inset(50%);
-	height: 1px;
-	overflow: hidden;
-	position: absolute;
-	white-space: nowrap;
-	width: 1px;
+@media screen and (min-width: 1500px) {
+	#app {
+		width: 50rem;
+		min-width: 50rem;
+		max-width: 50rem;
+	}
 }
+@media screen and (max-width: 545px) {
+	h1 {
+		font-size: 1.5em;
+	}
 
-.loading-icon {
-	width: 150px;
-	height: 150px;
-	animation: rotating 30s linear infinite;
+	#app {
+		width: 100%;
+		max-width: inherit;
+	}
+
+	footer {
+		display: none;
+	}
+
+	footer .wrap {
+		margin: 3rem auto;
+		max-width: 90%;
+	}
 }
+@media (prefers-color-scheme: dark) {
+	html {
+		color: var(--text);
+	}
 
-.inline-icon {
-	display: inline-block;
-	height: 1.5rem;
-	width: auto;
-	border-radius: 15px;
-	background-color: var(--icon-nutral);
-	padding: 2px;
-	transition: 1s all ease;
+	svg {
+		fill: var(--text);
+	}
+
+	body footer {
+		filter: invert(1);
+	}
 }
-
-span.inline-icon {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
+/* Animations */
+@keyframes rotating {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
-
-.weather-icon {
-	filter: drop-shadow(2px 3px 1px var(--icon-dk));
+@keyframes loading {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
-
-.inline-icon.svg-sunrise {
-	background-color: var(--sunrise);
-}
-
-.inline-icon.svg-sunset {
-	background-color: var(--sunset);
-}
-
-.inline-icon.moon {
-	background-color: var(--yellow-lt);
-	padding: 1px;
-}
-
+/**
+ * Data Scales
+*/
 [data-temp="0"] {
 	background-color: var(--temp-0) !important;
 }
@@ -197,49 +314,67 @@ span.inline-icon {
 	background-color: var(--uv-5) !important;
 }
 
-.left-col {
-	max-width: 70%;
+/**
+* Icon syles
+*/
+.inline-icon {
 	display: inline-block;
+	height: 1.5rem;
+	width: auto;
+	border-radius: 15px;
+	background-color: var(--icon-nutral);
+	padding: 2px;
+	transition: 1s all ease;
 }
 
-#hud {
-	padding: 2rem;
-	border-radius: 10px 10px 2px 2px;
-	background-color: var(--bg-lt);
-	margin: 0.2rem 0.3rem;
-	box-shadow: var(--bg-dk) 1px 1px 1px;
-}
-
-#hud h3 {
-	font-size: 1.8rem;
+span.inline-icon {
 	display: flex;
 	flex-direction: row;
-	flex-wrap: nowrap;
 	align-items: center;
 	justify-content: center;
-	margin: 0;
 }
 
+.weather-icon {
+	filter: drop-shadow(2px 3px 1px var(--icon-dk));
+}
+
+.inline-icon.svg-sunrise {
+	background-color: var(--sunrise);
+}
+
+.inline-icon.svg-sunset {
+	background-color: var(--sunset);
+}
+
+.inline-icon.moon {
+	background-color: var(--yellow-lt);
+	padding: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+	.inline-icon {
+		background-color: var(--icon-nutral);
+	}
+
+	.loading-icon,
+#forecast .weather-icon,
 #hud .weather-icon {
-	height: auto;
-	width: 25%;
-}
+		filter: invert(95%) hue-rotate(180deg) drop-shadow(2px 3px 1px var(--icon-dk));
+	}
 
-#hud ul {
-	display: flex;
-	flex-direction: column;
-	font-family: "Turret Road", sans-serif;
+	.feels-like .svg-wi-thermometer,
+.uv-index .svg-wi-day-sunny {
+		fill: var(--bg-vdk);
+	}
 }
-
-#hud ul li {
-	margin: 0 auto;
-}
-
-#hud ul li:first-child {
-	padding-bottom: 0.2rem;
-	margin-bottom: 0.4rem;
-	font-size: 1.3rem;
-	border-bottom: 1px solid var(--text);
+/**
+* Appearance of inital loading state
+*/
+.loading-icon {
+	width: 150px;
+	height: 150px;
+	animation: rotating 30s linear infinite;
+	display: inline-block;
 }
 
 .loading-hud {
@@ -253,12 +388,120 @@ span.inline-icon {
 	flex-direction: column;
 }
 
+.loading-bg {
+	background: linear-gradient(89deg, var(--bg-lt), var(--bg-md), var(--bg-md), var(--bg-md));
+	background-size: 200% 100%;
+	animation: loading 10s ease-in-out infinite;
+}
+
+/* @media Rules */
+@media screen and (prefers-reduced-motion: reduce) {
+	.loading-hud,
+.loading-icon {
+		animation: none;
+	}
+}
+/* Screens, including errors */
+#app .screen {
+	padding: 2rem;
+	border-radius: 10px;
+	background-color: var(--bg-lt);
+	margin: 0.2rem 0.3rem;
+	box-shadow: var(--bg-dk) 1px 1px 1px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	-ms-word-break: break-all;
+	/* This is the dangerous one in WebKit, as it breaks things wherever */
+	word-break: break-all;
+	/* Instead use this non-standard one: */
+	word-break: break-word;
+	/* Adds a hyphen where the word breaks, if supported (No Blink) */
+	-ms-hyphens: auto;
+	-moz-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
+	text-align: left;
+}
+#app .screen h3 {
+	text-align: center;
+	display: inline-block;
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+#app .screen .errors-wrap {
+	background: var(--bg-vdk);
+	padding: 1rem;
+	overflow-y: scroll;
+	border-radius: 3px;
+}
+#app .screen .screen-icon {
+	max-width: 50%;
+}
+
+@media screen and (max-width: 545px) {
+	#app.errors-screen {
+		padding: 1.5rem;
+	}
+}
+/**
+ * HUD Component Styles
+*/
+#hud {
+	padding: 2rem;
+	border-radius: 10px 10px 2px 2px;
+	background-color: var(--bg-lt);
+	margin: 0.2rem 0.3rem;
+	box-shadow: var(--bg-dk) 1px 1px 1px;
+}
+#hud h3 {
+	font-size: 1.8rem;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+}
+#hud .weather-icon {
+	height: auto;
+	width: 25%;
+}
+#hud ul {
+	display: flex;
+	flex-direction: column;
+	font-family: "Turret Road", sans-serif;
+}
+#hud ul li {
+	margin: 0 auto;
+}
+#hud ul li :first-child {
+	padding-bottom: 0.2rem;
+	margin-bottom: 0.4rem;
+	font-size: 1.3rem;
+	border-bottom: 1px solid var(--text);
+}
+
+@media screen and (max-width: 545px) {
+	#hud {
+		padding: 1.5rem;
+	}
+}
+/**
+ * Details Component Styles
+*/
+#details .left-col {
+	max-width: 70%;
+	display: inline-block;
+}
 #details ul {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0 0.15rem;
 }
-
 #details ul li {
 	display: flex;
 	justify-content: space-between;
@@ -274,64 +517,55 @@ span.inline-icon {
 	flex: 1 0 auto;
 }
 
-#details ul li.visibility {
+#details .visibility {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	flex: 1 1 100%;
 }
-
-.visibility .visibility-wrap {
+#details .visibility .visibility-wrap * {
+	align-self: center;
+}
+#details .visibility .visibility-wrap {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	width: 100%;
 	margin: 0.3rem 0 0.5rem 0;
 }
-
-.visibility .visibility-wrap * {
-	align-self: center;
-}
-
-.visibility .visibility-wrap .inline-icon {
+#details .visibility .visibility-wrap .inline-icon {
 	margin-top: -0.3em;
 }
-
-.visibility .visibility-graph {
+#details .visibility .visibility-graph {
 	background-color: var(--scale-bg);
 	background-image: url(../svg/graph.svg);
 	background-position: left -1px bottom -1px;
-	border: 1px solid var(--bg-md);
 	height: 1rem;
 	width: calc(100% + 1.6rem);
 	position: relative;
 	overflow: hidden;
 	font-size: 0.6em;
 	transition: all 0.5s ease;
-	margin-bottom: -0.9em;
 	margin: 0 -0.5rem -0.5rem -0.5rem;
 	border-bottom-right-radius: 2px;
 	border-bottom-left-radius: 2px;
 }
-
-.visibility .visibility-graph::before,
-.visibility .visibility-graph::after {
+#details .visibility .visibility-graph::before,
+#details .visibility .visibility-graph::after {
+	box-sizing: content-box !important;
 	position: absolute;
-	bottom: 0.2rem;
+	top: 0.1rem;
 	z-index: 1;
 }
-
-.visibility .visibility-graph::before {
+#details .visibility .visibility-graph::before {
 	content: "0 |";
 	left: 0.6rem;
 }
-
-.visibility .visibility-graph::after {
+#details .visibility .visibility-graph::after {
 	content: "| 5km/3.11mi";
 	right: 1rem;
 }
-
-.visibility .visibility-graph .distance {
+#details .visibility .visibility-graph .distance {
 	background: linear-gradient(to left, rgba(255, 255, 255, 0) calc(var(--distance) + 20px) var(--bg-dk), calc(var(--distance) - 20px));
 	border-right: 80px solid var(--bg-dk);
 	padding-left: 10px;
@@ -339,23 +573,98 @@ span.inline-icon {
 	overflow: hidden;
 	position: absolute;
 	height: 200%;
-	width: calc(100% - (10px + 5rem));
+	width: calc(100% - (10px + -0.6rem));
 	z-index: 0;
 	will-change: transform;
 	animation: distance-loading 2s ease forwards;
 }
 
+@keyframes distance-loading {
+	0% {
+		transform: translateX(150%);
+	}
+	100% {
+		transform: translateX(0%);
+	}
+}
+@media screen and (max-width: 545px) {
+	#details .visibility .visibility-graph {
+		height: 1rem;
+	}
+	#details .visibility .visibility-graph::before,
+#details .visibility .visibility-graph::after {
+		bottom: 0.2rem;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	#details .visibility .visibility-graph .distance {
+		border: 0px solid transparent;
+		background: linear-gradient(to left, var(--bg-lite) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
+		border-right: 80px solid var(--bg-lite);
+	}
+
+	::before,
+::after {
+		color: var(--bg);
+	}
+}
+/**
+ * Details Component Sun rise-set styles
+*/
+@media screen and (max-width: 545px) {
+	.inline-icon.svg-sunrise {
+		margin-bottom: 0;
+	}
+
+	.inline-icon.svg-sunset {
+		margin-bottom: 0;
+	}
+
+	.inline-icon.moon {
+		margin-bottom: 0;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	.inline-icon.svg-wi-sunrise,
+.inline-icon.svg-wi-sunset {
+		fill: var(--yellow-lt);
+	}
+
+	#details .inline-icon.moon {
+		filter: invert(0);
+		background-color: var(--yellow-lt);
+		fill: var(--bg-dk);
+	}
+}
+@media screen and (max-width: 545px) {
+	#details {
+		font-size: 0.9rem;
+		max-height: 40vh;
+		overflow-x: scroll;
+	}
+	#details ul li {
+		padding: 0.4rem 0.8rem;
+	}
+}
 #forecast {
 	margin: 0.2rem 0.3rem;
 }
-
+#forecast h4 {
+	margin: 0.3rem;
+	text-align: left;
+}
+#forecast h5 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+}
 #forecast ul {
 	display: flex;
 	flex-direction: row;
 	overflow-y: scroll;
 	scroll-snap-type: y mandatory;
 }
-
 #forecast ul li {
 	background-color: var(--bg-md);
 	border-radius: 2px;
@@ -372,234 +681,25 @@ span.inline-icon {
 	align-items: center;
 	scroll-snap-align: start end;
 }
-
-#forecast ul li:first-child {
+#forecast ul li :first-child {
 	border-bottom-left-radius: 10px;
 }
-
-#forecast ul li:last-child {
+#forecast ul li :last-child {
 	margin-right: 0.1rem;
 	border-bottom-right-radius: 10px;
 }
-
-#forecast h4 {
-	margin: 0.3rem;
-	text-align: left;
-}
-
-#forecast h5 {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: 0;
-}
-
 #forecast .forecast-description {
 	font-size: 0.7rem;
 	margin-top: 0;
 }
-
 #forecast .weather-icon {
 	width: 80%;
 	height: auto;
 }
 
-/* Animations */
-@keyframes rotating {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
-}
-.loading-bg {
-	background: linear-gradient(89deg, var(--bg-lt), var(--bg-md), var(--bg-md), var(--bg-md));
-	background-size: 200% 100%;
-	animation: loading 10s ease-in-out infinite;
-}
-
-@keyframes loading {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
-@keyframes distance-loading {
-	0% {
-		transform: translateX(150%);
-	}
-	100% {
-		transform: translateX(0%);
-	}
-}
-/* Errors */
-#ohnos {
-	text-align: center;
-	/* These are technically the same, but use both */
-	overflow-wrap: break-word;
-	word-wrap: break-word;
-	-ms-word-break: break-all;
-	/* This is the dangerous one in WebKit, as it breaks things wherever */
-	word-break: break-all;
-	/* Instead use this non-standard one: */
-	word-break: break-word;
-	/* Adds a hyphen where the word breaks, if supported (No Blink) */
-	-ms-hyphens: auto;
-	-moz-hyphens: auto;
-	-webkit-hyphens: auto;
-	hyphens: auto;
-}
-
-#ohnos h3 {
-	display: inline-block;
-	wrap-inside: 100%;
-	font-size: 3rem;
-}
-
-/* @media Rules */
-@media screen and (prefers-reduced-motion: reduce) {
-	.loading-hud,
-.loading-icon {
-		animation: none;
-	}
-}
-@media (prefers-color-scheme: dark) {
-	:root {
-		--text: #e5e9ee;
-		--bg-lt: #747171;
-		--bg: #282626;
-		--bg-md: #494848;
-		--bg-dk: #413f3f;
-		--bg-vdk: #2e2e2e;
-		--icon-nutral: hsla(0, 0%, 25%, 0.5);
-		--icon-dk: hsla(0, 0%, 50%, 0.5);
-	}
-
-	html {
-		color: var(--text);
-	}
-
-	.loading-icon,
-#forecast .weather-icon,
-#hud .weather-icon {
-		filter: invert(95%) hue-rotate(180deg) drop-shadow(2px 3px 1px var(--icon-dk));
-	}
-
-	svg {
-		fill: var(--text);
-	}
-
-	#details .inline-icon {
-		background-color: var(--icon-nutral);
-	}
-
-	.feels-like .svg-wi-thermometer,
-.uv-index .svg-wi-day-sunny {
-		fill: var(--bg-vdk);
-	}
-
-	#details .visibility .visibility-graph {
-		border: 0px solid transparent;
-	}
-
-	#details .visibility .visibility-graph::before,
-#details .visibility .visibility-graph::after {
-		color: var(--bg);
-	}
-
-	.visibility .visibility-graph .distance {
-		background: linear-gradient(to left, var(--bg-lite) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
-		border-right: 80px solid var(--bg-lite);
-	}
-
-	#details .inline-icon.svg-wi-sunrise,
-#details .inline-icon.svg-wi-sunset {
-		fill: var(--yellow-lt);
-	}
-
-	#details .inline-icon.moon {
-		filter: invert(0);
-		background-color: var(--yellow-lt);
-		fill: var(--bg-dk);
-	}
-
-	body footer {
-		filter: invert(1);
-	}
-}
-@media screen and (min-width: 1500px) {
-	#app {
-		width: 50rem;
-		min-width: 50rem;
-		max-width: 50rem;
-	}
-}
 @media screen and (max-width: 545px) {
-	h1 {
-		font-size: 1.5em;
-	}
-
-	#app {
-		width: 100%;
-		max-width: inherit;
-	}
-
-	#hud {
-		padding: 1.5rem;
-	}
-
-	#details {
-		font-size: 0.9rem;
-		max-height: 40vh;
-		overflow-x: scroll;
-	}
-
-	#details ul {
-		display: block;
-	}
-
-	#details ul li {
-		padding: 0.4rem 0.8rem;
-	}
-
-	.inline-icon.svg-sunrise {
-		margin-bottom: 0;
-	}
-
-	.inline-icon.svg-sunset {
-		margin-bottom: 0;
-	}
-
-	.inline-icon.moon {
-		margin-bottom: 0;
-	}
-
-	.visibility .visibility-graph {
-		height: 1rem;
-	}
-
-	.visibility .visibility-graph::before,
-.visibility .visibility-graph::after {
-		bottom: 0.2rem;
-	}
-
 	#forecast .weather-icon {
 		width: 45%;
 		height: auto;
-	}
-
-	footer {
-		display: none;
-	}
-
-	footer .wrap {
-		margin: 3rem auto;
-		max-width: 90%;
 	}
 }

@@ -1,0 +1,112 @@
+#details .visibility {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1 1 100%;
+
+    .visibility-wrap * {
+        align-self: center;
+    }
+
+    .visibility-wrap {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0.3rem 0 0.5rem 0;
+    }
+
+    .visibility-wrap .inline-icon {
+        margin-top: -0.3em;
+    }
+    .visibility-graph {
+        background-color: var(--scale-bg);
+        background-image: url(../svg/graph.svg);
+        background-position: left -1px bottom -1px;
+        // border: 1px solid var(--bg-md);
+        height: 1rem;
+        width: calc(100% + 1.6rem);
+        position: relative;
+        overflow: hidden;
+        font-size: 0.6em;
+        transition: all 0.5s ease;
+        // margin-bottom: -0.9em;
+        margin: 0 -0.5rem -0.5rem -0.5rem;
+        border-bottom-right-radius: 2px;
+        border-bottom-left-radius: 2px;
+    }
+    .visibility-graph::before,
+    .visibility-graph::after {
+        box-sizing: content-box !important;
+        position: absolute;
+        top: 0.1rem;
+        z-index: 1;
+    }
+
+    .visibility-graph::before {
+        content: '0 |';
+        left: 0.6rem;
+    }
+    .visibility-graph::after {
+        content: '| 5km/3.11mi';
+        right: 1rem;
+    }
+    .visibility-graph .distance {
+        background: linear-gradient(
+            to left,
+            hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px) var(--bg-dk),
+            calc(var(--distance) - 20px)
+        );
+        border-right: 80px solid var(--bg-dk);
+        padding-left: 10px;
+
+        background-repeat: no-repeat;
+        overflow: hidden;
+        position: absolute;
+        height: 200%;
+        width: calc(100% - (10px + -0.6rem));
+        z-index: 0;
+        will-change: transform;
+        animation: distance-loading 2s ease forwards;
+    }
+}
+
+@keyframes distance-loading {
+    0% {
+        transform: translateX(150%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@media screen and (max-width: 545px) {
+    #details .visibility {
+        .visibility-graph {
+            height: 1rem;
+        }
+
+        .visibility-graph::before,
+        .visibility-graph::after {
+            bottom: 0.2rem;
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    #details .visibility .visibility-graph .distance {
+        border: 0px solid transparent;
+        background: linear-gradient(
+            to left,
+            var(--bg-lite) calc(var(--distance) - 20px),
+            hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px)
+        );
+        border-right: 80px solid var(--bg-lite);
+    }
+    ::before,
+    ::after {
+        color: var(--bg);
+    }
+    #details .visibility .visibility-graph .distance {
+    }
+}

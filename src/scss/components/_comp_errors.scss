@@ -1,0 +1,52 @@
+/* Screens, including errors */
+
+#app .screen {
+    padding: 2rem;
+    border-radius: 10px;
+    background-color: var(--bg-lt);
+    margin: 0.2rem 0.3rem;
+    box-shadow: var(--bg-dk) 1px 1px 1px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    text-align: left;
+
+    h3 {
+        text-align: center;
+        display: inline-block;
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .errors-wrap {
+        background: var(--bg-vdk);
+        padding: 1rem;
+        overflow-y: scroll;
+        border-radius: 3px;
+    }
+
+    .screen-icon {
+        max-width: 50%;
+    }
+}
+
+@media screen and (max-width: 545px) {
+    #app.errors-screen {
+        padding: 1.5rem;
+    }
+}

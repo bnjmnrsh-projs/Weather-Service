@@ -1,0 +1,46 @@
+/**
+ * HUD Component Styles
+*/
+
+#hud {
+    padding: 2rem;
+    border-radius: 10px 10px 2px 2px;
+    background-color: var(--bg-lt);
+    margin: 0.2rem 0.3rem;
+    box-shadow: var(--bg-dk) 1px 1px 1px;
+
+    h3 {
+        font-size: 1.8rem;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+    }
+    .weather-icon {
+        height: auto;
+        width: 25%;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        font-family: 'Turret Road', sans-serif;
+        li {
+            margin: 0 auto;
+            :first-child {
+                padding-bottom: 0.2rem;
+                margin-bottom: 0.4rem;
+                font-size: 1.3rem;
+                border-bottom: 1px solid var(--text);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 545px) {
+    #hud {
+        padding: 1.5rem;
+    }
+}

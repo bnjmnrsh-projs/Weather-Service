@@ -1,0 +1,43 @@
+/**
+ * Data Scales
+*/
+
+// Temp
+[data-temp='0'] {
+    background-color: var(--temp-0) !important;
+}
+[data-temp='1'] {
+    background-color: var(--temp-1) !important;
+}
+[data-temp='2'] {
+    background-color: var(--temp-2) !important;
+}
+[data-temp='3'] {
+    background-color: var(--temp-3) !important;
+}
+[data-temp='4'] {
+    background-color: var(--temp-4) !important;
+}
+[data-temp='5'] {
+    background-color: var(--temp-5) !important;
+}
+
+// UV
+[data-uv='0'] {
+    background-color: var(--uv-0) !important;
+}
+[data-uv='1'] {
+    background-color: var(--uv-1) !important;
+}
+[data-uv='2'] {
+    background-color: var(--uv-2) !important;
+}
+[data-uv='3'] {
+    background-color: var(--uv-3) !important;
+}
+[data-uv='4'] {
+    background-color: var(--uv-4) !important;
+}
+[data-uv='5'] {
+    background-color: var(--uv-5) !important;
+}
