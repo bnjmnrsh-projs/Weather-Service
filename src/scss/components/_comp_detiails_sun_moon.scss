@@ -1,0 +1,50 @@
+/**
+ * Details Component Sun rise-set styles
+*/
+
+// #details {
+//     .sun-rise-set {
+//         display: flex;
+//         flex-direction: row;
+//         justify-content: space-evenly;
+//         line-height: 1.5em;
+//         text-align: center;
+//     }
+//     .sun-rise-set span {
+//         display: flex;
+//         justify-content: space-evenly;
+//         align-items: center;
+//         flex-wrap: wrap;
+//         border-right: 1px solid var(--icon-dk);
+//         width: 33.33%;
+//         text-align: center;
+//     }
+
+//     .sun-rise-set span:last-of-type {
+//         border-right: none;
+//     }
+// }
+
+@media screen and (max-width: 545px) {
+    .inline-icon.svg-sunrise {
+        margin-bottom: 0;
+    }
+    .inline-icon.svg-sunset {
+        margin-bottom: 0;
+    }
+    .inline-icon.moon {
+        margin-bottom: 0;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .inline-icon.svg-wi-sunrise,
+    .inline-icon.svg-wi-sunset {
+        fill: var(--yellow-lt);
+    }
+    #details .inline-icon.moon {
+        filter: invert(0);
+        background-color: var(--yellow-lt);
+        fill: var(--bg-dk);
+    }
+}

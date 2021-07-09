@@ -2,16 +2,105 @@
  * @section Base Styles
  */
 
-// body {
-// 	font-size: 125%;
-// 	margin: 0 auto;
-// 	max-width: 42em;
-// 	width: 88%;
-// }
+html {
+    font-size: 100%;
+    font-family: 'Ubuntu Mono', monospace;
+    counter-reset: var(--text);
+    background-color: var(--bg);
+    text-align: center;
+}
 
-// input,
-// textarea,
-// select,
-// button {
-// 	font: inherit;
-// }
+body {
+    font-size: 0.95em;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+    color: var(--text);
+}
+
+body footer {
+    font-size: 0.8rem;
+    background-color: var(--bg-lite);
+    padding: 0.5rem 0;
+    color: var(--bg-lt);
+    width: 100vw;
+}
+
+body footer .wrap {
+    margin: 1rem 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Turret Road', sans-serif;
+}
+h1 {
+    margin-bottom: 0.1em;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+ul.unstyled {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    min-width: 80%;
+    max-width: 10rem;
+    margin-bottom: 3rem;
+    flex: 1;
+}
+
+@media screen and (min-width: 1500px) {
+    #app {
+        width: 50rem;
+        min-width: 50rem;
+        max-width: 50rem;
+    }
+}
+
+@media screen and (max-width: 545px) {
+    h1 {
+        font-size: 1.5em;
+    }
+    #app {
+        width: 100%;
+        max-width: inherit;
+    }
+
+    footer {
+        display: none;
+    }
+    footer .wrap {
+        margin: 3rem auto;
+        max-width: 90%;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        color: var(--text);
+    }
+
+    svg {
+        fill: var(--text);
+    }
+
+    body footer {
+        filter: invert(1);
+    }
+}
