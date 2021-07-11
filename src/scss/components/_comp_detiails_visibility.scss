@@ -1,9 +1,11 @@
+/**
+* Current visibility compnent styles
+*/
 #details .visibility {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex: 1 1 100%;
-
     .visibility-wrap * {
         align-self: center;
     }
@@ -59,7 +61,6 @@
         );
         border-right: 80px solid var(--bg-dk);
         padding-left: 10px;
-
         background-repeat: no-repeat;
         overflow: hidden;
         position: absolute;
@@ -95,7 +96,7 @@
 
 @media (prefers-color-scheme: dark) {
     #details .visibility .visibility-graph .distance {
-        border: 0px solid transparent;
+        border: 0 solid transparent;
         background: linear-gradient(
             to left,
             var(--bg-lite) calc(var(--distance) - 20px),
@@ -106,7 +107,5 @@
     ::before,
     ::after {
         color: var(--bg);
-    }
-    #details .visibility .visibility-graph .distance {
     }
 }

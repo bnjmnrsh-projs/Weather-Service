@@ -1,18 +1,29 @@
+/**
+ * Custom properties
+*/
+
 :root {
+    // Text
     --text: #282a2d;
+
+    // Backgrounds
     --bg-lt: #f0e9e7;
     --bg: #c7c0be;
     --bg-md: #d8d5d2;
     --bg-dk: #aba7a6;
     --bg-vdk: #686462;
     --bg-lite: var(--text);
+
+    // Icons
     --icon-nutral: rgba(128, 128, 128, 0.125);
     --icon-dk: rgba(29, 27, 27, 0.564);
 
+    // Sun
     --sunrise: rgba(227, 227, 32, 0.68);
     --sunset: rgba(233, 198, 110, 0.68);
     --yellow-lt: rgba(230, 230, 118, 0.858);
 
+    // Temp
     --temp-0: rgba(21, 173, 223, 0.9);
     --temp-1: rgba(24, 201, 189, 0.851);
     --temp-2: rgba(15, 199, 89, 0.9);
@@ -20,6 +31,7 @@
     --temp-4: rgba(252, 173, 2, 0.844);
     --temp-5: rgba(254, 77, 1, 0.9);
 
+    // UV
     --uv-0: rgba(55, 255, 0, 0.5);
     --uv-1: rgba(157, 255, 0, 0.5);
     --uv-2: rgba(255, 234, 0, 0.5);

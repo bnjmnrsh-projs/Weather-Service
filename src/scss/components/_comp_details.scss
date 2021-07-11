@@ -1,6 +1,11 @@
 /**
- * Details Component Styles
+ * Details component top-level styles
 */
+
+@import './_comp_detiails_feels_like';
+@import './_comp_detiails_uv';
+@import './_comp_detiails_sun_moon';
+@import './_comp_detiails_visibility';
 
 #details {
     .left-col {
@@ -17,7 +22,6 @@
             justify-content: space-between;
             align-items: center;
             text-align: left;
-            min-height: 1rem;
             margin: 0.2rem;
             padding: 0.5rem 0.8rem;
             border-radius: 2px;
@@ -28,11 +32,6 @@
         }
     }
 }
-
-@import './_comp_detiails_feels_like';
-@import './_comp_detiails_uv';
-@import './_comp_detiails_visibility';
-@import './_comp_detiails_sun_moon';
 
 @media screen and (max-width: 545px) {
     #details {
