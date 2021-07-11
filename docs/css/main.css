@@ -1,9 +1,8 @@
-/*! BuildToolsCookbook v1.0.0 | (c) 2021 bnjmnrsh@gmail.com | MIT License | git+ssh://git@github.com/bnjmnrsh-projs/Weather-Service.git */
+/*! weather-service v1.0.0 | (c) 2021 bnjmnrsh@gmail.com | MIT License | git+ssh://git@github.com/bnjmnrsh-projs/Weather-Service.git */
+@import url("https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap");
 /**
- * Top-level imports
+ * Custom properties
 */
-@import url("https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap");
 :root {
 	--text: #282a2d;
 	--bg-lt: #f0e9e7;
@@ -47,6 +46,10 @@
 		--icon-dk: hsla(0, 0%, 50%, 0.5);
 	}
 }
+/**
+ * Reset
+ * https://piccalil.li/blog/a-modern-css-reset/
+*/
 /* Box sizing rules */
 *,
 *::before,
@@ -122,7 +125,7 @@ select {
 	}
 }
 /**
- * CSS utility classes
+ * Utility classes
 */
 /** Screen reader only styles */
 .sr-only:not(:focus):not(:active) {
@@ -401,7 +404,9 @@ span.inline-icon {
 		animation: none;
 	}
 }
-/* Screens, including errors */
+/**
+* Screens compnent, including errors
+*/
 #app .screen {
 	padding: 2rem;
 	border-radius: 10px;
@@ -491,32 +496,45 @@ span.inline-icon {
 	}
 }
 /**
- * Details Component Styles
+ * Details component top-level styles
 */
-#details .left-col {
-	max-width: 70%;
-	display: inline-block;
-}
-#details ul {
-	display: flex;
-	flex-wrap: wrap;
-	margin: 0 0.15rem;
-}
-#details ul li {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	text-align: left;
-	min-height: 1rem;
-	margin: 0.2rem;
-	padding: 0.5rem 0.8rem;
-	border-radius: 2px;
-	background-color: var(--bg-lt);
-	box-shadow: var(--bg-dk) 1px 1px 2px;
-	min-height: 1.8rem;
-	flex: 1 0 auto;
-}
+/**
+* Current feels-like compnent styles
+*/
+/**
+* Current UV compnent styles
+*/
+/**
+ * Current Sun rise-set component styles
+*/
+@media screen and (max-width: 545px) {
+	.inline-icon.svg-sunrise {
+		margin-bottom: 0;
+	}
 
+	.inline-icon.svg-sunset {
+		margin-bottom: 0;
+	}
+
+	.inline-icon.moon {
+		margin-bottom: 0;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	.inline-icon.svg-wi-sunrise,
+.inline-icon.svg-wi-sunset {
+		fill: var(--yellow-lt);
+	}
+
+	#details .inline-icon.moon {
+		filter: invert(0);
+		background-color: var(--yellow-lt);
+		fill: var(--bg-dk);
+	}
+}
+/**
+* Current visibility compnent styles
+*/
 #details .visibility {
 	display: flex;
 	flex-direction: column;
@@ -598,7 +616,7 @@ span.inline-icon {
 }
 @media (prefers-color-scheme: dark) {
 	#details .visibility .visibility-graph .distance {
-		border: 0px solid transparent;
+		border: 0 solid transparent;
 		background: linear-gradient(to left, var(--bg-lite) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
 		border-right: 80px solid var(--bg-lite);
 	}
@@ -608,34 +626,29 @@ span.inline-icon {
 		color: var(--bg);
 	}
 }
-/**
- * Details Component Sun rise-set styles
-*/
-@media screen and (max-width: 545px) {
-	.inline-icon.svg-sunrise {
-		margin-bottom: 0;
-	}
-
-	.inline-icon.svg-sunset {
-		margin-bottom: 0;
-	}
-
-	.inline-icon.moon {
-		margin-bottom: 0;
-	}
+#details .left-col {
+	max-width: 70%;
+	display: inline-block;
 }
-@media (prefers-color-scheme: dark) {
-	.inline-icon.svg-wi-sunrise,
-.inline-icon.svg-wi-sunset {
-		fill: var(--yellow-lt);
-	}
-
-	#details .inline-icon.moon {
-		filter: invert(0);
-		background-color: var(--yellow-lt);
-		fill: var(--bg-dk);
-	}
+#details ul {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 0.15rem;
 }
+#details ul li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-align: left;
+	margin: 0.2rem;
+	padding: 0.5rem 0.8rem;
+	border-radius: 2px;
+	background-color: var(--bg-lt);
+	box-shadow: var(--bg-dk) 1px 1px 2px;
+	min-height: 1.8rem;
+	flex: 1 0 auto;
+}
+
 @media screen and (max-width: 545px) {
 	#details {
 		font-size: 0.9rem;
@@ -646,6 +659,9 @@ span.inline-icon {
 		padding: 0.4rem 0.8rem;
 	}
 }
+/**
+* Forecast compnent styles
+*/
 #forecast {
 	margin: 0.2rem 0.3rem;
 }

@@ -46,9 +46,9 @@
         let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`;
 
         if (!oLoc.latitude || !oLoc.longitude) {
-            let sCity,
-                sState,
-                sCountry = '';
+            let sCity;
+            let sState;
+            let sCountry = '';
 
             if ('city' in oLoc && oLoc.city) {
                 sCity = `&city=${oLoc.city}`;
@@ -63,7 +63,9 @@
             sApiQuery = `${urlBase}${sCity ?? ''}${sState ?? ''}${sCountry ?? ''}`;
         }
 
-        _oSettings.debug ? console.log('sApiQuery query:', fClean(sApiQuery)) : '';
+        if (_oSettings.debug) {
+            console.log('sApiQuery query:', fClean(sApiQuery));
+        }
 
         return fClean(sApiQuery)
     };
@@ -102,29 +104,25 @@
     const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
         if (navigator.geolocation) {
             try {
-                _oSettings.debug
-                    ? console.log(
-                          'fGetLocation: Checking geoLoccation API: fGeoLocApi.'
-                      )
-                    : '';
+                if (_oSettings.debug) {
+                    console.log(
+                        'fGetLocation: Checking geoLoccation API: fGeoLocApi.'
+                    );
+                }
                 return await fGeoLocApi()
             } catch (e) {
-                _oSettings.debug
-                    ? console.warn('fGetLocationL: failed using fGeoLocApi: ', e)
-                    : '';
+                if (_oSettings.debug) {
+                    console.warn('fGetLocationL: failed using fGeoLocApi: ', e);
+                }
                 try {
-                    console.log('5');
-                    _oSettings.debug
-                        ? console.warn('Falling back to IP address lookup instead.')
-                        : '';
+                    if (_oSettings.debug) {
+                        console.warn('Falling back to IP address lookup instead.');
+                    }
                     return await fIPapi(sIpapiLocationApi)
                 } catch (e) {
-                    _oSettings.debug
-                        ? console.warn(
-                              'fGetLocation: failed sIpapiLocationApi: ',
-                              e
-                          )
-                        : '';
+                    if (_oSettings.debug) {
+                        console.warn('fGetLocation: failed sIpapiLocationApi: ', e);
+                    }
                 }
             }
         }
@@ -152,17 +150,17 @@
     /**
      * Generate a visual scale based on 5km
      *
-     * @param {float} vis (expects km units)
+    no * @param {float} vis (expects km units)
+     *
      */
     const fSetVisabilityScale = function (vis) {
         const distance = (parseFloat(vis) / 5) * 100;
-
-        const nGraph = app.querySelector('.distance');
+        const nGraph = document.querySelector('.distance');
         nGraph.style.setProperty('--distance', 100 - distance + '%');
     };
 
     /**
-     * Assigns a named string based on temperature in C
+     * Assigns a named string based on temperature in C
      * 6 step scale for data-temp
      *
      * @param {float} nTemp
@@ -225,7 +223,7 @@
                 sUVclass = '4';
                 break
             case nUV >= 9 || nUV <= 10 ? nUV : null:
-                uvClass = 5;
+                sUVclass = 5;
                 break
         }
         return sUVclass
@@ -290,7 +288,7 @@
         if (!oData) return
 
         let iCode, sPod;
-        if (!iHour && oData.hasOwnProperty('pod')) {
+        if (!iHour && Object.prototype.hasOwnProperty.call(oData, 'pod')) {
             // Current weather object
             sPod = fClean(oData.sPod) === 'd' ? 0 : 1;
             iCode = parseInt(fClean(oData.weather.code));
@@ -317,7 +315,7 @@
         if (typeof iCoverage !== 'number') return
 
         // set day or night icon set
-        sPod = sPod = 0 ;
+        sPod = sPod === 'd' ? 0 : 1;
 
         const icons = oCloudCover;
 
@@ -377,19 +375,19 @@
             nEl.innerHTML = sEl.trim();
             const nTarget = nEl.querySelector('div >:first-child');
 
-            if (props.hasOwnProperty('style')) {
+            if (Object.prototype.hasOwnProperty.call(props, 'style')) {
                 nTarget.setAttribute('style', props.style);
             }
-            if (props.hasOwnProperty('class')) {
+            if (Object.prototype.hasOwnProperty.call(props, 'class')) {
                 nTarget.classList.add(props.class);
             }
             if (
-                props.hasOwnProperty('data') &&
+                Object.prototype.hasOwnProperty.call(props, 'data') &&
                 Object.keys(props.data).length > 0
             ) {
-                Object.keys(props.data).map((key) => {
-                    nTarget.setAttribute(`data-${key}`, props.data[key]);
-                });
+                Object.keys(props.data).map((key) =>
+                    nTarget.setAttribute(`data-${key}`, props.data[key])
+                );
             }
             return nEl.innerHTML
         }
@@ -438,10 +436,10 @@
         }
         if (typeof nMeasure !== 'number') return 0
         if (_oSettings.units === 'M') {
-            let converted = parseFloat(nMeasure).toFixed(1);
+            const converted = parseFloat(nMeasure).toFixed(1);
             return withUnits ? `${converted}°&nbsp;C` : converted
         } else {
-            let converted = ((parseFloat(nMeasure) * 9) / 5 + 32).toFixed(1);
+            const converted = ((parseFloat(nMeasure) * 9) / 5 + 32).toFixed(1);
             return withUnits ? `${converted}°&nbsp;F` : converted
         }
     };
@@ -515,8 +513,8 @@
         if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
         // Will produce a string that can be converted into a valid date object
-        const new_sDate = `${sDate}T00:00`;
-        const oDate = new Date(new_sDate);
+        const sNewDate = `${sDate}T00:00`;
+        const oDate = new Date(sNewDate);
 
         // test to see if we now have string which creates a valid date
         if (typeof oDate.getMonth !== 'function') {
@@ -526,7 +524,7 @@
         }
 
         // return the new date string vaild for cases 2, 3, and 4)
-        return new_sDate
+        return sNewDate
     }
 
     /**
@@ -538,7 +536,7 @@
      * @returns {string} converted time as string with units
      */
     const fTime = function (sTime24, _oSettings) {
-        if (!sTime24.includes(':') || !sTime24.length == '5') {
+        if (!sTime24.includes(':') || !sTime24.length === '5') {
             throw new Error('fTime not given a valid time string: HH:MM')
         }
 
@@ -568,7 +566,7 @@
         } else {
             oDate = new Date();
         }
-        if (sTime24 != '') {
+        if (sTime24 !== '') {
             aTime = sTime24.split(':');
         } else {
             aTime = [oDate.getUTCHours(), oDate.getUTCMinutes()];
@@ -627,11 +625,11 @@
 
         const sFormatedDate =
             oDate.getDate() +
-            (oDate.getDate() % 10 == 1 && oDate.getDate() != 11
+            (oDate.getDate() % 10 === 1 && oDate.getDate() !== 11
                 ? 'st'
-                : oDate.getDate() % 10 == 2 && oDate.getDate() != 12
+                : oDate.getDate() % 10 === 2 && oDate.getDate() !== 12
                 ? 'nd'
-                : oDate.getDate() % 10 == 3 && oDate.getDate() != 13
+                : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
                 ? 'rd'
                 : 'th');
         return sFormatedDate
@@ -777,13 +775,15 @@
      * @returns {string}
      */
     const fRenderHUD = function (_oData, _oSettings) {
-        _oSettings.log ? console.log('fRenderHUD: ', _oData) : '';
+        if (_oSettings.log) {
+            console.log('fRenderHUD: ', _oData);
+        }
 
         const oCURRENT = _oData.CURRENT.data[0];
         const sIconName = fGetWeatherIcon(oCURRENT);
 
         const template = `<header
-        id="hud" class="" data-temp="${fTempDataPt(oCURRENT.temp)}">
+        id="hud" class="" data-temp="${fTempDataPt(fClean(oCURRENT.temp))}">
             <h3>
                 <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
                 <span aria-hidden="true">{{temp}}</span>
@@ -802,6 +802,7 @@
      * Renders individual upcoming forecast li elements
      *
      * @param {object} _oForecast
+     * @param {object} _oSettings
      * @returns {string}
      */
     const fRenderForecastList = function (_oForecast, _oSettings) {
@@ -903,11 +904,11 @@
 
         // test our date object
         if (!date || typeof date.getMonth !== 'function') {
-            _oSettings.debug
-                ? console.error(
-                      `fMoonPhase provided invalid date strings: year: ${year}, month: ${month}, day: ${day}`
-                  )
-                : '';
+            if (_oSettings.debug) {
+                console.error(
+                    `fMoonPhase provided invalid date strings: year: ${date.year}, month: ${date.month}, day: ${date.day}`
+                );
+            }
         }
 
         const yyyy = date.getFullYear();
@@ -916,7 +917,9 @@
 
         const oMoonPhase = Moon.phase(yyyy, mm, dd);
 
-        _oSettings.debug ? console.log('fMoonPhase result: ', oMoonPhase) : '';
+        if (_oSettings.debug) {
+            console.log('fMoonPhase result: ', oMoonPhase);
+        }
 
         return oMoonPhase
     };
@@ -924,13 +927,12 @@
     /**
      * Renders the app's details secection
      *
-     * @param {array} data
+     * @param {object} _oData
+     * @param {object} _oSettings
      * @returns {string}
      */
     const fRenderDetails = function (_oData, _oSettings) {
         const oCURRENT = _oData.CURRENT.data[0];
-        fClean(oCURRENT.wind_cdir_full);
-        fClean(oCURRENT.wind_dir);
         const iconCloud = fGetCloudCoverIcon(oCURRENT.clouds);
         const oMoon = fPhase(oCURRENT.obj_time, _oSettings);
         const oIcons = _oSettings.icon;
@@ -1088,7 +1090,7 @@
             sSunrise: nIcons.querySelector('.svg-wi-sunrise').outerHTML,
             sSunset: nIcons.querySelector('.svg-wi-sunset').outerHTML,
             sSunnyDay: nIcons.querySelector('.svg-wi-day-sunny').outerHTML,
-            // moon phases loaded as <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+            // moon phases are loaded as img pathsL: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
         };
 
         /**
@@ -1097,7 +1099,7 @@
          * @param {array} data
          */
         const fBuildUI = function (_oData) {
-            app.innerHTML =
+            nApp.innerHTML =
                 fRenderHUD(_oData, _oSettings) +
                 fRenderDetails(_oData, _oSettings) +
                 fRenderForecast(_oData.DAILY.data, _oSettings);
@@ -1121,10 +1123,10 @@
                     _oSettings
                 );
 
-                _oSettings.debug ? console.log('fGetLocation response:', loc) : '';
-                _oSettings.debug
-                    ? console.log('fGetWeather response:', _oWeather)
-                    : '';
+                if (_oSettings.debug) {
+                    console.log('fGetLocation response:', loc);
+                    console.log('fGetWeather response:', _oWeather);
+                }
 
                 fBuildUI(_oWeather);
             } catch (e) {
