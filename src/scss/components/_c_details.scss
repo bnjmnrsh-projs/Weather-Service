@@ -2,12 +2,14 @@
  * Details component top-level styles
 */
 
-@import './_comp_detiails_feels_like';
-@import './_comp_detiails_uv';
-@import './_comp_detiails_sun_moon';
-@import './_comp_detiails_visibility';
+@import './_c_detiails_feels_like';
+@import './_c_detiails_uv';
+@import './_c_detiails_sun_moon';
+@import './_c_detiails_visibility';
 
 #details {
+    @include code-font;
+
     .left-col {
         max-width: 70%;
         display: inline-block;

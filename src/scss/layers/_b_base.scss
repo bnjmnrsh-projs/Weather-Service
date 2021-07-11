@@ -2,9 +2,13 @@
  * @section Base Styles
  */
 
+// Base reset
+@import '../vendor/_v_reset';
+@import './_b_fonts';
+
 html {
     font-size: 100%;
-    font-family: 'Ubuntu Mono', monospace;
+    font-family: system, sans-serif;
     counter-reset: var(--text);
     background-color: var(--bg);
     text-align: center;
