@@ -1,16 +1,13 @@
 // Top-level imports
 
-@import url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap');
-
-@import './components/_vars';
-@import './components/_reset';
-@import './components/_utils';
-@import './components/_base';
-@import './components/_animations';
-@import './components/_scales';
-@import './components/_icons';
-@import './components/_inital_load';
-@import './components/_comp_errors';
-@import './components/_comp_hud';
-@import './components/_comp_details';
-@import './components/_comp_forecast';
+@import './tools/_u_vars';
+@import './tools/_u_animations';
+@import './tools/_u_utils';
+@import './tools/_u_scales';
+@import './tools/_u_icons';
+@import './layers/_b_base';
+@import './layers/_l_inital_load';
+@import './layers/_l_notice_screens';
+@import './components/_c_hud';
+@import './components/_c_details';
+@import './components/_c_forecast';
