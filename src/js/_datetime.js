@@ -23,8 +23,8 @@ function fAddTimeToDateString(sDate) {
     if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
     // Will produce a string that can be converted into a valid date object
-    const new_sDate = `${sDate}T00:00`
-    const oDate = new Date(new_sDate)
+    const sNewDate = `${sDate}T00:00`
+    const oDate = new Date(sNewDate)
 
     // test to see if we now have string which creates a valid date
     if (typeof oDate.getMonth !== 'function') {
@@ -34,7 +34,7 @@ function fAddTimeToDateString(sDate) {
     }
 
     // return the new date string vaild for cases 2, 3, and 4)
-    return new_sDate
+    return sNewDate
 }
 
 /**
@@ -46,7 +46,7 @@ function fAddTimeToDateString(sDate) {
  * @returns {string} converted time as string with units
  */
 export const fTime = function (sTime24, _oSettings) {
-    if (!sTime24.includes(':') || !sTime24.length == '5') {
+    if (!sTime24.includes(':') || !sTime24.length === '5') {
         throw new Error('fTime not given a valid time string: HH:MM')
     }
 
@@ -76,7 +76,7 @@ export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
     } else {
         oDate = new Date()
     }
-    if (sTime24 != '') {
+    if (sTime24 !== '') {
         aTime = sTime24.split(':')
     } else {
         aTime = [oDate.getUTCHours(), oDate.getUTCMinutes()]
@@ -135,11 +135,11 @@ export const fGetDayOrdinal = function (sDate) {
 
     const sFormatedDate =
         oDate.getDate() +
-        (oDate.getDate() % 10 == 1 && oDate.getDate() != 11
+        (oDate.getDate() % 10 === 1 && oDate.getDate() !== 11
             ? 'st'
-            : oDate.getDate() % 10 == 2 && oDate.getDate() != 12
+            : oDate.getDate() % 10 === 2 && oDate.getDate() !== 12
             ? 'nd'
-            : oDate.getDate() % 10 == 3 && oDate.getDate() != 13
+            : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
             ? 'rd'
             : 'th')
     return sFormatedDate

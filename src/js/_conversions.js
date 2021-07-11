@@ -40,10 +40,10 @@ export const fTemp = function (nMeasure, _oSettings, withUnits = true) {
     }
     if (typeof nMeasure !== 'number') return 0
     if (_oSettings.units === 'M') {
-        let converted = parseFloat(nMeasure).toFixed(1)
+        const converted = parseFloat(nMeasure).toFixed(1)
         return withUnits ? `${converted}°&nbsp;C` : converted
     } else {
-        let converted = ((parseFloat(nMeasure) * 9) / 5 + 32).toFixed(1)
+        const converted = ((parseFloat(nMeasure) * 9) / 5 + 32).toFixed(1)
         return withUnits ? `${converted}°&nbsp;F` : converted
     }
 }

@@ -29,9 +29,9 @@ export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
     let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`
 
     if (!oLoc.latitude || !oLoc.longitude) {
-        let sCity,
-            sState,
-            sCountry = ''
+        let sCity
+        let sState
+        let sCountry = ''
 
         if ('city' in oLoc && oLoc.city) {
             sCity = `&city=${oLoc.city}`
@@ -46,7 +46,9 @@ export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
         sApiQuery = `${urlBase}${sCity ?? ''}${sState ?? ''}${sCountry ?? ''}`
     }
 
-    _oSettings.debug ? console.log('sApiQuery query:', fClean(sApiQuery)) : ''
+    if (_oSettings.debug) {
+        console.log('sApiQuery query:', fClean(sApiQuery))
+    }
 
     return fClean(sApiQuery)
 }
@@ -85,29 +87,25 @@ const fGeoLocApi = async function () {
 export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
     if (navigator.geolocation) {
         try {
-            _oSettings.debug
-                ? console.log(
-                      'fGetLocation: Checking geoLoccation API: fGeoLocApi.'
-                  )
-                : ''
+            if (_oSettings.debug) {
+                console.log(
+                    'fGetLocation: Checking geoLoccation API: fGeoLocApi.'
+                )
+            }
             return await fGeoLocApi()
         } catch (e) {
-            _oSettings.debug
-                ? console.warn('fGetLocationL: failed using fGeoLocApi: ', e)
-                : ''
+            if (_oSettings.debug) {
+                console.warn('fGetLocationL: failed using fGeoLocApi: ', e)
+            }
             try {
-                console.log('5')
-                _oSettings.debug
-                    ? console.warn('Falling back to IP address lookup instead.')
-                    : ''
+                if (_oSettings.debug) {
+                    console.warn('Falling back to IP address lookup instead.')
+                }
                 return await fIPapi(sIpapiLocationApi)
             } catch (e) {
-                _oSettings.debug
-                    ? console.warn(
-                          'fGetLocation: failed sIpapiLocationApi: ',
-                          e
-                      )
-                    : ''
+                if (_oSettings.debug) {
+                    console.warn('fGetLocation: failed sIpapiLocationApi: ', e)
+                }
             }
         }
     }

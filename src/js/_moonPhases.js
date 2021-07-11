@@ -49,11 +49,11 @@ export const fPhase = function (date, _oSettings) {
 
     // test our date object
     if (!date || typeof date.getMonth !== 'function') {
-        _oSettings.debug
-            ? console.error(
-                  `fMoonPhase provided invalid date strings: year: ${year}, month: ${month}, day: ${day}`
-              )
-            : ''
+        if (_oSettings.debug) {
+            console.error(
+                `fMoonPhase provided invalid date strings: year: ${date.year}, month: ${date.month}, day: ${date.day}`
+            )
+        }
     }
 
     const yyyy = date.getFullYear()
@@ -62,7 +62,9 @@ export const fPhase = function (date, _oSettings) {
 
     const oMoonPhase = Moon.phase(yyyy, mm, dd)
 
-    _oSettings.debug ? console.log('fMoonPhase result: ', oMoonPhase) : ''
+    if (_oSettings.debug) {
+        console.log('fMoonPhase result: ', oMoonPhase)
+    }
 
     return oMoonPhase
 }

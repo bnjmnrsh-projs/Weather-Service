@@ -1,4 +1,3 @@
-import * as Convert from '../_conversions'
 import * as Icons from '../_icons'
 import * as Moon from '../_moonPhases'
 import * as Scales from '../_scales'
@@ -8,13 +7,12 @@ import { fClean } from '../_helpers'
 /**
  * Renders the app's details secection
  *
- * @param {array} data
+ * @param {object} _oData
+ * @param {object} _oSettings
  * @returns {string}
  */
 export const fRenderDetails = function (_oData, _oSettings) {
     const oCURRENT = _oData.CURRENT.data[0]
-    const sWindDirection = fClean(oCURRENT.wind_cdir_full)
-    const sWindDeg = fClean(oCURRENT.wind_dir)
     const iconCloud = Icons.fGetCloudCoverIcon(oCURRENT.clouds)
     const oMoon = Moon.fPhase(oCURRENT.obj_time, _oSettings)
     const oIcons = _oSettings.icon

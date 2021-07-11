@@ -8,6 +8,7 @@ import { fClean } from '../_helpers'
  * Renders individual upcoming forecast li elements
  *
  * @param {object} _oForecast
+ * @param {object} _oSettings
  * @returns {string}
  */
 const fRenderForecastList = function (_oForecast, _oSettings) {

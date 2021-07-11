@@ -1,17 +1,17 @@
 /**
  * Generate a visual scale based on 5km
  *
- * @param {float} vis (expects km units)
+no * @param {float} vis (expects km units)
+ *
  */
 export const fSetVisabilityScale = function (vis) {
     const distance = (parseFloat(vis) / 5) * 100
-
-    const nGraph = app.querySelector('.distance')
+    const nGraph = document.querySelector('.distance')
     nGraph.style.setProperty('--distance', 100 - distance + '%')
 }
 
 /**
- * Assigns a named string based on temperature in C
+ * Assigns a named string based on temperature in C
  * 6 step scale for data-temp
  *
  * @param {float} nTemp
@@ -74,7 +74,7 @@ export const fUvDataPt = function (nUV) {
             sUVclass = '4'
             break
         case nUV >= 9 || nUV <= 10 ? nUV : null:
-            uvClass = 5
+            sUVclass = 5
             break
     }
     return sUVclass

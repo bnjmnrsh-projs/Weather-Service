@@ -52,7 +52,7 @@ const weatherApp = function (_oSettings = {}) {
         sSunrise: nIcons.querySelector('.svg-wi-sunrise').outerHTML,
         sSunset: nIcons.querySelector('.svg-wi-sunset').outerHTML,
         sSunnyDay: nIcons.querySelector('.svg-wi-day-sunny').outerHTML,
-        // moon phases loaded as <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+        // moon phases are loaded as img pathsL: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
     }
 
     /**
@@ -61,7 +61,7 @@ const weatherApp = function (_oSettings = {}) {
      * @param {array} data
      */
     const fBuildUI = function (_oData) {
-        app.innerHTML =
+        nApp.innerHTML =
             fRenderHUD(_oData, _oSettings) +
             fRenderDetails(_oData, _oSettings) +
             fRenderForecast(_oData.DAILY.data, _oSettings)
@@ -85,10 +85,10 @@ const weatherApp = function (_oSettings = {}) {
                 _oSettings
             )
 
-            _oSettings.debug ? console.log('fGetLocation response:', loc) : ''
-            _oSettings.debug
-                ? console.log('fGetWeather response:', _oWeather)
-                : ''
+            if (_oSettings.debug) {
+                console.log('fGetLocation response:', loc)
+                console.log('fGetWeather response:', _oWeather)
+            }
 
             fBuildUI(_oWeather)
         } catch (e) {

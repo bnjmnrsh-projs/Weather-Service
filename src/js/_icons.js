@@ -59,7 +59,7 @@ export const fGetWeatherIcon = function (oData, iHour) {
     if (!oData) return
 
     let iCode, sPod
-    if (!iHour && oData.hasOwnProperty('pod')) {
+    if (!iHour && Object.prototype.hasOwnProperty.call(oData, 'pod')) {
         // Current weather object
         sPod = fClean(oData.sPod) === 'd' ? 0 : 1
         iCode = parseInt(fClean(oData.weather.code))
@@ -86,7 +86,7 @@ export const fGetCloudCoverIcon = function (iCoverage, sPod = 'd') {
     if (typeof iCoverage !== 'number') return
 
     // set day or night icon set
-    sPod = sPod = 'd' ? 0 : 1
+    sPod = sPod === 'd' ? 0 : 1
 
     const icons = oCloudCover
 
@@ -146,19 +146,19 @@ export const fSetStringElAttrs = function (sEl, props = {}) {
         nEl.innerHTML = sEl.trim()
         const nTarget = nEl.querySelector('div >:first-child')
 
-        if (props.hasOwnProperty('style')) {
+        if (Object.prototype.hasOwnProperty.call(props, 'style')) {
             nTarget.setAttribute('style', props.style)
         }
-        if (props.hasOwnProperty('class')) {
+        if (Object.prototype.hasOwnProperty.call(props, 'class')) {
             nTarget.classList.add(props.class)
         }
         if (
-            props.hasOwnProperty('data') &&
+            Object.prototype.hasOwnProperty.call(props, 'data') &&
             Object.keys(props.data).length > 0
         ) {
-            Object.keys(props.data).map((key) => {
+            Object.keys(props.data).map((key) =>
                 nTarget.setAttribute(`data-${key}`, props.data[key])
-            })
+            )
         }
         return nEl.innerHTML
     }
