@@ -1,0 +1,26 @@
+/**
+ * Global styles
+ */
+
+html,
+body {
+    height: 100%;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    max-width: 500px;
+    background: var(--color-stroke);
+    border: none;
+    margin: get-size(900) auto;
+}
+
+img {
+    height: auto;
+}
+
+:focus {
+    outline: 1px solid var(--color-theme-primary-glare);
+    outline-offset: 0.25rem;
+}

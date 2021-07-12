@@ -2,12 +2,13 @@
  * Details component top-level styles
 */
 
-@import './_c_detiails_feels_like';
-@import './_c_detiails_uv';
-@import './_c_detiails_sun_moon';
-@import './_c_detiails_visibility';
+@import '../utilities/_u_icons';
+@import './_c_detiails-feels-like';
+@import './_c_detiails-uv';
+@import './_c_detiails-sun-moon';
+@import './_c_detiails-visibility';
 
-#details {
+.section-details {
     @include code-font;
 
     .left-col {
@@ -36,8 +37,8 @@
 }
 
 @media screen and (max-width: 545px) {
-    #details {
-        font-size: 0.9rem;
+    .section-details {
+        font-size: var(--step--1);
         max-height: 40vh;
         overflow-x: scroll;
         ul {

@@ -5,6 +5,7 @@
 #forecast {
     @include code-font;
 
+    text-align: center;
     margin: 0.2rem 0.3rem;
 
     h4 {
@@ -51,7 +52,7 @@
     }
 
     .forecast-description {
-        font-size: 0.7rem;
+        font-size: var(--step--1);
         margin-top: 0;
     }
     .weather-icon {
@@ -61,33 +62,7 @@
 }
 
 @media screen and (max-width: 545px) {
-    // #forecast ul {
-    //     display: flex;
-    //     flex-direction: column;
-    // }
-
-    // #forecast ul li {
-    //     border-radius: 2px;
-    //     width: 100%;
-    //     padding: 0;
-    //     margin: 0;
-    //     box-shadow: var(--bg-dk) 1px 1px 2px;
-    // }
-    // #forecast ul li:first-child {
-    //     margin-right: 0;
-    //     border-bottom-left-radius: 2px;
-    // }
-    // #forecast ul li:last-child {
-    //     margin-top: 0.3em;
-    //     margin-left: 0;
-    //     border-bottom-right-radius: 10px;
-    //     border-bottom-left-radius: 10px;
-    // }
-    // #forecast ul li header {
-    //     padding: 0.3rem;
-    // }
-
-    #forecast .weather-icon {
+    .section-forecast .weather-icon {
         width: 45%;
         height: auto;
     }

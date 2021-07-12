@@ -18,7 +18,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
     const oIcons = _oSettings.icon
 
     const template = `
-        <div id="details">
+        <div id="details" class="section-details">
             <ul class="unstyled">
                 <li class="feels-like">
                     <span class="left-col">{{feels_like}} {{app_temp}}</span>
@@ -82,7 +82,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
                         <span class="left-col">{{vis}} {{vis_distance}}</span>
                         ${oIcons.sBinoculars}
                     </div>
-                    <div class="visibility-graph" aria-hidden="true"><div class="distance"></div></div>
+                    <div class="scale" aria-hidden="true"><div class="distance"></div></div>
                 </li>
                 <li class="sun-rise-set">
                     <span class="left-col">{{sun_rise_set}} {{sun_rise}} | {{sun_set}}</span>

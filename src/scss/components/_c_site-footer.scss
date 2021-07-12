@@ -1,0 +1,29 @@
+/**
+ * Page footer styles
+*/
+
+.site-footer {
+    font-size: var(--step--1);
+    text-align: center;
+    background-color: var(--bg-lite);
+    padding: 0.5rem 0;
+    color: var(--bg-lt);
+    width: 100vw;
+
+    .wrap {
+        margin: 1rem 0;
+    }
+    a {
+        color: currentColor;
+
+        &:hover {
+            // text-decoration: none;
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .site-footer {
+        filter: invert(1);
+    }
+}

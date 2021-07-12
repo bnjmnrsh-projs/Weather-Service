@@ -1,5 +1,5 @@
 /**
- * Utility classes
+ * General utility classes
 */
 
 /** Screen reader only styles */
@@ -11,4 +11,11 @@
     position: absolute;
     white-space: nowrap;
     width: 1px;
+}
+
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--scale-500);
+    padding-right: var(--scale-500);
 }

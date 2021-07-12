@@ -1,0 +1,97 @@
+/**
+ * Theme styles
+ */
+
+html {
+    // Backgrounds
+    --bg-lt: var(--grey-1);
+    --bg: var(--grey-2);
+    --bg-md: var(--grey-3);
+    --bg-dk: var(--gray-5);
+    --bg-vdk: var(--grey-6);
+    --bg-lite: var(--text);
+
+    // Text
+    --text: var(--grey-9);
+
+    // Icons
+    --icon-nutral: var(--grey-9);
+    --icon-dk: var(--grey-10);
+
+    // Temp
+    --temp-0: var(--blue-2);
+    --temp-1: var(--cyan-2);
+    --temp-2: var(--green-2);
+    --temp-3: var(--yellow-2);
+    --temp-4: var(--orange-2);
+    --temp-5: var(--red-2);
+
+    // UV
+    --uv-0: var(--blue-3);
+    --uv-1: var(--cyan-3);
+    --uv-2: var(--green-3);
+    --uv-3: var(--yellow-2);
+    --uv-4: var(--orange-2);
+    --uv-5: var(--red-2);
+
+    background-color: var(--bg);
+}
+
+body {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+#app {
+    min-width: 80%;
+    max-width: 10rem;
+    margin-bottom: 3rem;
+    flex: 1;
+}
+
+@media screen and (min-width: 1500px) {
+    #app {
+        width: 50rem;
+        min-width: 50rem;
+        max-width: 50rem;
+    }
+}
+
+@media screen and (max-width: 545px) {
+    h1 {
+    }
+    #app {
+        width: 100%;
+        max-width: inherit;
+    }
+
+    .site-footer {
+        display: none;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: var(--theme-white);
+        --bg-lt: var(--grey-6);
+        --bg: var(--grey-9);
+        --bg-md: var(--grey-7);
+        --bg-dk: var(--grey-8);
+        --bg-vdk: var(--grey-9);
+        --icon-nutral: var(--grey-8);
+        --icon-dk: var(--grey-4);
+    }
+    html {
+        color: var(--text);
+    }
+
+    svg {
+        fill: var(--text);
+    }
+}

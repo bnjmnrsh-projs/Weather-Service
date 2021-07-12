@@ -1,0 +1,27 @@
+/**
+ * Current Sun rise-set component styles
+*/
+
+@media screen and (max-width: 545px) {
+    .inline-icon.svg-sunrise {
+        margin-bottom: 0;
+    }
+    .inline-icon.svg-sunset {
+        margin-bottom: 0;
+    }
+    .inline-icon.moon {
+        margin-bottom: 0;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .inline-icon.svg-wi-sunrise,
+    .inline-icon.svg-wi-sunset {
+        fill: var(--yellow-3);
+    }
+    .inline-icon.moon {
+        filter: invert(0);
+        background-color: var(--yellow-3);
+        fill: var(--bg-dk);
+    }
+}

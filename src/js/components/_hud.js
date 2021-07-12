@@ -18,7 +18,9 @@ export const fRenderHUD = function (_oData, _oSettings) {
     const sIconName = fGetWeatherIcon(oCURRENT)
 
     const template = `<header
-        id="hud" class="" data-temp="${fTempDataPt(fClean(oCURRENT.temp))}">
+        id="hud" class="section-hud" data-temp="${fTempDataPt(
+            fClean(oCURRENT.temp)
+        )}">
             <h3>
                 <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
                 <span aria-hidden="true">{{temp}}</span>

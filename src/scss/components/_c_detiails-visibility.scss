@@ -1,7 +1,10 @@
 /**
 * Current visibility compnent styles
 */
-#details .visibility {
+.section-details .visibility {
+    --distance: 0%;
+    --scale-bg: hsla(195, 100%, 69%, 0.509);
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -21,7 +24,7 @@
     .visibility-wrap .inline-icon {
         margin-top: -0.3em;
     }
-    .visibility-graph {
+    .scale {
         background-color: var(--scale-bg);
         background-image: url(../svg/graph.svg);
         background-position: left -1px bottom -1px;
@@ -37,23 +40,23 @@
         border-bottom-right-radius: 2px;
         border-bottom-left-radius: 2px;
     }
-    .visibility-graph::before,
-    .visibility-graph::after {
+    .scale::before,
+    .scale::after {
         box-sizing: content-box !important;
         position: absolute;
         top: 0.1rem;
         z-index: 1;
     }
 
-    .visibility-graph::before {
+    .scale::before {
         content: '0 |';
         left: 0.6rem;
     }
-    .visibility-graph::after {
+    .scale::after {
         content: '| 5km/3.11mi';
         right: 1rem;
     }
-    .visibility-graph .distance {
+    .scale .distance {
         background: linear-gradient(
             to left,
             hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px) var(--bg-dk),
@@ -82,20 +85,20 @@
 }
 
 @media screen and (max-width: 545px) {
-    #details .visibility {
-        .visibility-graph {
+    .section-details .visibility {
+        .scale {
             height: 1rem;
         }
 
-        .visibility-graph::before,
-        .visibility-graph::after {
+        .scale::before,
+        .scale::after {
             bottom: 0.2rem;
         }
     }
 }
 
 @media (prefers-color-scheme: dark) {
-    #details .visibility .visibility-graph .distance {
+    .section-details .visibility .scale .distance {
         border: 0 solid transparent;
         background: linear-gradient(
             to left,
