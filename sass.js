@@ -11,7 +11,7 @@ const configs = {
     indentType: 'tab',
     indentWidth: 1,
     minify: true,
-    sourceMap: false,
+    sourceMap: true,
 }
 
 // Banner
