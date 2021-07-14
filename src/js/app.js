@@ -5,6 +5,7 @@ import { fRenderHUD } from './components/_hud'
 import { fRenderForecast } from './components/_forecast'
 import { fRenderDetails } from './components/_details'
 import { fRenderErrors } from './components/_errors'
+import { fDkModeToggle } from './_darkmode-toggle'
 
 /**
  * The Weather Service
@@ -14,6 +15,9 @@ import { fRenderErrors } from './components/_errors'
  */
 
 const weatherApp = function (_oSettings = {}) {
+    document.documentElement.classList.remove('no-js')
+    fDkModeToggle()
+
     const _oDefaults = {
         target: '#app',
         units: 'M',

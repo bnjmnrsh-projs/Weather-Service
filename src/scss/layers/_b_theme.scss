@@ -2,6 +2,10 @@
  * Theme styles
  */
 
+:root {
+    --color-mode: 'light';
+}
+
 html {
     // Backgrounds
     --bg-lt: var(--grey-1);
@@ -78,6 +82,9 @@ body {
 
 @media (prefers-color-scheme: dark) {
     :root {
+        --color-mode: 'dark';
+    }
+    :root:not([data-user-color-scheme]) {
         --text: var(--theme-white);
         --bg-lt: var(--grey-6);
         --bg: var(--grey-9);
@@ -86,11 +93,29 @@ body {
         --bg-vdk: var(--grey-9);
         --icon-nutral: var(--grey-8);
         --icon-dk: var(--grey-4);
+
+        html {
+            color: var(--text);
+        }
+        svg {
+            fill: var(--text);
+        }
     }
+}
+
+[data-user-color-scheme='dark'] {
+    --text: var(--theme-white);
+    --bg-lt: var(--grey-6);
+    --bg: var(--grey-9);
+    --bg-md: var(--grey-7);
+    --bg-dk: var(--grey-8);
+    --bg-vdk: var(--grey-9);
+    --icon-nutral: var(--grey-8);
+    --icon-dk: var(--grey-4);
+
     html {
         color: var(--text);
     }
-
     svg {
         fill: var(--text);
     }
