@@ -65,6 +65,7 @@ const weatherApp = function (_oSettings = {}) {
      * @param {array} data
      */
     const fBuildUI = function (_oData) {
+        nApp.classList.remove('loading')
         nApp.innerHTML =
             fRenderHUD(_oData, _oSettings) +
             fRenderDetails(_oData, _oSettings) +
