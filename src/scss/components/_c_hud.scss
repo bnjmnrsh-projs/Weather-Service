@@ -3,6 +3,9 @@
 */
 
 .section-hud {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     padding: 2rem;
     border-radius: 10px 10px 2px 2px;
     background-color: var(--bg-lt);

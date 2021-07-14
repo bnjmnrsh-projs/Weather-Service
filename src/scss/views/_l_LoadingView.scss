@@ -2,49 +2,58 @@
 * Appearance of inital loading state
 */
 
-.loading-icon {
-    width: 150px;
-    height: 150px;
-    animation: rotating 30s linear infinite;
-    display: inline-block;
-}
+.loading {
+    .loading-icon {
+        width: 150px;
+        height: 150px;
+        animation: rotating 30s linear infinite;
+        display: inline-block;
+        margin: 0 auto;
+    }
 
-.loading-hud {
-    background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
-        radial-gradient(
-            ellipse at center,
-            var(--temp-5),
-            var(--temp-4),
-            var(--temp-3),
-            var(--temp-2),
-            var(--temp-1),
-            var(--temp-0)
+    .section-hud {
+        background: radial-gradient(
+                ellipse at top,
+                var(--temp-3),
+                var(--temp-0)
+            ),
+            radial-gradient(
+                ellipse at center,
+                var(--temp-5),
+                var(--temp-4),
+                var(--temp-3),
+                var(--temp-2),
+                var(--temp-1),
+                var(--temp-0)
+            );
+        background-size: 400% 400%;
+        animation: loading 60s ease infinite;
+    }
+
+    .section-details ul {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .loading-bg {
+        background: linear-gradient(
+            89deg,
+            var(--bg-lt),
+            var(--bg-md),
+            var(--bg-md),
+            var(--bg-md)
         );
-    background-size: 400% 400%;
-    animation: loading 60s ease infinite;
-}
-
-#details.loading-details ul {
-    display: flex;
-    flex-direction: column;
-}
-
-.loading-bg {
-    background: linear-gradient(
-        89deg,
-        var(--bg-lt),
-        var(--bg-md),
-        var(--bg-md),
-        var(--bg-md)
-    );
-    background-size: 200% 100%;
-    animation: loading 10s ease-in-out infinite;
+        background-size: 200% 100%;
+        animation: loading 10s ease-in-out infinite;
+    }
 }
 
 /* @media Rules */
 @media screen and (prefers-reduced-motion: reduce) {
-    .loading-hud,
-    .loading-icon {
-        animation: none;
+    .loading {
+        .section-hud,
+        .loading-icon {
+            animation: none;
+        }
     }
 }
