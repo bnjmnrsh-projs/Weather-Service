@@ -1,0 +1,1000 @@
+/*! weather-service v1.0.0 | (c) 2021 bnjmnrsh@gmail.com | MIT License | git+ssh://git@github.com/bnjmnrsh-projs/Weather-Service.git */
+/**
+ * Reset
+ * https://piccalil.li/blog/a-modern-css-reset/
+*/
+/* Box sizing rules */
+@import url("https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap");
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+	margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role=list],
+ol[role=list] {
+	list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+	scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+	min-height: 100vh;
+	text-rendering: optimizeSpeed;
+	line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+	text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+	max-width: 100%;
+	display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+	font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+	html:focus-within {
+		scroll-behavior: auto;
+	}
+
+	*,
+*::before,
+*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+/**
+ * Custom properties
+*/
+:root {
+	--theme-white: hsl(13, 7%, 92%);
+	--theme-black: hsl(13, 7%, 5%);
+	--grey-1: hsla(13, 7%, 95%, 0.9);
+	--grey-2: hsla(13, 7%, 78%, 0.9);
+	--grey-3: hsla(13, 7%, 70%, 0.9);
+	--grey-4: hsla(13, 7%, 60%, 0.9);
+	--grey-5: hsla(13, 7%, 50%, 0.9);
+	--grey-6: hsla(13, 7%, 40%, 0.9);
+	--grey-7: hsla(13, 7%, 30%, 0.9);
+	--grey-8: hsla(13, 7%, 20%, 0.9);
+	--grey-9: hsla(13, 7%, 12%, 0.9);
+	--grey-10: hsla(13, 7%, 8%, 0.9);
+	--red-1: hsla(9, 95%, 30%, 0.7);
+	--red-2: hsla(9, 95%, 50%, 0.7);
+	--red-3: hsla(9, 100%, 77%, 0.7);
+	--orange-1: hsla(33, 95%, 30%, 0.7);
+	--orange-2: hsla(33, 95%, 50%, 0.7);
+	--orange-3: hsla(33, 95%, 70%, 0.7);
+	--yellow-1: hsla(60, 95%, 25%, 0.7);
+	--yellow-2: hsla(60, 95%, 50%, 0.7);
+	--yellow-3: hsla(60, 95%, 70%, 0.7);
+	--green-1: hsla(144, 95%, 25%, 0.7);
+	--green-2: hsla(144, 95%, 50%, 0.7);
+	--green-3: hsla(144, 95%, 70%, 0.7);
+	--cyan-1: hsla(176, 95%, 25%, 0.7);
+	--cyan-2: hsla(176, 95%, 50%, 0.7);
+	--cyan-3: hsla(176, 95%, 70%, 0.7);
+	--blue-1: hsla(195, 95%, 30%, 0.7);
+	--blue-2: hsla(195, 95%, 50%, 0.7);
+	--blue-3: hsla(195, 95%, 70%, 0.7);
+}
+
+:root {
+	/* Fluid Type Scale: 1.125 Major Second
+	 * https://utopia.fyi/blog/css-modular-scales/
+	 * https://utopia.fyi/type/calculator?c=320,16,1.2,1140,24,1.25,4,1,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l
+	*/
+	--step--3: clamp(0.48rem, 0.43rem + 0.26vw, 0.61rem);
+	--step--2: clamp(0.58rem, 0.5rem + 0.37vw, 0.77rem);
+	--step--1: clamp(0.69rem, 0.59rem + 0.52vw, 0.96rem);
+	--step-0: clamp(0.83rem, 0.69rem + 0.72vw, 1.2rem);
+	--step-1: clamp(1rem, 0.8rem + 0.98vw, 1.5rem);
+	--step-2: clamp(1.2rem, 0.94rem + 1.32vw, 1.88rem);
+	--step-3: clamp(1.44rem, 1.09rem + 1.76vw, 2.34rem);
+	--step-4: clamp(1.73rem, 1.26rem + 2.35vw, 2.93rem);
+	--step-5: clamp(2.07rem, 1.45rem + 3.1vw, 3.66rem);
+}
+
+/**
+ * General utility classes
+*/
+/** Screen reader only styles */
+.c-theme-toggler input[type=checkbox],
+.sr-only:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+.wrapper {
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--scale-500);
+	padding-right: var(--scale-500);
+}
+
+/**
+ * Data Scales
+*/
+[data-temp="0"] {
+	background-color: var(--temp-0) !important;
+}
+
+[data-temp="1"] {
+	background-color: var(--temp-1) !important;
+}
+
+[data-temp="2"] {
+	background-color: var(--temp-2) !important;
+}
+
+[data-temp="3"] {
+	background-color: var(--temp-3) !important;
+}
+
+[data-temp="4"] {
+	background-color: var(--temp-4) !important;
+}
+
+[data-temp="5"] {
+	background-color: var(--temp-5) !important;
+}
+
+[data-uv="0"] {
+	background-color: var(--uv-0) !important;
+}
+
+[data-uv="1"] {
+	background-color: var(--uv-1) !important;
+}
+
+[data-uv="2"] {
+	background-color: var(--uv-2) !important;
+}
+
+[data-uv="3"] {
+	background-color: var(--uv-3) !important;
+}
+
+[data-uv="4"] {
+	background-color: var(--uv-4) !important;
+}
+
+[data-uv="5"] {
+	background-color: var(--uv-5) !important;
+}
+
+/* Animations */
+@keyframes rotating {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@keyframes loading {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+/**
+ * Global styles
+ */
+html,
+body {
+	height: 100%;
+}
+
+hr {
+	display: block;
+	height: 1px;
+	max-width: 500px;
+	background: var(--color-stroke);
+	border: none;
+	margin: get-size(900) auto;
+}
+
+img {
+	height: auto;
+}
+
+:focus {
+	outline: 1px solid var(--color-theme-primary-glare);
+	outline-offset: 0.25rem;
+}
+
+/**
+ * Theme styles
+ */
+:root {
+	--color-mode: "light";
+}
+
+html {
+	--bg-lt: var(--grey-1);
+	--bg: var(--grey-2);
+	--bg-md: var(--grey-3);
+	--bg-dk: var(--gray-5);
+	--bg-vdk: var(--grey-6);
+	--bg-lite: var(--text);
+	--text: var(--grey-9);
+	--icon-nutral: var(--grey-9);
+	--icon-dk: var(--grey-10);
+	--temp-0: var(--blue-2);
+	--temp-1: var(--cyan-2);
+	--temp-2: var(--green-2);
+	--temp-3: var(--yellow-2);
+	--temp-4: var(--orange-2);
+	--temp-5: var(--red-2);
+	--uv-0: var(--blue-3);
+	--uv-1: var(--cyan-3);
+	--uv-2: var(--green-3);
+	--uv-3: var(--yellow-2);
+	--uv-4: var(--orange-2);
+	--uv-5: var(--red-2);
+	background-color: var(--bg);
+}
+
+body {
+	width: 80%;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: nowrap;
+	min-height: 100vh;
+	scroll-behavior: smooth;
+}
+
+#app {
+	min-width: 80%;
+	max-width: 10rem;
+	margin-bottom: 3rem;
+	flex: 1;
+}
+
+@media screen and (min-width: 1500px) {
+	#app {
+		width: 50rem;
+		min-width: 50rem;
+		max-width: 50rem;
+	}
+}
+@media screen and (max-width: 545px) {
+	#app {
+		width: 100%;
+		max-width: inherit;
+	}
+
+	.site-footer {
+		display: none;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-mode: "dark";
+	}
+
+	:root:not([data-user-color-scheme]) {
+		--text: var(--theme-white);
+		--bg-lt: var(--grey-6);
+		--bg: var(--grey-9);
+		--bg-md: var(--grey-7);
+		--bg-dk: var(--grey-8);
+		--bg-vdk: var(--grey-9);
+		--icon-nutral: var(--grey-8);
+		--icon-dk: var(--grey-4);
+	}
+	:root:not([data-user-color-scheme]) html {
+		color: var(--text);
+	}
+	:root:not([data-user-color-scheme]) svg {
+		fill: var(--text);
+	}
+}
+[data-user-color-scheme=dark] {
+	--text: var(--theme-white);
+	--bg-lt: var(--grey-6);
+	--bg: var(--grey-9);
+	--bg-md: var(--grey-7);
+	--bg-dk: var(--grey-8);
+	--bg-vdk: var(--grey-9);
+	--icon-nutral: var(--grey-8);
+	--icon-dk: var(--grey-4);
+}
+[data-user-color-scheme=dark] html {
+	color: var(--text);
+}
+[data-user-color-scheme=dark] svg {
+	fill: var(--text);
+}
+
+/**
+* Base fonts & typography
+*/
+@font-face {
+	font-family: system;
+	font-style: normal;
+	font-weight: 300;
+	src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
+html {
+	font-size: 100%;
+	/* 16px */
+}
+
+body {
+	font-family: system, sans-serif;
+	font-weight: 400;
+	line-height: 1.4;
+	color: var(--text);
+}
+
+p {
+	margin-bottom: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	margin: 3rem 0 1.38rem;
+	font-family: "Turret Road", system, sans-serif;
+	font-weight: 800;
+	line-height: 1.3;
+}
+
+h1 {
+	margin-top: 0;
+	margin-bottom: 0.1em;
+	font-size: var(--step-4);
+}
+
+h2 {
+	font-size: var(--step-3);
+}
+
+h3 {
+	font-size: var(--step-2);
+}
+
+h4 {
+	font-size: var(--step-1);
+}
+
+h5 {
+	font-size: var(--step-0);
+}
+
+small,
+.text_small {
+	font-size: var(--step--1);
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+ul.unstyled {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/**
+* Fluid type utlis
+*/
+.ft-0 {
+	font-size: var(--step-0);
+}
+
+.ft-1 {
+	font-size: var(--step-1);
+}
+
+.ft-2 {
+	font-size: var(--step-2);
+}
+
+.ft-3 {
+	font-size: var(--step-3);
+}
+
+.ft-4 {
+	font-size: var(--step-4);
+}
+
+.ft-5 {
+	font-size: var(--step-5);
+}
+
+.c-masthead {
+	margin-top: 3rem;
+}
+
+/**
+ * Page footer styles
+*/
+.c-site-footer {
+	font-size: var(--step--1);
+	text-align: center;
+	background-color: var(--bg-lite);
+	padding: 0.5rem 0;
+	color: var(--bg-lt);
+	width: 100vw;
+}
+.c-site-footer .wrap {
+	margin: 1rem 0;
+}
+.c-site-footer a {
+	color: currentColor;
+}
+@media (prefers-color-scheme: dark) {
+	.c-site-footer {
+		background-color: var(--bg-dk);
+		color: var(--grey-3);
+	}
+}
+/**
+* Theme checkbox toggle
+*/
+.c-theme-toggler label {
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.c-theme-toggler .toggle {
+	width: 50px;
+	height: 25px;
+	border-radius: 1em;
+	cursor: pointer;
+	background-image: url("data:image/svg+xml,%3Csvg enable-background='new 0 0 30 30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='m7.91 14.48c0-.96.19-1.87.56-2.75s.88-1.63 1.51-2.26 1.39-1.14 2.27-1.52 1.8-.57 2.75-.57h1.14c.16.04.23.14.23.28l.05.88c.04 1.27.49 2.35 1.37 3.24s1.94 1.37 3.19 1.42l.82.07c.16 0 .24.08.24.23v.98c.01 1.28-.3 2.47-.93 3.56s-1.48 1.95-2.57 2.59c-1.08.63-2.27.95-3.55.95-.97 0-1.9-.19-2.78-.56s-1.63-.88-2.26-1.51-1.13-1.39-1.5-2.26c-.35-.88-.54-1.8-.54-2.77zm1.83 0c0 .76.15 1.48.45 2.16.3.67.7 1.24 1.19 1.7s1.05.82 1.69 1.08c.63.27 1.28.4 1.94.4.58 0 1.17-.11 1.76-.34s1.14-.55 1.65-.96.94-.93 1.31-1.57.6-1.33.71-2.09c-1.63-.34-2.94-1.04-3.92-2.1s-1.55-2.3-1.7-3.74c-.96.06-1.82.35-2.61.88-.78.53-1.39 1.2-1.82 2.02s-.65 1.67-.65 2.56z' /%3E%3C/svg%3E");
+	background-color: var(--grey-2);
+	border: 1px solid var(--grey-4);
+	transition: all 0.1s linear;
+	display: flex;
+	flex-direction: row;
+	vertical-align: middle;
+	margin-left: 1em;
+}
+.c-theme-toggler .toggle::after {
+	content: "";
+	position: absolute;
+	width: 21px;
+	height: 21px;
+	margin: 1px;
+	border-radius: 1em;
+	background-color: var(--theme-white);
+	border: 1px solid var(--theme-white);
+	box-shadow: 2px 5px 10px -2px rgba(0, 0, 0, 0.2);
+	transition: all 0.1s linear;
+}
+.c-theme-toggler input[type=checkbox]:focus + .toggle {
+	box-shadow: 0 0 0 5px var(--blue-3), 0 0 0 3px var(--blue-2);
+	outline: 5px solid transparent;
+}
+.c-theme-toggler input[type=checkbox]:not(:checked) + .toggle {
+	background-image: url("data:image/svg+xml,%3Csvg enable-background='new 0 0 30 30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='m4.4 14.9c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.2.2.2.2.4.2.6s0 .5-.2.6c-.2.2-.3.2-.6.2h-2c-.2 0-.4-.1-.6-.2-.1-.1-.2-.3-.2-.6zm2.8 6.9c0-.2.1-.4.2-.6l1.5-1.4c.1-.2.4-.2.6-.2s.4.1.6.2.2.3.2.6c0 .2-.1.5-.2.6l-1.4 1.4c-.4.3-.8.3-1.2 0-.2-.1-.3-.3-.3-.6zm0-13.8c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2s.4.1.6.2l1.4 1.5c.2.1.2.4.2.6s-.1.4-.2.6-.4.2-.6.2-.4-.1-.6-.2l-1.3-1.5c-.2-.1-.3-.4-.3-.6zm2.6 6.9c0-.9.2-1.8.7-2.6s1.1-1.4 1.9-1.9 1.7-.7 2.6-.7c.7 0 1.4.1 2 .4s1.2.6 1.7 1.1.8 1 1.1 1.7c.3.6.4 1.3.4 2 0 .9-.2 1.8-.7 2.6s-1.1 1.4-1.9 1.9-1.7.7-2.6.7-1.8-.2-2.6-.7-1.4-1.1-1.9-1.9-.7-1.6-.7-2.6zm1.7 0c0 1 .3 1.8 1 2.5s1.5 1 2.5 1 1.8-.4 2.5-1 1-1.5 1-2.5-.4-1.8-1-2.5c-.7-.7-1.5-1-2.5-1s-1.8.3-2.5 1-1 1.6-1 2.5zm2.6 7.8c0-.2.1-.4.2-.6s.4-.2.6-.2.4.1.6.2.2.4.2.6v2c0 .2-.1.5-.2.6s-.4.2-.6.2-.4-.1-.6-.2c-.2-.2-.2-.4-.2-.6zm0-15.5v-2c0-.2.1-.4.2-.6s.4-.3.6-.3.4.1.6.2.2.4.2.6v2.1c0 .2-.1.4-.2.6s-.3.2-.5.2-.4-.1-.6-.2-.3-.4-.3-.6zm5.6 13.2c0-.2.1-.4.2-.6s.3-.2.6-.2c.2 0 .4.1.6.2l1.5 1.4c.2.2.2.4.2.6s-.1.4-.2.6c-.4.3-.8.3-1.2 0l-1.5-1.4c-.2-.2-.2-.4-.2-.6zm0-10.9c0-.2.1-.4.2-.6l1.4-1.5c.2-.2.4-.2.6-.2s.4.1.6.2c.2.2.2.4.2.6s-.1.5-.2.6l-1.5 1.5c-.2.2-.4.2-.6.2s-.4-.1-.6-.2-.1-.4-.1-.6zm2.2 5.4c0-.2.1-.4.2-.6.2-.2.4-.2.6-.2h2c.2 0 .4.1.6.3s.3.4.3.6-.1.4-.3.6-.4.2-.6.2h-2c-.2 0-.4-.1-.6-.2s-.2-.4-.2-.7z' /%3E%3C/svg%3E");
+}
+.c-theme-toggler input[type=checkbox]:checked + .toggle {
+	background-color: var(--green-2);
+	border-color: var(--green-2);
+}
+.c-theme-toggler input[type=checkbox]:focus:not(:focus-visible) + .toggle {
+	box-shadow: none;
+}
+.c-theme-toggler input[type=checkbox]:checked + .toggle::after {
+	transform: translateX(24px);
+	transition: transform 0.1s linear;
+	border-color: var(--theme-white);
+}
+
+.no-js .c-theme-toggler {
+	display: none;
+}
+
+/**
+* Appearance of inital loading state
+*/
+.loading .loading-icon {
+	width: calc(var(--step-5) * 3.1);
+	height: calc(var(--step-5) * 3.1);
+	animation: rotating 30s linear infinite;
+	display: inline-block;
+	margin: 0 auto;
+}
+.loading .c-hud {
+	background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)), radial-gradient(ellipse at center, var(--temp-5), var(--temp-4), var(--temp-3), var(--temp-2), var(--temp-1), var(--temp-0));
+	background-size: 400% 400%;
+	animation: loading 60s ease infinite;
+}
+.loading .c-details ul li:nth-child(1),
+.loading .c-details ul li:nth-child(2),
+.loading .c-details ul li:nth-child(3),
+.loading .c-details ul li:nth-child(4) {
+	min-height: 3.8rem;
+}
+.loading .c-forecast .weather-icon {
+	width: 75%;
+	border-radius: 3rem;
+	background-color: var(--icon-nutral);
+	filter: none !important;
+}
+.loading .loading-bg {
+	background: linear-gradient(89deg, var(--bg-lt), var(--bg-md), var(--bg-md), var(--bg-md));
+	background-size: 200% 100%;
+	animation: loading 10s ease-in-out infinite;
+}
+
+/* @media Rules */
+@media screen and (prefers-reduced-motion: reduce) {
+	.loading .section-hud,
+.loading .loading-icon {
+		animation: none;
+	}
+}
+@media screen and (max-width: 545px) {
+	.loading .loading-icon {
+		width: calc(var(--step-5) * 2.7);
+		height: calc(var(--step-5) * 2.7);
+	}
+	.loading .c-details ul li:nth-child(1),
+.loading .c-details ul li:nth-child(2),
+.loading .c-details ul li:nth-child(3),
+.loading .c-details ul li:nth-child(4) {
+		min-height: auto;
+	}
+	.loading .c-forecast .weather-icon {
+		width: 45%;
+	}
+}
+@media screen and (min-width: 1500px) {
+	.loading .loading-icon {
+		width: calc(var(--step-5) * 3);
+		height: calc(var(--step-5) * 3);
+	}
+}
+/**
+* Main application screen
+*/
+/**
+ * HUD Component Styles
+*/
+.c-hud {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	padding: 2rem;
+	border-radius: 10px 10px 2px 2px;
+	background-color: var(--bg-lt);
+	margin: 0.2rem 0.3rem;
+	box-shadow: var(--bg-dk) 1px 1px 1px;
+}
+.c-hud h3 {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+}
+.c-hud .weather-icon {
+	height: auto;
+	width: 25%;
+}
+.c-hud ul {
+	display: flex;
+	flex-direction: column;
+	font-family: "Turret Road", sans-serif;
+}
+.c-hud ul li {
+	margin: 0 auto;
+}
+.c-hud ul li :first-child {
+	padding-bottom: 0.2rem;
+	margin-bottom: 0.4rem;
+	font-size: var(--step--1);
+	border-bottom: 1px solid var(--text);
+}
+
+@media screen and (max-width: 545px) {
+	.c-hud {
+		padding: 1.5rem;
+	}
+}
+/**
+ * Details component top-level styles
+*/
+/**
+* Icon syles
+*/
+.inline-icon {
+	display: inline-block;
+	height: 1.8rem;
+	width: auto;
+	border-radius: 15px;
+	background-color: var(--icon-nutral);
+	padding: 2px;
+	transition: 1s all ease;
+}
+
+span.inline-icon {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.weather-icon {
+	filter: drop-shadow(2px 3px 1px var(--icon-dk));
+}
+
+.inline-icon.svg-sunrise {
+	background-color: var(--sunrise);
+}
+
+.inline-icon.svg-sunset {
+	background-color: var(--sunset);
+}
+
+.inline-icon.moon {
+	background-color: var(--yellow-lt);
+	padding: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+	.inline-icon {
+		background-color: var(--icon-nutral);
+	}
+
+	.loading-icon,
+#forecast .weather-icon,
+#hud .weather-icon {
+		filter: invert(95%) hue-rotate(180deg) drop-shadow(2px 3px 1px var(--icon-dk));
+	}
+
+	.feels-like .svg-wi-thermometer,
+.uv-index .svg-wi-day-sunny {
+		fill: var(--bg-vdk);
+	}
+}
+/**
+* Current feels-like compnent styles
+*/
+.c-feels-like {
+	--temp-0: var(--blue-2);
+	--temp-1: var(--cyan-2);
+	--temp-2: var(--green-2);
+	--temp-3: var(--yellow-2);
+	--temp-4: var(--orange-2);
+	--temp-5: var(--red-2);
+}
+
+/**
+* Current UV compnent styles
+*/
+/**
+ * Current Sun rise-set component styles
+*/
+@media screen and (max-width: 545px) {
+	.inline-icon.svg-sunrise {
+		margin-bottom: 0;
+	}
+
+	.inline-icon.svg-sunset {
+		margin-bottom: 0;
+	}
+
+	.inline-icon.moon {
+		margin-bottom: 0;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	.inline-icon.svg-wi-sunrise,
+.inline-icon.svg-wi-sunset {
+		fill: var(--yellow-3);
+	}
+
+	.inline-icon.moon {
+		filter: invert(0);
+		background-color: var(--yellow-3);
+		fill: var(--bg-dk);
+	}
+}
+/**
+* Current visibility compnent styles
+*/
+.c-details .c-visibility {
+	--distance: 0%;
+	--scale-bg: hsla(195, 100%, 69%, 0.509);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex: 1 1 100%;
+}
+.c-details .c-visibility .visibility-wrap * {
+	align-self: center;
+}
+.c-details .c-visibility .visibility-wrap {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	margin: 0.3rem 0 0.5rem 0;
+}
+.c-details .c-visibility .visibility-wrap .inline-icon {
+	margin-top: -0.3em;
+}
+.c-details .c-visibility .scale {
+	background-color: var(--scale-bg);
+	background-image: url(../svg/graph.svg);
+	background-position: left -1px bottom -1px;
+	height: 1rem;
+	width: calc(100% + 1.6rem);
+	position: relative;
+	overflow: hidden;
+	font-size: 0.6em;
+	transition: all 0.5s ease;
+	margin: 0 -0.5rem -0.5rem -0.5rem;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+.c-details .c-visibility .scale::before,
+.c-details .c-visibility .scale::after {
+	box-sizing: content-box !important;
+	position: absolute;
+	top: 0.1rem;
+	z-index: 1;
+}
+.c-details .c-visibility .scale::before {
+	content: "0 |";
+	left: 0.6rem;
+}
+.c-details .c-visibility .scale::after {
+	content: "| 5km/3.11mi";
+	right: 1rem;
+}
+.c-details .c-visibility .scale .distance {
+	background: linear-gradient(to left, rgba(255, 255, 255, 0) calc(var(--distance) + 20px) var(--bg-dk), calc(var(--distance) - 20px));
+	border-right: 80px solid var(--bg-dk);
+	padding-left: 10px;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: absolute;
+	height: 200%;
+	width: calc(100% - (10px + -0.6rem));
+	z-index: 0;
+	will-change: transform;
+	animation: distance-loading 2s ease forwards;
+}
+
+@keyframes distance-loading {
+	0% {
+		transform: translateX(150%);
+	}
+	100% {
+		transform: translateX(0%);
+	}
+}
+@media screen and (max-width: 545px) {
+	.c-details .c-visibility .scale {
+		height: 1rem;
+	}
+	.c-details .c-visibility .scale::before,
+.c-details .c-visibility .scale::after {
+		bottom: 0.2rem;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	.c-details .c-visibility .scale .distance {
+		border: 0 solid transparent;
+		background: linear-gradient(to left, var(--bg-lite) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
+		border-right: 80px solid var(--bg-lite);
+	}
+
+	::before,
+::after {
+		color: var(--bg);
+	}
+}
+.c-details {
+	font-family: "Ubuntu Mono", Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, "Courier New", monospace;
+}
+.c-details .left-col {
+	max-width: 70%;
+	display: inline-block;
+}
+.c-details ul {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 0.15rem;
+}
+.c-details ul li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-align: left;
+	margin: 0.2rem;
+	padding: 0.5rem 0.8rem;
+	border-radius: 2px;
+	background-color: var(--bg-lt);
+	box-shadow: var(--bg-dk) 1px 1px 2px;
+	min-height: 1.8rem;
+	flex: 1 0 auto;
+}
+
+@media screen and (max-width: 545px) {
+	.c-details {
+		font-size: var(--step--1);
+		max-height: 40vh;
+		overflow-x: scroll;
+	}
+	.c-details ul li {
+		padding: 0.4rem 0.8rem;
+	}
+}
+/**
+* Forecast compnent styles
+*/
+.c-forecast {
+	font-family: "Ubuntu Mono", Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, "Courier New", monospace;
+	text-align: center;
+	margin: 0.2rem 0.3rem;
+}
+.c-forecast h4 {
+	margin: 0.3rem;
+	text-align: left;
+}
+.c-forecast h5 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+}
+.c-forecast ul {
+	display: flex;
+	flex-direction: row;
+	overflow-y: scroll;
+	scroll-snap-type: y mandatory;
+}
+.c-forecast ul li {
+	background-color: var(--bg-md);
+	border-radius: 2px;
+	width: 50%;
+	min-width: 100px;
+	padding: 0.3rem;
+	margin-right: 0.3rem;
+	box-shadow: var(--bg-dk) 1px 1px 2px;
+	min-height: 8rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-content: center;
+	align-items: center;
+	scroll-snap-align: start end;
+}
+.c-forecast ul li :first-child {
+	border-bottom-left-radius: 10px;
+}
+.c-forecast ul li :last-child {
+	margin-right: 0.1rem;
+	border-bottom-right-radius: 10px;
+}
+.c-forecast .forecast-description {
+	font-size: var(--step--1);
+	margin-top: 0;
+}
+.c-forecast .weather-icon {
+	width: 80%;
+	height: auto;
+}
+
+@media screen and (max-width: 545px) {
+	.c-forecast .weather-icon {
+		width: 45%;
+		height: auto;
+	}
+}
+/**
+* Screens compnent, including errors
+*/
+#app .screen {
+	padding: 2rem;
+	border-radius: 10px;
+	background-color: var(--bg-lt);
+	margin: 0.2rem 0.3rem;
+	box-shadow: var(--bg-dk) 1px 1px 1px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	-ms-word-break: break-all;
+	/* This is the dangerous one in WebKit, as it breaks things wherever */
+	word-break: break-all;
+	/* Instead use this non-standard one: */
+	word-break: break-word;
+	/* Adds a hyphen where the word breaks, if supported (No Blink) */
+	-ms-hyphens: auto;
+	-moz-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
+	text-align: left;
+}
+#app .screen h3 {
+	text-align: center;
+	display: inline-block;
+	margin-bottom: 1rem;
+}
+#app .screen .errors-wrap {
+	background: var(--bg-vdk);
+	padding: 1rem;
+	overflow-y: scroll;
+	border-radius: 3px;
+}
+#app .screen .screen-icon {
+	max-width: 50%;
+}
+
+@media screen and (max-width: 545px) {
+	#app.errors-screen {
+		padding: 1.5rem;
+	}
+}
+
+/*# sourceMappingURL=main.css.map */
