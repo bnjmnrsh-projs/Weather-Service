@@ -2,7 +2,7 @@
  * HUD Component Styles
 */
 
-.section-hud {
+.c-hud {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -42,7 +42,7 @@
 }
 
 @media screen and (max-width: 545px) {
-    .section-hud {
+    .c-hud {
         padding: 1.5rem;
     }
 }

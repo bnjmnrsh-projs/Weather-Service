@@ -1,7 +1,7 @@
 /**
 * Current visibility compnent styles
 */
-.section-details .visibility {
+.c-details .c-visibility {
     --distance: 0%;
     --scale-bg: hsla(195, 100%, 69%, 0.509);
 
@@ -85,7 +85,7 @@
 }
 
 @media screen and (max-width: 545px) {
-    .section-details .visibility {
+    .c-details .c-visibility {
         .scale {
             height: 1rem;
         }
@@ -98,7 +98,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .section-details .visibility .scale .distance {
+    .c-details .c-visibility .scale .distance {
         border: 0 solid transparent;
         background: linear-gradient(
             to left,

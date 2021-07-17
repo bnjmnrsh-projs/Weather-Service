@@ -2,7 +2,7 @@
 * Forecast compnent styles
 */
 
-#forecast {
+.c-forecast {
     @include code-font;
 
     text-align: center;
@@ -62,7 +62,7 @@
 }
 
 @media screen and (max-width: 545px) {
-    .section-forecast .weather-icon {
+    .c-forecast .weather-icon {
         width: 45%;
         height: auto;
     }

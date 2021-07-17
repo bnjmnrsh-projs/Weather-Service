@@ -53,7 +53,7 @@ const fRenderForecastList = function (_oForecast, _oSettings) {
  */
 export const fRenderForecast = function (_oForecast, _oSettings) {
     return `
-        <div id="forecast" class="section-forecast" aria-description="The weather forecast for the next 16 days.">
+        <div id="forecast" class="c-forecast" aria-description="The weather forecast for the next 16 days.">
             <ul class="unstyled">
                 ${fRenderForecastList(_oForecast, _oSettings)}
             </ul>

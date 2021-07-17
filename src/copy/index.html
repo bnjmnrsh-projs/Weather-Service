@@ -31,13 +31,13 @@
         <link href="./css/main.css" rel="stylesheet" />
     </head>
     <body>
-        <header class="masthead">
+        <header class="c-masthead">
             <a href="./">
                 <h1>Weather Service</h1>
             </a>
         </header>
         <main id="app" role="main" class="loading" aria-live="polite">
-            <header id="hud" class="section-hud">
+            <header id="hud" class="c-hud">
                 <img
                     alt=""
                     class="loading-icon"
@@ -47,25 +47,228 @@
                     <li>Checking the weather near you...</li>
                 </ul>
             </header>
-            <div id="details" class="section-details">
+            <div id="details" class="c-details">
                 <ul class="local-data unstyled">
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
+                    <li class="loading-bg c-feels-like">
+                        <span class="left-col">           </span>
+                        <svg
+                            class="inline-icon"
+                            height="26"
+                            width="26"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                    </li>
+                    <li class="loading-bg c-uv-index">
+                        <span class="left-col">           </span>
+                        <svg
+                            class="inline-icon"
+                            height="26"
+                            width="26"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                    </li>
+                    <li class="loading-bg c-cloud-cover">
+                        <span class="left-col">           </span>
+                        <svg
+                            class="inline-icon"
+                            height="26"
+                            width="26"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                    </li>
+                    <li class="loading-bg c-percipitation">
+                        <span class="left-col">           </span>
+                        <svg
+                            class="inline-icon"
+                            height="26"
+                            width="26"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                    </li>
+                    <li class="loading-bg c-windspeed">
+                        <span class="left-col">            </span>
+                        <span class="inline-icon"
+                            ><svg
+                                class="inline-icon"
+                                height="26"
+                                width="26"
+                                alt=""
+                                enable-background="new 0 0 30 30"
+                                viewBox="0 0 30 30"
+                                xmlns="http://www.w3.org/2000/svg"
+                            ></svg>
+                            <svg
+                                class="inline-icon"
+                                height="26"
+                                width="26"
+                                alt=""
+                                enable-background="new 0 0 30 30"
+                                viewBox="0 0 30 30"
+                                xmlns="http://www.w3.org/2000/svg"
+                            ></svg>
+                        </span>
+                    </li>
+                    <li class="loading-bg c-visibility">
+                        <div class="visibility-wrap">
+                            <span class="left-col">                     </span>
+                            <svg
+                                class="inline-icon"
+                                height="26"
+                                width="26"
+                                alt=""
+                                enable-background="new 0 0 30 30"
+                                viewBox="0 0 30 30"
+                                xmlns="http://www.w3.org/2000/svg"
+                            ></svg>
+                        </div>
+                        <div class="scale" aria-hidden="true"></div>
+                    </li>
+                    <li class="loading-bg c-sun-rise-set">
+                        <span class="left-col">                 </span>
+                        <svg
+                            class="inline-icon"
+                            height="26"
+                            width="26"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                    </li>
+                    <li class="loading-bg c-moonphase">
+                        <span class="left-col">                    </span>
+                        <svg
+                            class="inline-icon"
+                            height="26"
+                            width="26"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                    </li>
                 </ul>
             </div>
-            <div id="forecast" class="section-forecast">
+            <div id="forecast" class="c-forecast">
                 <ul class="unstyled">
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
-                    <li class="loading-bg"></li>
+                    <li class="loading-bg">
+                        <header>       </header>
+                        <svg
+                            class="weather-icon"
+                            height="76"
+                            width="76"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        <p class="forecast-description" aria-hidden="true">
+                                            
+                        </p>
+                        <span><stong>    &nbsp; </stong></span>
+                        <span>    &nbsp; </span>
+                    </li>
+                    <li class="loading-bg">
+                        <header>       </header>
+                        <svg
+                            class="weather-icon"
+                            height="76"
+                            width="76"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        <p class="forecast-description" aria-hidden="true">
+                                            
+                        </p>
+                        <span><stong>    &nbsp; </stong></span>
+                        <span>    &nbsp; </span>
+                    </li>
+                    <li class="loading-bg">
+                        <header>       </header>
+                        <svg
+                            class="weather-icon"
+                            height="76"
+                            width="76"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        <p class="forecast-description" aria-hidden="true">
+                                            
+                        </p>
+                        <span><stong>    &nbsp; </stong></span>
+                        <span>    &nbsp; </span>
+                    </li>
+                    <li class="loading-bg">
+                        <header>       </header>
+                        <svg
+                            class="weather-icon"
+                            height="76"
+                            width="76"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        <p class="forecast-description" aria-hidden="true">
+                                            
+                        </p>
+                        <span><stong>    &nbsp; </stong></span>
+                        <span>    &nbsp; </span>
+                    </li>
+                    <li class="loading-bg">
+                        <header>       </header>
+                        <svg
+                            class="weather-icon"
+                            height="76"
+                            width="76"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        <p class="forecast-description" aria-hidden="true">
+                                            
+                        </p>
+                        <span><stong>    &nbsp; </stong></span>
+                        <span>    &nbsp; </span>
+                    </li>
+                    <li class="loading-bg">
+                        <header>       </header>
+                        <svg
+                            class="weather-icon"
+                            height="76"
+                            width="76"
+                            alt=""
+                            enable-background="new 0 0 30 30"
+                            viewBox="0 0 30 30"
+                            xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        <p class="forecast-description" aria-hidden="true">
+                                            
+                        </p>
+                        <span><stong>    &nbsp; </stong></span>
+                        <span>    &nbsp; </span>
+                    </li>
                 </ul>
             </div>
         </main>
-        <footer class="site-footer">
+        <footer class="c-site-footer">
             <div class="wrap">
                 Weather Service: "More efficient than the Post Office"™ <br />
                 APIs: <a href="https://ipapi.co/">IPapi.co</a> &
@@ -86,11 +289,11 @@
                     >Github</a
                 >
             </div>
-            <div class="theme-toggler">
+            <div id="theme-toggler" class="c-theme-toggler">
                 <label for="theme-toggle"
                     >Dark Mode
                     <input type="checkbox" id="theme-toggle" class="checkbox" />
-                    <span aria-hidden="true" class="switch"></span>
+                    <span aria-hidden="true" class="toggle"></span>
                 </label>
             </div>
         </footer>

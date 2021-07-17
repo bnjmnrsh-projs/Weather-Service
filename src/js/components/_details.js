@@ -18,9 +18,9 @@ export const fRenderDetails = function (_oData, _oSettings) {
     const oIcons = _oSettings.icon
 
     const template = `
-        <div id="details" class="section-details">
+        <div id="details" class="c-details">
             <ul class="unstyled">
-                <li class="feels-like">
+                <li class="c-feels-like">
                     <span class="left-col">{{feels_like}} {{app_temp}}</span>
                     ${Icons.fSetStringElAttrs(_oSettings.icon.sThermometer, {
                         class: 'inline-icon',
@@ -48,7 +48,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
                           </li>`
                         : ''
                 }
-                <li class="cloud-cover">
+                <li class="c-cloud-cover">
                     <span class="left-col">{{cloud}} {{cloud_percent}}</span>
                     ${iconCloud[2]}
                 </li>
@@ -60,11 +60,11 @@ export const fRenderDetails = function (_oData, _oSettings) {
                           </li>`
                         : ''
                 }
-                <li class="precipitation">
+                <li class="c-precipitation">
                     <span class="left-col">{{rain}} {{rain_percip}}</span>
                     ${oIcons.sRaindrop}
                 </li>
-                <li class="windspeed" aria-description="{{aira_winds}} ">
+                <li class="c-windspeed" aria-description="{{aira_winds}} ">
                     <span class="left-col">
                         {{wind}} {{wind_speed}}<span aira-hidden>&nbsp;|&nbsp;</span><span hidden>{{aira_winds_join}}</span>{{wind_direction}}
                     </span>
@@ -77,18 +77,18 @@ export const fRenderDetails = function (_oData, _oSettings) {
                         ${oIcons.sWind}
                     </span>
                 </li>
-                <li class="visibility">
+                <li class="c-visibility">
                     <div class="visibility-wrap">
                         <span class="left-col">{{vis}} {{vis_distance}}</span>
                         ${oIcons.sBinoculars}
                     </div>
                     <div class="scale" aria-hidden="true"><div class="distance"></div></div>
                 </li>
-                <li class="sun-rise-set">
+                <li class="c-sun-rise-set">
                     <span class="left-col">{{sun_rise_set}} {{sun_rise}} | {{sun_set}}</span>
                     ${oIcons.sSunrise}
                 </li>
-                <li class="moonphase">
+                <li class="c-moonphase">
                     <span class="left-col">{{moon}} ${oMoon.name}</span>
                     <img class="inline-icon moon"
                         alt=""

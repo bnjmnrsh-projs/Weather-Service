@@ -2,7 +2,7 @@
  * Page footer styles
 */
 
-.site-footer {
+.c-site-footer {
     font-size: var(--step--1);
     text-align: center;
     background-color: var(--bg-lite);
@@ -23,8 +23,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .site-footer {
-        // filter: invert(1);
+    .c-site-footer {
         background-color: var(--bg-dk);
         color: var(--grey-3);
     }

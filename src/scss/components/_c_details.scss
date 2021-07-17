@@ -8,7 +8,7 @@
 @import './_c_detiails-sun-moon';
 @import './_c_detiails-visibility';
 
-.section-details {
+.c-details {
     @include code-font;
 
     .left-col {
@@ -37,7 +37,7 @@
 }
 
 @media screen and (max-width: 545px) {
-    .section-details {
+    .c-details {
         font-size: var(--step--1);
         max-height: 40vh;
         overflow-x: scroll;

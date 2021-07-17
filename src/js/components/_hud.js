@@ -18,7 +18,7 @@ export const fRenderHUD = function (_oData, _oSettings) {
     const sIconName = fGetWeatherIcon(oCURRENT)
 
     const template = `<header
-        id="hud" class="section-hud" data-temp="${fTempDataPt(
+        id="hud" class="c-hud" data-temp="${fTempDataPt(
             fClean(oCURRENT.temp)
         )}">
             <h3>
