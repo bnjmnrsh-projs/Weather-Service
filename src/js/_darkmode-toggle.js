@@ -88,7 +88,6 @@ export const fDkModeToggle = function () {
     document.addEventListener('DOMContentLoaded', function () {
         // if the stored color mode is dark, set the toggle
         if (fGetCSSCustomProp(COLOR_MODE_KEY) === 'dark') {
-            console.log(nDkMdToggle)
             nDkMdToggle.setAttribute('checked', '')
         }
 
