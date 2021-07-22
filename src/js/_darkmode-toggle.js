@@ -115,35 +115,6 @@ export const ThemeToggle = (function () {
         }
 
         /**
-         * Add event listeners for clicks and system changes to prefers-color-scheme
-         */
-        const fAddEventListeners = function () {
-            // Detect prefers-color-scheme system preference changes
-            window
-                .matchMedia('(prefers-color-scheme: dark)')
-                .addEventListener('change', function (e) {
-                    console.log('prefers-color-scheme test fired')
-                    if (e.matches) {
-                        console.log('dark')
-                        fApplyDocumentColorScheme('dark')
-                        fApplyButtonState('dark')
-                    } else {
-                        console.log('light')
-                        fApplyDocumentColorScheme('light')
-                        fApplyButtonState('light')
-                    }
-                })
-
-            // Capture clicks on the toggle
-            document.addEventListener('click', function (e) {
-                if (e.target.id === nThemeToggel.id) {
-                    console.log('click')
-                    fToggleColorScheme()
-                }
-            })
-        }
-
-        /**
          * Update the aria-pressed state of the button
          *
          * @param {string} currentSetting
@@ -154,6 +125,31 @@ export const ThemeToggle = (function () {
             } else if (currentSetting === 'light') {
                 nThemeToggel.removeAttribute('aria-pressed')
             }
+        }
+
+        /**
+         * Add event listeners for clicks and system changes to prefers-color-scheme
+         */
+        const fAddEventListeners = function () {
+            // Detect prefers-color-scheme system preference changes
+            window
+                .matchMedia('(prefers-color-scheme: dark)')
+                .addEventListener('change', function (e) {
+                    if (e.matches) {
+                        fApplyDocumentColorScheme('dark')
+                        fApplyButtonState('dark')
+                    } else {
+                        fApplyDocumentColorScheme('light')
+                        fApplyButtonState('light')
+                    }
+                })
+
+            // Capture clicks on the toggle
+            document.addEventListener('click', function (e) {
+                if (e.target.id === nThemeToggel.id) {
+                    fToggleColorScheme()
+                }
+            })
         }
 
         //
@@ -167,7 +163,6 @@ export const ThemeToggle = (function () {
                     'theme toggel button not found, node:',
                     nThemeToggel
                 )
-                // Bail
                 return
             } else {
                 // Enable the button
@@ -177,6 +172,7 @@ export const ThemeToggle = (function () {
             // Add event listeners
             fAddEventListeners()
 
+            // Establish toggle/theme state based on system and last pref saved in localStorage
             fApplyDocumentColorScheme(fRetreiveStoredColorScheme())
             fApplyButtonState(fRetreiveStoredColorScheme())
 
