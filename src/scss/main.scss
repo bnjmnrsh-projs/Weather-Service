@@ -8,9 +8,10 @@
 @import './base/_b_global';
 @import './base/_b_theme';
 @import './base/_b_typography';
-@import './components/c_site-masthead';
-@import './components/c_site-footer';
-@import './components/c_theme-toggle';
+@import './components/_c_site-masthead';
+@import './components/_c_site-footer';
+@import './components/_c_toggle';
+@import './components/_c_theme-toggle';
 @import './views/_l_LoadingView';
 @import './views/_l_WeatherView';
 @import './views/_l_NoticesView';

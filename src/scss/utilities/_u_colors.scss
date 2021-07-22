@@ -1,13 +1,12 @@
 /**
- * Custom properties
+ * Base color and greyscale properties.
+ * You likely want to use theme varrabiles instead of these.
 */
 
 :root {
-    --theme-white: hsl(13, 7%, 92%);
-    --theme-black: hsl(13, 7%, 5%);
-
     // Greyscale
-    --grey-1: hsla(13, 7%, 95%, 0.9);
+    --grey-0: hsl(13, 7%, 96%);
+    --grey-1: hsla(13, 7%, 96%, 0.9);
     --grey-2: hsla(13, 7%, 78%, 0.9);
     --grey-3: hsla(13, 7%, 70%, 0.9);
     --grey-4: hsla(13, 7%, 60%, 0.9);
@@ -16,25 +15,31 @@
     --grey-7: hsla(13, 7%, 30%, 0.9);
     --grey-8: hsla(13, 7%, 20%, 0.9);
     --grey-9: hsla(13, 7%, 12%, 0.9);
-    --grey-10: hsla(13, 7%, 8%, 0.9);
+    --grey-10: hsla(13, 7%, 8%);
 
     // Color Scales
     --red-1: hsla(9, 95%, 30%, 0.7);
     --red-2: hsla(9, 95%, 50%, 0.7);
-    --red-3: hsla(9, 100%, 77%, 0.7);
+    --red-3: hsla(9, 100%, 70%, 0.7);
+    --red-4: hsla(9, 100%, 85%, 0.7);
     --orange-1: hsla(33, 95%, 30%, 0.7);
     --orange-2: hsla(33, 95%, 50%, 0.7);
     --orange-3: hsla(33, 95%, 70%, 0.7);
+    --orange-4: hsla(33, 95%, 85%, 0.7);
     --yellow-1: hsla(60, 95%, 25%, 0.7);
     --yellow-2: hsla(60, 95%, 50%, 0.7);
     --yellow-3: hsla(60, 95%, 70%, 0.7);
+    --yellow-4: hsla(60, 95%, 85%, 0.7);
     --green-1: hsla(144, 95%, 25%, 0.7);
     --green-2: hsla(144, 95%, 50%, 0.7);
     --green-3: hsla(144, 95%, 70%, 0.7);
+    --green-4: hsla(144, 95%, 85%, 0.7);
     --cyan-1: hsla(176, 95%, 25%, 0.7);
     --cyan-2: hsla(176, 95%, 50%, 0.7);
     --cyan-3: hsla(176, 95%, 70%, 0.7);
+    --cyan-4: hsla(176, 95%, 85%, 0.7);
     --blue-1: hsla(195, 95%, 30%, 0.7);
     --blue-2: hsla(195, 95%, 50%, 0.7);
     --blue-3: hsla(195, 95%, 70%, 0.7);
+    --blue-4: hsla(195, 95%, 85%, 0.7);
 }

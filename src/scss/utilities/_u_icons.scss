@@ -2,16 +2,31 @@
 * Icon syles
 */
 
+// Used across the Loading screen, as well as HUD and Forecast components
+// Invert default icon fill color (black)
+.weather-icon {
+    filter: invert(95%) hue-rotate(180deg)
+        drop-shadow(2px 3px 1px var(--grey-7));
+}
+
+// Set the var for icon fill on details icons to white by default
+.c-details {
+    --icon-fill-color: var(--theme-white);
+}
+
+// Lone icon
 .inline-icon {
     display: inline-block;
     height: 1.8rem;
     width: auto;
-    border-radius: 15px;
-    background-color: var(--icon-nutral);
     padding: 2px;
+    background-color: var(--icon-bg);
+    border: 1px solid var(--grey-3);
+    border-radius: 15px;
     transition: 1s all ease;
 }
 
+// Icon group
 span.inline-icon {
     display: flex;
     flex-direction: row;
@@ -19,35 +34,6 @@ span.inline-icon {
     justify-content: center;
 }
 
-.weather-icon {
-    filter: drop-shadow(2px 3px 1px var(--icon-dk));
-}
-
-.inline-icon.svg-sunrise {
-    background-color: var(--sunrise);
-}
-.inline-icon.svg-sunset {
-    background-color: var(--sunset);
-}
-.inline-icon.moon {
-    background-color: var(--yellow-lt);
-    padding: 1px;
-}
-
-@media (prefers-color-scheme: dark) {
-    .inline-icon {
-        background-color: var(--icon-nutral);
-    }
-
-    .loading-icon,
-    #forecast .weather-icon,
-    #hud .weather-icon {
-        filter: invert(95%) hue-rotate(180deg)
-            drop-shadow(2px 3px 1px var(--icon-dk));
-    }
-
-    .feels-like .svg-wi-thermometer,
-    .uv-index .svg-wi-day-sunny {
-        fill: var(--bg-vdk);
-    }
-}
+// @media (prefers-color-scheme: dark) {
+//     :root:not([data-user-color-scheme='dark']) {}
+// }
