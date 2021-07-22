@@ -51,7 +51,9 @@ export const fTime = function (sTime24, _oSettings) {
     }
 
     if (_oSettings.units === 'M') return sTime24
-    console.log('sTime24', sTime24)
+    console.log('sTime24', `${sTime24}`)
+    console.log('sTime24 length', `${sTime24.length}`)
+
     const [sHours, minutes] = sTime24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1)
     const period = +sHours < 12 ? 'AM' : 'PM'
     const hours = +sHours % 12 || 12
@@ -99,7 +101,12 @@ export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
         )
     }
     console.log(oDate)
-    return fTime(`${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`, _oSettings)
+    return fTime(
+        `${oDateUtc.getHours()}`.padStart(2, '0') +
+            ':' +
+            `${oDateUtc.getMinutes()}`.padStart(2, '0'),
+        _oSettings
+    )
 }
 
 /**
