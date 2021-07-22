@@ -109,7 +109,7 @@ const weatherApp = function (_oSettings = {}) {
 
 // with debugging and Imperial Units
 const settings = {
-    units: 'M',
+    units: 'I',
     debug: true,
     dev: false,
 }
