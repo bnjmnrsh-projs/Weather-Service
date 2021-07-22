@@ -1,0 +1,31 @@
+/**
+* Current UV component styles
+*/
+
+.c-uv-index {
+    --icon-fill-color: var(--grey-8);
+
+    // UV
+    [data-uv='0'] {
+        background-color: var(--blue-3) !important;
+    }
+    [data-uv='1'] {
+        background-color: var(--cyan-3) !important;
+    }
+    [data-uv='2'] {
+        background-color: var(--green-3) !important;
+    }
+    [data-uv='3'] {
+        background-color: var(--yellow-3) !important;
+    }
+    [data-uv='4'] {
+        background-color: var(--orange-3) !important;
+    }
+    [data-uv='5'] {
+        background-color: var(--red-3) !important;
+    }
+}
+
+// @media (prefers-color-scheme: dark) {
+//     :root:not([data-user-color-scheme='dark']) {}
+// }

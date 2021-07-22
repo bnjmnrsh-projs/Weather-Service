@@ -1,5 +1,5 @@
 /**
-* Current visibility compnent styles
+* Current visibility component styles
 */
 .c-details .c-visibility {
     --distance: 0%;
@@ -23,12 +23,13 @@
 
     .visibility-wrap .inline-icon {
         margin-top: -0.3em;
+        border: none;
     }
     .scale {
         background-color: var(--scale-bg);
         background-image: url(../svg/graph.svg);
         background-position: left -1px bottom -1px;
-        // border: 1px solid var(--bg-md);
+        border-top: 1px solid var(--bg-md);
         height: 1rem;
         width: calc(100% + 1.6rem);
         position: relative;
@@ -46,6 +47,7 @@
         position: absolute;
         top: 0.1rem;
         z-index: 1;
+        color: var(--theme-black);
     }
 
     .scale::before {
@@ -59,10 +61,10 @@
     .scale .distance {
         background: linear-gradient(
             to left,
-            hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px) var(--bg-dk),
-            calc(var(--distance) - 20px)
+            var(--theme-white) calc(var(--distance) - 20px),
+            hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px)
         );
-        border-right: 80px solid var(--bg-dk);
+        border-right: 80px solid var(--theme-white);
         padding-left: 10px;
         background-repeat: no-repeat;
         overflow: hidden;
@@ -97,18 +99,7 @@
     }
 }
 
-@media (prefers-color-scheme: dark) {
-    .c-details .c-visibility .scale .distance {
-        border: 0 solid transparent;
-        background: linear-gradient(
-            to left,
-            var(--bg-lite) calc(var(--distance) - 20px),
-            hsla(0, 0%, 100%, 0) calc(var(--distance) + 20px)
-        );
-        border-right: 80px solid var(--bg-lite);
-    }
-    ::before,
-    ::after {
-        color: var(--bg);
-    }
-}
+// @media (prefers-color-scheme: dark) {
+//     :root:not([data-user-color-scheme='dark']) {
+//     }
+// }

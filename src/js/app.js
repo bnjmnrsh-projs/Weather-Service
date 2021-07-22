@@ -5,10 +5,11 @@ import { fRenderHUD } from './components/_hud'
 import { fRenderForecast } from './components/_forecast'
 import { fRenderDetails } from './components/_details'
 import { fRenderErrors } from './components/_errors'
-import { fDkModeToggle } from './_darkmode-toggle'
+import { ThemeToggle } from './_darkmode-toggle'
 
 /**
  * The Weather Service
+ *
  * @author bnjmnrsh@gmail.com
  *
  * @param {object} [_oSettings={}]
@@ -16,7 +17,6 @@ import { fDkModeToggle } from './_darkmode-toggle'
 
 const weatherApp = function (_oSettings = {}) {
     document.documentElement.classList.remove('no-js')
-    fDkModeToggle()
 
     const _oDefaults = {
         target: '#app',
@@ -102,11 +102,14 @@ const weatherApp = function (_oSettings = {}) {
         }
     }
     fInit()
+
+    // Enable ThemeToggle
+    ThemeToggle().init()
 }
 
 // with debugging and Imperial Units
 const settings = {
-    units: 'M',
+    units: 'I',
     debug: true,
     dev: false,
 }

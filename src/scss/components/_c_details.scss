@@ -3,10 +3,13 @@
 */
 
 @import '../utilities/_u_icons';
-@import './_c_detiails-feels-like';
-@import './_c_detiails-uv';
-@import './_c_detiails-sun-moon';
-@import './_c_detiails-visibility';
+@import './_c_details-feels-like';
+@import './_c_details-uv';
+@import './_c_details-cloud-cover';
+@import './_c_details-precipitation';
+@import './_c_details-windspeed';
+@import './_c_details-visibility';
+@import './_c_details-sun-moon';
 
 .c-details {
     @include code-font;
@@ -49,3 +52,7 @@
         }
     }
 }
+
+// @media (prefers-color-scheme: dark) {
+//     :root:not([data-user-color-scheme='dark']) {}
+// }

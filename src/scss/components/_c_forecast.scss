@@ -1,5 +1,5 @@
 /**
-* Forecast compnent styles
+* Forecast component styles
 */
 
 .c-forecast {
@@ -41,10 +41,10 @@
             align-items: center;
             scroll-snap-align: start end;
 
-            :first-child {
+            &:first-child {
                 border-bottom-left-radius: 10px;
             }
-            :last-child {
+            &:last-child {
                 margin-right: 0.1rem;
                 border-bottom-right-radius: 10px;
             }
@@ -67,3 +67,7 @@
         height: auto;
     }
 }
+
+// @media (prefers-color-scheme: dark) {
+//     :root:not([data-user-color-scheme='dark']) {}
+// }

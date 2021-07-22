@@ -31,7 +31,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
                 </li>
                 ${
                     oCURRENT.uv
-                        ? `<li class="uv-index">
+                        ? `<li class="c-uv-index">
                             <span class="left-col">{{uv}} {{uv_index}}</span>
                             ${Icons.fSetStringElAttrs(
                                 _oSettings.icon.sSunnyDay,
