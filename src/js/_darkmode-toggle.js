@@ -33,8 +33,10 @@ export const ThemeToggle = function (options = {}) {
      * @param {string} propKey
      * @returns {string} dark || light
      */
-    const fGetCSSCustomProp = function (propKey) {
-        let response = getComputedStyle(nHTML).getPropertyValue(propKey)
+    const fGetValUserColorSchemeAttr = function () {
+        let response = getComputedStyle(nHTML).getPropertyValue(
+            settings.COLOR_MODE_KEY
+        )
         if (response.length) {
             response = response.replace(/"/g, '').trim()
         }
@@ -54,9 +56,7 @@ export const ThemeToggle = function (options = {}) {
         switch (sCurrentSetting) {
             case null:
                 sCurrentSetting =
-                    fGetCSSCustomProp(settings.COLOR_MODE_KEY) === 'dark'
-                        ? 'dark'
-                        : 'light'
+                    fGetValUserColorSchemeAttr() === 'dark' ? 'dark' : 'light'
                 // Set to localStorage
                 localStorage.setItem(settings.STORAGE_KEY, sCurrentSetting)
                 break
