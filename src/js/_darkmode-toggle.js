@@ -8,18 +8,19 @@ export const ThemeToggle = function (options = {}) {
     // Settings & Defaults
     //
     const defaults = {
-        targetNode: '#theme-toggler',
-        STORAGE_KEY: 'user-color-scheme',
-        COLOR_MODE_KEY: '--color-mode',
+        buttonID: '#theme-toggler',
     }
     // Merge user options into defaults
     const settings = Object.assign({}, defaults, options)
+    settings.STORAGE_KEY = 'user-color-scheme'
+    settings.COLOR_MODE_KEY = '--color-mode'
     this.settings = settings
+
     //
     // Varriables
     //
-
-    const nThemeToggel = document.querySelector(settings.targetNode)
+    const nThemeToggel = document.querySelector(settings.buttonID)
+    const nHTML = document.documentElement
 
     //
     // Private Methods
@@ -33,9 +34,7 @@ export const ThemeToggle = function (options = {}) {
      * @returns {string} dark || light
      */
     const fGetCSSCustomProp = function (propKey) {
-        let response = getComputedStyle(
-            document.documentElement
-        ).getPropertyValue(propKey)
+        let response = getComputedStyle(nHTML).getPropertyValue(propKey)
         if (response.length) {
             response = response.replace(/"/g, '').trim()
         }
@@ -82,10 +81,7 @@ export const ThemeToggle = function (options = {}) {
             sColorSetting || localStorage.getItem(settings.STORAGE_KEY)
 
         if (sCurrentSetting) {
-            document.documentElement.setAttribute(
-                'data-user-color-scheme',
-                sCurrentSetting
-            )
+            nHTML.setAttribute('data-user-color-scheme', sCurrentSetting)
             // Set to localStorage
             localStorage.setItem(settings.STORAGE_KEY, sCurrentSetting)
         }
