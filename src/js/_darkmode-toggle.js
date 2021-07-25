@@ -50,7 +50,7 @@ export const ThemeToggle = function (options = {}) {
      * @returns {string} light || dark
      */
 
-    const fRetreiveStoredColorScheme = function () {
+    const fGetLocalStoredColorSchemeVal = function () {
         let sCurrentSetting = localStorage.getItem(settings.STORAGE_KEY)
 
         switch (sCurrentSetting) {
@@ -88,7 +88,7 @@ export const ThemeToggle = function (options = {}) {
     }
 
     const fToggleColorScheme = function () {
-        const sCurrentSetting = fRetreiveStoredColorScheme()
+        const sCurrentSetting = fGetLocalStoredColorSchemeVal()
 
         switch (sCurrentSetting) {
             case 'light':
@@ -157,8 +157,8 @@ export const ThemeToggle = function (options = {}) {
         fAddEventListeners()
 
         // Establish toggle/theme state based on system and last pref saved in localStorage
-        fApplyDocumentColorScheme(fRetreiveStoredColorScheme())
-        fApplyButtonState(fRetreiveStoredColorScheme())
+        fApplyDocumentColorScheme(fGetLocalStoredColorSchemeVal())
+        fApplyButtonState(fGetLocalStoredColorSchemeVal())
 
         console.log(
             'first run, curent setting: ',
