@@ -76,7 +76,7 @@ export const ThemeToggle = function (options = {}) {
      *
      * @param {string} passedSetting
      */
-    const fApplyDocumentColorScheme = function (sColorSetting) {
+    const fSetGlobalColorScheme = function (sColorSetting) {
         const sCurrentSetting =
             sColorSetting || localStorage.getItem(settings.STORAGE_KEY)
 
@@ -92,11 +92,11 @@ export const ThemeToggle = function (options = {}) {
 
         switch (sCurrentSetting) {
             case 'light':
-                fApplyDocumentColorScheme('dark')
+                fSetGlobalColorScheme('dark')
                 nThemeToggel.toggleAttribute('aria-pressed')
                 break
             case 'dark':
-                fApplyDocumentColorScheme('light')
+                fSetGlobalColorScheme('light')
                 nThemeToggel.toggleAttribute('aria-pressed')
                 break
         }
@@ -124,10 +124,10 @@ export const ThemeToggle = function (options = {}) {
             .matchMedia('(prefers-color-scheme: dark)')
             .addEventListener('change', function (e) {
                 if (e.matches) {
-                    fApplyDocumentColorScheme('dark')
+                    fSetGlobalColorScheme('dark')
                     fApplyButtonState('dark')
                 } else {
-                    fApplyDocumentColorScheme('light')
+                    fSetGlobalColorScheme('light')
                     fApplyButtonState('light')
                 }
             })
@@ -157,7 +157,7 @@ export const ThemeToggle = function (options = {}) {
         fAddEventListeners()
 
         // Establish toggle/theme state based on system and last pref saved in localStorage
-        fApplyDocumentColorScheme(fGetLocalStoredColorSchemeVal())
+        fSetGlobalColorScheme(fGetLocalStoredColorSchemeVal())
         fApplyButtonState(fGetLocalStoredColorSchemeVal())
 
         console.log(
