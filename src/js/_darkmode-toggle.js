@@ -110,11 +110,11 @@ export const ThemeToggle = function (oOptions = {}) {
         switch (sCurrentSetting) {
             case 'light':
                 fSetGlobalColorScheme('dark')
-                nThemeToggel.toggleAttribute('aria-pressed')
+                fApplyButtonState('dark')
                 break
             case 'dark':
                 fSetGlobalColorScheme('light')
-                nThemeToggel.toggleAttribute('aria-pressed')
+                fApplyButtonState('light')
                 break
         }
 
