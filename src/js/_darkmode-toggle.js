@@ -90,6 +90,13 @@ export const ThemeToggle = function (oOptions = {}) {
         if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
             localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
         }
+
+        if (oSettings.debug) {
+            console.log(
+                'ThemeToggle:fSetLocalStorageColorSchemeVal: sCurrentSetting:',
+                sCurrentSetting
+            )
+        }
     }
 
     /**
@@ -106,7 +113,10 @@ export const ThemeToggle = function (oOptions = {}) {
         }
 
         if (oSettings.debug) {
-            console.log('fSetHTMLdataAttr: sColorSetting:', sColorSetting)
+            console.log(
+                'ThemeToggle:fSetHTMLdataAttr: sColorSetting:',
+                sColorSetting
+            )
         }
     }
 
@@ -123,6 +133,13 @@ export const ThemeToggle = function (oOptions = {}) {
             case 'light':
                 nThemeToggel.removeAttribute('aria-pressed')
                 break
+        }
+
+        if (oSettings.debug) {
+            console.log(
+                'ThemeToggle:fSetButtonState: sSetButtonState:',
+                sSetButtonState
+            )
         }
     }
 
@@ -192,7 +209,7 @@ export const ThemeToggle = function (oOptions = {}) {
                     fSetGlobalColorScheme('light')
                 }
 
-                if (oSettings.debug) {
+                if (oSettings.debug && e.matches) {
                     console.log(
                         `ThemeToggle:fAddEventListeners: Window detected system color pref change: ${e.matches}`
                     )
