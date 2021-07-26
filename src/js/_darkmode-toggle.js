@@ -136,6 +136,31 @@ export const ThemeToggle = function (oOptions = {}) {
             )
         }
     }
+
+    /**
+     * Set the UI color scheme, button state, and update localStore.
+     *
+     * @param {string} sColorSetting 'light' || 'dark'
+     */
+    const fSetGlobalColorScheme = function (sColorSetting) {
+        const sCurrentSetting = sColorSetting || fGetLocalStoredColorSchemeVal()
+
+        switch (sCurrentSetting) {
+            case 'light':
+                fSetHTMLdataAttr('light')
+                fSetButtonState('light')
+                fSetLocalStorageColorSchemeVal('light')
+                break
+            case 'dark':
+                fSetHTMLdataAttr('dark')
+                fSetButtonState('dark')
+                fSetLocalStorageColorSchemeVal('dark')
+                break
+        }
+
+        if (oSettings.debug) {
+            console.log(
+                'ThemeToggle:fSetGlobalColorScheme: sCurrentSetting:',
                 sCurrentSetting
             )
         }
