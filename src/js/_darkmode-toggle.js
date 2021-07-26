@@ -143,7 +143,7 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Add event listeners for clicks and system changes to prefers-color-scheme
+     * Add listeners for button clicks, changes to prefers-color-scheme, and the html data-user-color-scheme attr
      */
     const fAddEventListeners = function () {
         // Detect prefers-color-scheme system preference changes
