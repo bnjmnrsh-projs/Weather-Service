@@ -113,8 +113,8 @@ export const ThemeToggle = function (oOptions = {}) {
     /**
      * Toggle the UI color scheme & button state based on value saved in localStorage.
      */
-    const fToggleSetColorScheme = function (sColorSetting) {
-        const sCurrentSetting = sColorSetting || fGetLocalStoredColorSchemeVal()
+    const fToggleColorScheme = function () {
+        const sCurrentSetting = fGetLocalStoredColorSchemeVal()
 
         switch (sCurrentSetting) {
             case 'light':
@@ -181,7 +181,7 @@ export const ThemeToggle = function (oOptions = {}) {
         // Capture clicks on the toggle
         document.addEventListener('click', function (e) {
             if (e.target.id === nThemeToggel.id) {
-                fToggleSetColorScheme()
+                fToggleColorScheme()
 
                 if (oSettings.debug) {
                     console.log(
