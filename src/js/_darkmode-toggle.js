@@ -98,7 +98,7 @@ export const ThemeToggle = function (oOptions = {}) {
      * @param {string} sColorSetting
      */
     const fSetGlobalColorScheme = function (sColorSetting) {
-            sColorSetting || localStorage.getItem(oSettings.STORAGE_KEY)
+        const sCurrentSetting = sColorSetting || fGetLocalStoredColorSchemeVal()
 
         if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
             // Set the data attr
