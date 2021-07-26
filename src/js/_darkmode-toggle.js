@@ -214,12 +214,10 @@ export const ThemeToggle = function (oOptions = {}) {
      */
     this.init = function () {
         if (!nThemeToggel) {
-            if (oSettings.debug) {
-                console.warn(
-                    "ThemeToggle: Couldn't find the theme toggel button with node selector:",
-                    nThemeToggel
-                )
-            }
+            console.warn(
+                "ThemeToggle: Couldn't find the theme toggel button with node selector:",
+                nThemeToggel
+            )
             return
         } else {
             // Enable the button
