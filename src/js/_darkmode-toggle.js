@@ -123,16 +123,18 @@ export const ThemeToggle = function (oOptions = {}) {
             case 'light':
                 fSetGlobalColorScheme('dark')
                 fSetButtonState('dark')
+                fSetLocalStorageColorSchemeVal('dark')
                 break
             case 'dark':
                 fSetGlobalColorScheme('light')
                 fSetButtonState('light')
+                fSetLocalStorageColorSchemeVal('light')
                 break
         }
 
         if (oSettings.debug) {
             console.log(
-                'ThemeToggle:fToggleColorScheme: sCurrentSetting:',
+                'ThemeToggle:fToggleSetColorScheme: sCurrentSetting:',
                 sCurrentSetting
             )
         }
@@ -165,9 +167,11 @@ export const ThemeToggle = function (oOptions = {}) {
                 if (e.matches) {
                     fSetGlobalColorScheme('dark')
                     fSetButtonState('dark')
+                    fSetLocalStorageColorSchemeVal('dark')
                 } else {
                     fSetGlobalColorScheme('light')
                     fSetButtonState('light')
+                    fSetLocalStorageColorSchemeVal('light')
                 }
 
                 if (oSettings.debug) {
@@ -242,6 +246,7 @@ export const ThemeToggle = function (oOptions = {}) {
         // Establish toggle/theme state based on system and/or last pref saved in localStorage
         fSetGlobalColorScheme(fGetLocalStoredColorSchemeVal())
         fSetButtonState(fGetLocalStoredColorSchemeVal())
+        fSetLocalStorageColorSchemeVal(fGetLocalStoredColorSchemeVal())
         if (oSettings.debug) {
             console.log(
                 'ThemeToggle:Init,  current localStore setting: ',
