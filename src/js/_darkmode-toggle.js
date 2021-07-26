@@ -61,7 +61,7 @@ export const ThemeToggle = function (oOptions = {}) {
      * @returns {string} light || dark
      */
 
-    const fGetLocalStoredColorSchemeVal = function () {
+    const fGetLocalStoreColorSchemeVal = function () {
         let sCurrentSetting = localStorage.getItem(oSettings.STORAGE_KEY)
 
         // If nothing stored, check which style sheet is active
@@ -73,7 +73,7 @@ export const ThemeToggle = function (oOptions = {}) {
         }
         if (oSettings.debug) {
             console.log(
-                'ThemeToggle:fGetLocalStoredColorSchemeVal: sCurrentSetting:',
+                'ThemeToggle:fGetLocalStoreColorSchemeVal: sCurrentSetting:',
                 sCurrentSetting
             )
         }
@@ -86,14 +86,14 @@ export const ThemeToggle = function (oOptions = {}) {
      *
      * @param {string} sCurrentSetting 'light' || 'dark'
      */
-    const fSetLocalStorageColorSchemeVal = function (sCurrentSetting) {
+    const fSetLocalStoreColorSchemeVal = function (sCurrentSetting) {
         if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
             localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
         }
 
         if (oSettings.debug) {
             console.log(
-                'ThemeToggle:fSetLocalStorageColorSchemeVal: sCurrentSetting:',
+                'ThemeToggle:fSetLocalStoreColorSchemeVal: sCurrentSetting:',
                 sCurrentSetting
             )
         }
@@ -105,7 +105,7 @@ export const ThemeToggle = function (oOptions = {}) {
      * @param {string} sColorSetting
      */
     const fSetHTMLdataAttr = function (sColorSetting) {
-        const sCurrentSetting = sColorSetting || fGetLocalStoredColorSchemeVal()
+        const sCurrentSetting = sColorSetting || fGetLocalStoreColorSchemeVal()
 
         if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
             // Set the data attr
@@ -149,18 +149,18 @@ export const ThemeToggle = function (oOptions = {}) {
      * @param {string} sColorSetting 'light' || 'dark'
      */
     const fSetGlobalColorScheme = function (sColorSetting) {
-        const sCurrentSetting = sColorSetting || fGetLocalStoredColorSchemeVal()
+        const sCurrentSetting = sColorSetting || fGetLocalStoreColorSchemeVal()
 
         switch (sCurrentSetting) {
             case 'light':
                 fSetHTMLdataAttr('light')
                 fSetButtonState('light')
-                fSetLocalStorageColorSchemeVal('light')
+                fSetLocalStoreColorSchemeVal('light')
                 break
             case 'dark':
                 fSetHTMLdataAttr('dark')
                 fSetButtonState('dark')
-                fSetLocalStorageColorSchemeVal('dark')
+                fSetLocalStoreColorSchemeVal('dark')
                 break
         }
 
@@ -176,7 +176,7 @@ export const ThemeToggle = function (oOptions = {}) {
      * Toggle the UI color scheme & button state based on value saved in localStorage.
      */
     const fToggleGlobalColorScheme = function () {
-        const sCurrentSetting = fGetLocalStoredColorSchemeVal()
+        const sCurrentSetting = fGetLocalStoreColorSchemeVal()
 
         switch (sCurrentSetting) {
             case 'light':
@@ -241,7 +241,7 @@ export const ThemeToggle = function (oOptions = {}) {
                     // Update button state to reflect change
                     fSetButtonState(sHTMLcolorMode)
                     // Update localStorage value to reflect change
-                    fSetLocalStorageColorSchemeVal(sHTMLcolorMode)
+                    fSetLocalStoreColorSchemeVal(sHTMLcolorMode)
 
                     if (oSettings.debug) {
                         console.log(
@@ -279,7 +279,7 @@ export const ThemeToggle = function (oOptions = {}) {
         fAddEventListeners()
 
         // Establish toggle/theme state based on system and/or last pref saved in localStorage
-        fSetGlobalColorScheme(fGetLocalStoredColorSchemeVal())
+        fSetGlobalColorScheme(fGetLocalStoreColorSchemeVal())
 
         if (oSettings.debug) {
             console.log(
