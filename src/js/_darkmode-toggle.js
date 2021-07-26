@@ -111,11 +111,11 @@ export const ThemeToggle = function (oOptions = {}) {
         switch (sCurrentSetting) {
             case 'light':
                 fSetGlobalColorScheme('dark')
-                fApplyButtonState('dark')
+                fSetButtonState('dark')
                 break
             case 'dark':
                 fSetGlobalColorScheme('light')
-                fApplyButtonState('light')
+                fSetButtonState('light')
                 break
         }
 
@@ -132,7 +132,7 @@ export const ThemeToggle = function (oOptions = {}) {
      *
      * @param {string} sSetButtonState 'light' || 'dark'
      */
-    const fApplyButtonState = function (sSetButtonState) {
+    const fSetButtonState = function (sSetButtonState) {
         switch (sSetButtonState) {
             case 'dark':
                 nThemeToggel.setAttribute('aria-pressed', 'true')
@@ -153,10 +153,10 @@ export const ThemeToggle = function (oOptions = {}) {
             .addEventListener('change', function (e) {
                 if (e.matches) {
                     fSetGlobalColorScheme('dark')
-                    fApplyButtonState('dark')
+                    fSetButtonState('dark')
                 } else {
                     fSetGlobalColorScheme('light')
-                    fApplyButtonState('light')
+                    fSetButtonState('light')
                 }
 
                 if (oSettings.debug) {
@@ -189,7 +189,7 @@ export const ThemeToggle = function (oOptions = {}) {
                         `data-${oSettings.STORAGE_KEY}`
                     )
                     // Update button state to reflect change
-                    fApplyButtonState(sHTMLcolorMode)
+                    fSetButtonState(sHTMLcolorMode)
                     // Update localStorage value to reflect change
                     localStorage.setItem(oSettings.STORAGE_KEY, sHTMLcolorMode)
 
@@ -230,7 +230,7 @@ export const ThemeToggle = function (oOptions = {}) {
 
         // Establish toggle/theme state based on system and/or last pref saved in localStorage
         fSetGlobalColorScheme(fGetLocalStoredColorSchemeVal())
-        fApplyButtonState(fGetLocalStoredColorSchemeVal())
+        fSetButtonState(fGetLocalStoredColorSchemeVal())
         if (oSettings.debug) {
             console.log(
                 'ThemeToggle:Init,  current localStore setting: ',
