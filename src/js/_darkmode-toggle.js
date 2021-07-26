@@ -9,6 +9,7 @@ export const ThemeToggle = function (options = {}) {
     //
     const defaults = {
         buttonID: '#theme-toggler',
+        debug: false,
     }
     // Merge user options into defaults
     const settings = Object.assign({}, defaults, options)
@@ -40,6 +41,14 @@ export const ThemeToggle = function (options = {}) {
         if (sResponse.length) {
             sResponse = sResponse.replace(/"/g, '').trim()
         }
+
+        if (settings.debug) {
+            console.log(
+                'ThemeToggle:fGetValUserColorSchemeAttr: sResponse:',
+                sResponse
+            )
+        }
+
         return sResponse
     }
 
@@ -68,6 +77,13 @@ export const ThemeToggle = function (options = {}) {
                 break
         }
 
+        if (settings.debug) {
+            console.log(
+                'ThemeToggle:fGetLocalStoredColorSchemeVal: sCurrentSetting:',
+                sCurrentSetting
+            )
+        }
+
         return sCurrentSetting
     }
 
@@ -85,8 +101,15 @@ export const ThemeToggle = function (options = {}) {
             // Set to localStorage
             localStorage.setItem(settings.STORAGE_KEY, sCurrentSetting)
         }
+
+        if (settings.debug) {
+            console.log('fSetGlobalColorScheme: sColorSetting:', sColorSetting)
+        }
     }
 
+    /**
+     * Toggle the UI color scheme based on value saved in localStorage
+     */
     const fToggleColorScheme = function () {
         const sCurrentSetting = fGetLocalStoredColorSchemeVal()
 
@@ -100,6 +123,13 @@ export const ThemeToggle = function (options = {}) {
                 nThemeToggel.toggleAttribute('aria-pressed')
                 break
         }
+
+        if (settings.debug) {
+            console.log(
+                'ThemeToggle:fToggleColorScheme: sCurrentSetting:',
+                sCurrentSetting
+            )
+        }
     }
 
     /**
@@ -112,6 +142,12 @@ export const ThemeToggle = function (options = {}) {
             nThemeToggel.setAttribute('aria-pressed', 'true')
         } else if (currentSetting === 'light') {
             nThemeToggel.removeAttribute('aria-pressed')
+        }
+        if (settings.debug) {
+            console.log(
+                'ThemeToggle:fApplyButtonState: sCurrentSetting',
+                currentSetting
+            )
         }
     }
 
@@ -130,12 +166,24 @@ export const ThemeToggle = function (options = {}) {
                     fSetGlobalColorScheme('light')
                     fApplyButtonState('light')
                 }
+
+                if (settings.debug) {
+                    console.log(
+                        `ThemeToggle:fAddEventListeners: Window detected system color pref change: ${e.matches}`
+                    )
+                }
             })
 
         // Capture clicks on the toggle
         document.addEventListener('click', function (e) {
             if (e.target.id === nThemeToggel.id) {
                 fToggleColorScheme()
+
+                if (settings.debug) {
+                    console.log(
+                        `ThemeToggle:fAddEventListeners: button "${e.target.id}" clicked.`
+                    )
+                }
             }
         })
 
@@ -150,10 +198,16 @@ export const ThemeToggle = function (options = {}) {
                     fApplyButtonState(sHTMLcolorMode)
                     // Update localStorage value to reflect change
                     localStorage.setItem(settings.STORAGE_KEY, sHTMLcolorMode)
+
+                    if (settings.debug) {
+                        console.log(
+                            `ThemeToggle:fAddEventListeners: MutationObserver change: data-${settings.STORAGE_KEY}="${sHTMLcolorMode}"`
+                        )
+                    }
                 }
             })
         })
-
+        // MutationObserver options
         observer.observe(nHTML, {
             attributeFilter: [`data-${settings.STORAGE_KEY}`],
             attributeOldValue: true,
@@ -161,12 +215,16 @@ export const ThemeToggle = function (options = {}) {
     }
 
     //
-    // Public APIs
+    // Public init method
     //
-
     this.init = function () {
         if (!nThemeToggel) {
-            console.warn('theme toggel button not found, node:', nThemeToggel)
+            if (settings.debug) {
+                console.warn(
+                    "ThemeToggle: Couldn't find the theme toggel button with node selector:",
+                    nThemeToggel
+                )
+            }
             return
         } else {
             // Enable the button
@@ -176,14 +234,15 @@ export const ThemeToggle = function (options = {}) {
         // Add event listeners
         fAddEventListeners()
 
-        // Establish toggle/theme state based on system and last pref saved in localStorage
+        // Establish toggle/theme state based on system and/or last pref saved in localStorage
         fSetGlobalColorScheme(fGetLocalStoredColorSchemeVal())
         fApplyButtonState(fGetLocalStoredColorSchemeVal())
-
-        console.log(
-            'first run, curent setting: ',
-            localStorage.getItem(settings.STORAGE_KEY)
-        )
+        if (settings.debug) {
+            console.log(
+                'ThemeToggle:Init,  current localStore setting: ',
+                localStorage.getItem(settings.STORAGE_KEY)
+            )
+        }
     }
 
     //
