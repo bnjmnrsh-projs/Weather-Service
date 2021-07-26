@@ -16,7 +16,7 @@ export const ThemeToggle = function (oOptions = {}) {
     // Merge user options into defaults
     const oSettings = Object.assign({}, oDefaults, oOptions)
     oSettings.STORAGE_KEY = 'user-color-scheme'
-    oSettings.COLOR_MODE_KEY = '--color-mode'
+    oSettings.COLOR_MODE_CSS_PROP = '--color-mode'
     this.oSettings = oSettings
 
     //
@@ -37,9 +37,9 @@ export const ThemeToggle = function (oOptions = {}) {
      *
      * @returns {string} dark || light
      */
-    const fGetValUserColorSchemeAttr = function () {
+    const fGetColorModeCSSpropVal = function () {
         let sResponse = getComputedStyle(nHTML).getPropertyValue(
-            oSettings.COLOR_MODE_KEY
+            oSettings.COLOR_MODE_CSS_PROP
         )
         if (sResponse.length) {
             sResponse = sResponse.replace(/"/g, '').trim()
@@ -47,7 +47,7 @@ export const ThemeToggle = function (oOptions = {}) {
 
         if (oSettings.debug) {
             console.log(
-                'ThemeToggle:fGetValUserColorSchemeAttr: sResponse:',
+                'ThemeToggle:fGetColorModeCSSpropVal: sResponse:',
                 sResponse
             )
         }
@@ -56,7 +56,7 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Get the last saved value from local storage, or System prefers-color-scheme
+     * Get the last saved value from local storage, falling back to System prefers-color-scheme via CSS prop
      *
      * @returns {string} light || dark
      */
@@ -64,21 +64,13 @@ export const ThemeToggle = function (oOptions = {}) {
     const fGetLocalStoredColorSchemeVal = function () {
         let sCurrentSetting = localStorage.getItem(oSettings.STORAGE_KEY)
 
-        switch (sCurrentSetting) {
-            case null:
-                sCurrentSetting =
-                    fGetValUserColorSchemeAttr() === 'dark' ? 'dark' : 'light'
-                // Set to localStorage
-                localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
-                break
-            case 'light':
-                sCurrentSetting = 'light'
-                break
-            case 'dark':
-                sCurrentSetting = 'dark'
-                break
+        // If nothing stored, check which style sheet is active
+        if (sCurrentSetting === null) {
+            sCurrentSetting =
+                fGetColorModeCSSpropVal() === 'dark' ? 'dark' : 'light'
+            // Set to localStorage
+            localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
         }
-
         if (oSettings.debug) {
             console.log(
                 'ThemeToggle:fGetLocalStoredColorSchemeVal: sCurrentSetting:',
