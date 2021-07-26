@@ -138,6 +138,22 @@ export const ThemeToggle = function (options = {}) {
                 fToggleColorScheme()
             }
         })
+
+        // listen for changes to on html data-user-color-scheme attr if mutiple toggle-buttons
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === `data-${settings.STORAGE_KEY}`) {
+                    fApplyButtonState(
+                        nHTML.getAttribute(`data-${settings.STORAGE_KEY}`)
+                    )
+                }
+            })
+        })
+
+        observer.observe(nHTML, {
+            attributeFilter: [`data-${settings.STORAGE_KEY}`],
+            attributeOldValue: true,
+        })
     }
 
     //
