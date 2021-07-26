@@ -82,6 +82,17 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
+     * Save user perfered theme to localStorage
+     *
+     * @param {string} sCurrentSetting 'light' || 'dark'
+     */
+    const fSetLocalStorageColorSchemeVal = function (sCurrentSetting) {
+        if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
+            localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
+        }
+    }
+
+    /**
      * Apply data-user-color-scheme to document, update localStore.
      *
      * @param {string} sColorSetting
