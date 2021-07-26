@@ -143,9 +143,13 @@ export const ThemeToggle = function (options = {}) {
         const observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 if (mutation.attributeName === `data-${settings.STORAGE_KEY}`) {
-                    fApplyButtonState(
-                        nHTML.getAttribute(`data-${settings.STORAGE_KEY}`)
+                    const sHTMLcolorMode = nHTML.getAttribute(
+                        `data-${settings.STORAGE_KEY}`
                     )
+                    // Update button state to reflect change
+                    fApplyButtonState(sHTMLcolorMode)
+                    // Update localStorage value to reflect change
+                    localStorage.setItem(settings.STORAGE_KEY, sHTMLcolorMode)
                 }
             })
         })
