@@ -132,16 +132,13 @@ export const ThemeToggle = function (oOptions = {}) {
      * @param {string} sSetButtonState
      */
     const fApplyButtonState = function (sSetButtonState) {
-        if (sSetButtonState === 'dark') {
-            nThemeToggel.setAttribute('aria-pressed', 'true')
-        } else if (sSetButtonState === 'light') {
-            nThemeToggel.removeAttribute('aria-pressed')
-        }
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fApplyButtonState: sCurrentSetting',
-                sSetButtonState
-            )
+        switch (sSetButtonState) {
+            case 'dark':
+                nThemeToggel.setAttribute('aria-pressed', 'true')
+                break
+            case 'light':
+                nThemeToggel.removeAttribute('aria-pressed')
+                break
         }
     }
 
