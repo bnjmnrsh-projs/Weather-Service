@@ -1,5 +1,5 @@
 /**
- * Toggle user-color-scheme.
+ * Theme Toggle
  *
  * @author bnjmnrsh@gmail.com
  */
@@ -56,7 +56,7 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Get the last saved value from local storage, falling back to System prefers-color-scheme via CSS prop
+     * Get the last saved value from local storage, falling back to System prefers-color-scheme via CSS prop.
      *
      * @returns {string} light || dark
      */
@@ -82,7 +82,7 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Apply data-user-color-scheme to document, update localStore
+     * Apply data-user-color-scheme to document, update localStore.
      *
      * @param {string} sColorSetting
      */
@@ -103,7 +103,7 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Toggle the UI color scheme based on value saved in localStorage
+     * Toggle the UI color scheme & button state based on value saved in localStorage.
      */
     const fToggleColorScheme = function () {
         const sCurrentSetting = fGetLocalStoredColorSchemeVal()
@@ -128,9 +128,9 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Update the aria-pressed state of the button
+     * Update the aria-pressed state of toggle-button based on passed value.
      *
-     * @param {string} sSetButtonState
+     * @param {string} sSetButtonState 'light' || 'dark'
      */
     const fApplyButtonState = function (sSetButtonState) {
         switch (sSetButtonState) {
