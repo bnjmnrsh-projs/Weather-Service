@@ -111,25 +111,18 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Toggle the UI color scheme & button state based on value saved in localStorage.
+     * Update the aria-pressed state of toggle-button based on passed value.
+     *
+     * @param {string} sSetButtonState 'light' || 'dark'
      */
-    const fToggleGlobalColorScheme = function () {
-        const sCurrentSetting = fGetLocalStoredColorSchemeVal()
-
-        switch (sCurrentSetting) {
-            case 'light':
-                fSetGlobalColorScheme('dark')
-                break
+    const fSetButtonState = function (sSetButtonState) {
+        switch (sSetButtonState) {
             case 'dark':
-                fSetGlobalColorScheme('light')
+                nThemeToggel.setAttribute('aria-pressed', 'true')
                 break
-        }
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fToggleGlobalColorScheme: sCurrentSetting:',
-                sCurrentSetting
-            )
+            case 'light':
+                nThemeToggel.removeAttribute('aria-pressed')
+                break
         }
     }
 
@@ -163,18 +156,25 @@ export const ThemeToggle = function (oOptions = {}) {
     }
 
     /**
-     * Update the aria-pressed state of toggle-button based on passed value.
-     *
-     * @param {string} sSetButtonState 'light' || 'dark'
+     * Toggle the UI color scheme & button state based on value saved in localStorage.
      */
-    const fSetButtonState = function (sSetButtonState) {
-        switch (sSetButtonState) {
-            case 'dark':
-                nThemeToggel.setAttribute('aria-pressed', 'true')
-                break
+    const fToggleGlobalColorScheme = function () {
+        const sCurrentSetting = fGetLocalStoredColorSchemeVal()
+
+        switch (sCurrentSetting) {
             case 'light':
-                nThemeToggel.removeAttribute('aria-pressed')
+                fSetGlobalColorScheme('dark')
                 break
+            case 'dark':
+                fSetGlobalColorScheme('light')
+                break
+        }
+
+        if (oSettings.debug) {
+            console.log(
+                'ThemeToggle:fToggleGlobalColorScheme: sCurrentSetting:',
+                sCurrentSetting
+            )
         }
     }
 
