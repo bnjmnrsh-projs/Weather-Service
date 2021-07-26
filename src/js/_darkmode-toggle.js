@@ -34,13 +34,13 @@ export const ThemeToggle = function (options = {}) {
      * @returns {string} dark || light
      */
     const fGetValUserColorSchemeAttr = function () {
-        let response = getComputedStyle(nHTML).getPropertyValue(
+        let sResponse = getComputedStyle(nHTML).getPropertyValue(
             settings.COLOR_MODE_KEY
         )
-        if (response.length) {
-            response = response.replace(/"/g, '').trim()
+        if (sResponse.length) {
+            sResponse = sResponse.replace(/"/g, '').trim()
         }
-        return response
+        return sResponse
     }
 
     /**
