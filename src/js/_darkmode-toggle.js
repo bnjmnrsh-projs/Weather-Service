@@ -97,7 +97,7 @@ export const ThemeToggle = function (oOptions = {}) {
      *
      * @param {string} sColorSetting
      */
-    const fSetGlobalColorScheme = function (sColorSetting) {
+    const fSetHTMLdataAttr = function (sColorSetting) {
         const sCurrentSetting = sColorSetting || fGetLocalStoredColorSchemeVal()
 
         if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
@@ -106,7 +106,7 @@ export const ThemeToggle = function (oOptions = {}) {
         }
 
         if (oSettings.debug) {
-            console.log('fSetGlobalColorScheme: sColorSetting:', sColorSetting)
+            console.log('fSetHTMLdataAttr: sColorSetting:', sColorSetting)
         }
     }
 
@@ -162,11 +162,11 @@ export const ThemeToggle = function (oOptions = {}) {
             .matchMedia('(prefers-color-scheme: dark)')
             .addEventListener('change', function (e) {
                 if (e.matches) {
-                    fSetGlobalColorScheme('dark')
+                    fSetHTMLdataAttr('dark')
                     fSetButtonState('dark')
                     fSetLocalStorageColorSchemeVal('dark')
                 } else {
-                    fSetGlobalColorScheme('light')
+                    fSetHTMLdataAttr('light')
                     fSetButtonState('light')
                     fSetLocalStorageColorSchemeVal('light')
                 }
