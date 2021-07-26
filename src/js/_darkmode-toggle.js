@@ -104,8 +104,6 @@ export const ThemeToggle = function (oOptions = {}) {
         if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
             // Set the data attr
             nHTML.setAttribute('data-user-color-scheme', sCurrentSetting)
-            // Update localStorage
-            localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
         }
 
         if (oSettings.debug) {
