@@ -224,7 +224,7 @@ export const ThemeToggle = function (oOptions = {}) {
                     // Update button state to reflect change
                     fSetButtonState(sHTMLcolorMode)
                     // Update localStorage value to reflect change
-                    localStorage.setItem(oSettings.STORAGE_KEY, sHTMLcolorMode)
+                    fSetLocalStorageColorSchemeVal(sHTMLcolorMode)
 
                     if (oSettings.debug) {
                         console.log(
