@@ -118,12 +118,12 @@ export const ThemeToggle = function (oOptions = {}) {
 
         switch (sCurrentSetting) {
             case 'light':
-                fSetGlobalColorScheme('dark')
+                fSetHTMLdataAttr('dark')
                 fSetButtonState('dark')
                 fSetLocalStorageColorSchemeVal('dark')
                 break
             case 'dark':
-                fSetGlobalColorScheme('light')
+                fSetHTMLdataAttr('light')
                 fSetButtonState('light')
                 fSetLocalStorageColorSchemeVal('light')
                 break
