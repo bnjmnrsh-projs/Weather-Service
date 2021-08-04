@@ -2,20 +2,20 @@
   "name": "weather-service",
   "version": "1.0.0",
   "description": "Weather Service App",
-  "main": "src/app.js",
+  "homepage": "https://github.com/bnjmnrsh-projs/Weather-Service#readme",
+  "bugs": {
+    "url": "https://github.com/bnjmnrsh-projs/Weather-Service/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/bnjmnrsh-projs/Weather-Service.git"
   },
+  "license": "MIT",
   "author": {
     "name": "bnjmnrsh@gmail.com",
     "website": "https://bnjmnrsh-projs.github.io/Weather-Service/"
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bnjmnrsh-projs/Weather-Service/issues"
-  },
-  "homepage": "https://github.com/bnjmnrsh-projs/Weather-Service#readme",
+  "main": "src/app.js",
   "scripts": {
     "build:dirty": "npm-run-all -p js css svg img copy",
     "build": "npm-run-all -s clean build:dirty",
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "browser-sync": "^2.26.14",
-    "browserlist": "*",
+    "browserslist": "*",
     "chokidar-cli": "^2.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
