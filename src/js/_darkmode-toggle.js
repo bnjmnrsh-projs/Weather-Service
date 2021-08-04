@@ -306,9 +306,5 @@ export const ThemeToggle = function (oOptions = {}) {
         window.localStorage.getItem(oSettings.STORAGE_KEY)
       )
     }
-
-    //
-    // Return the Public API
-    //
-    return this
+  }
 }
