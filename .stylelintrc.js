@@ -14,19 +14,21 @@ module.exports = {
     'stylelint-scss'
   ],
   rules: {
+    // browserslist supported
+    'plugin/no-unsupported-browser-features': [
+      true,
+      {
+        severity: 'warning',
+        ignorePartialSupport: true
+      }
+    ],
     // a11y
     'a11y/media-prefers-reduced-motion': true,
     'a11y/no-outline-none': true,
     'a11y/selector-pseudo-class-focus': true,
     // nesting & order
     'csstools/use-nesting': 'always', // || "ignore"
-    // browserslist supported
-    'plugin/no-unsupported-browser-features': [
-      true,
-      {
-        severity: 'warning'
-      }
-    ],
+
     // animations
     'plugin/no-low-performance-animation-properties': [
       true,

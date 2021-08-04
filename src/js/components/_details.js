@@ -12,53 +12,53 @@ import { fClean } from '../_helpers'
  * @returns {string}
  */
 export const fRenderDetails = function (_oData, _oSettings) {
-    const oCURRENT = _oData.CURRENT.data[0]
-    const iconCloud = Icons.fGetCloudCoverIcon(oCURRENT.clouds)
-    const oMoon = Moon.fPhase(oCURRENT.obj_time, _oSettings)
-    const oIcons = _oSettings.icon
+  const oCURRENT = _oData.CURRENT.data[0]
+  const iconCloud = Icons.fGetCloudCoverIcon(oCURRENT.clouds)
+  const oMoon = Moon.fPhase(oCURRENT.obj_time, _oSettings)
+  const oIcons = _oSettings.icon
 
-    const template = `
+  const template = `
         <div id="details" class="c-details">
             <ul class="unstyled">
                 <li class="c-feels-like">
                     <span class="left-col">{{feels_like}} {{app_temp}}</span>
                     ${Icons.fSetStringElAttrs(_oSettings.icon.sThermometer, {
-                        class: 'inline-icon',
-                        data: {
-                            temp: Scales.fTempDataPt(fClean(oCURRENT.app_temp)),
-                        },
+                      class: 'inline-icon',
+                      data: {
+                        temp: Scales.fTempDataPt(fClean(oCURRENT.app_temp))
+                      }
                     })}
                 </li>
                 ${
-                    oCURRENT.uv
-                        ? `<li class="c-uv-index">
+                  oCURRENT.uv
+                    ? `<li class="c-uv-index">
                             <span class="left-col">{{uv}} {{uv_index}}</span>
                             ${Icons.fSetStringElAttrs(
-                                _oSettings.icon.sSunnyDay,
-                                {
-                                    class: 'inline-icon',
-                                    data: {
-                                        uv: Scales.fUvDataPt(
-                                            fClean(oCURRENT.uv),
-                                            _oSettings
-                                        ),
-                                    },
+                              _oSettings.icon.sSunnyDay,
+                              {
+                                class: 'inline-icon',
+                                data: {
+                                  uv: Scales.fUvDataPt(
+                                    fClean(oCURRENT.uv),
+                                    _oSettings
+                                  )
                                 }
+                              }
                             )}
                           </li>`
-                        : ''
+                    : ''
                 }
                 <li class="c-cloud-cover">
                     <span class="left-col">{{cloud}} {{cloud_percent}}</span>
                     ${iconCloud[2]}
                 </li>
                 ${
-                    oCURRENT.snow
-                        ? `<li>
+                  oCURRENT.snow
+                    ? `<li>
                             <span class="left-col">{{snow}} {{snow_percip}}</span>
                             ${oIcons.sSnow}
                           </li>`
-                        : ''
+                    : ''
                 }
                 <li class="c-precipitation">
                     <span class="left-col">{{rain}} {{rain_percip}}</span>
@@ -70,9 +70,9 @@ export const fRenderDetails = function (_oData, _oSettings) {
                     </span>
                     <span class="inline-icon">
                         ${Icons.fSetStringElAttrs(oIcons.sWindDirection, {
-                            style: `transform: rotate(${fClean(
-                                oCURRENT.wind_dir + 180
-                            )}deg)`,
+                          style: `transform: rotate(${fClean(
+                            oCURRENT.wind_dir + 180
+                          )}deg)`
                         })}
                         ${oIcons.sWind}
                     </span>
@@ -97,5 +97,5 @@ export const fRenderDetails = function (_oData, _oSettings) {
                 </li>
             </ul>
         </div>`
-    return fDetsStr(template, _oData, _oSettings)
+  return fDetsStr(template, _oData, _oSettings)
 }

@@ -10,16 +10,16 @@ import { fClean } from '../_helpers'
  * @returns {string}
  */
 export const fRenderHUD = function (_oData, _oSettings) {
-    if (_oSettings.log) {
-        console.log('fRenderHUD: ', _oData)
-    }
+  if (_oSettings.log) {
+    console.log('fRenderHUD: ', _oData)
+  }
 
-    const oCURRENT = _oData.CURRENT.data[0]
-    const sIconName = fGetWeatherIcon(oCURRENT)
+  const oCURRENT = _oData.CURRENT.data[0]
+  const sIconName = fGetWeatherIcon(oCURRENT)
 
-    const template = `<header
+  const template = `<header
         id="hud" class="c-hud" data-temp="${fTempDataPt(
-            fClean(oCURRENT.temp)
+          fClean(oCURRENT.temp)
         )}">
             <h3>
                 <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
@@ -32,5 +32,5 @@ export const fRenderHUD = function (_oData, _oSettings) {
             </ul>
         </header>
         `
-    return fHUDstr(template, _oData, _oSettings)
+  return fHUDstr(template, _oData, _oSettings)
 }

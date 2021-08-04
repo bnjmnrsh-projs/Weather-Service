@@ -3,52 +3,48 @@
 */
 
 #app .screen {
-    padding: 2rem;
-    border-radius: 10px;
-    background-color: var(--bg-lt);
-    margin: 0.2rem 0.3rem;
-    box-shadow: var(--bg-dk) 1px 1px 1px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    -ms-word-break: break-all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0.2rem 0.3rem;
+  padding: 2rem;
 
-    /* This is the dangerous one in WebKit, as it breaks things wherever */
-    word-break: break-all;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  text-align: left;
+  word-wrap: break-word;
+  -ms-word-break: break-all; /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  background-color: var(--bg-lt);
+  border-radius: 10px;
+  box-shadow: var(--bg-dk) 1px 1px 1px;
 
-    /* Instead use this non-standard one: */
-    word-break: break-word;
+  h3 {
+    display: inline-block;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
 
-    /* Adds a hyphen where the word breaks, if supported (No Blink) */
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-    text-align: left;
+  .errors-wrap {
+    padding: 1rem;
+    overflow-y: scroll;
+    background: var(--bg-vdk);
+    border-radius: 3px;
+  }
 
-    h3 {
-        text-align: center;
-        display: inline-block;
-        margin-bottom: 1rem;
-    }
-
-    .errors-wrap {
-        background: var(--bg-vdk);
-        padding: 1rem;
-        overflow-y: scroll;
-        border-radius: 3px;
-    }
-
-    .screen-icon {
-        max-width: 50%;
-    }
+  .screen-icon {
+    max-width: 50%;
+  }
 }
 
 @media screen and (max-width: 545px) {
-    #app.errors-screen {
-        padding: 1.5rem;
-    }
+  #app.errors-screen {
+    padding: 1.5rem;
+  }
 }

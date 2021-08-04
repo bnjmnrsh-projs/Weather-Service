@@ -51,8 +51,8 @@ a:not([class]) {
 /* Make images easier to work with */
 img,
 picture {
-	max-width: 100%;
 	display: block;
+	max-width: 100%;
 }
 
 /* Inherit fonts for inputs and buttons */
@@ -72,9 +72,9 @@ select {
 	*,
 *::before,
 *::after {
+		transition-duration: 0.01ms !important;
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
 	}
 }
@@ -867,12 +867,9 @@ span.inline-icon {
 	--distance: 0%;
 	--scale-bg: hsla(195, 100%, 69%, 0.509);
 	display: flex;
+	flex: 1 1 100%;
 	flex-direction: column;
 	justify-content: space-between;
-	flex: 1 1 100%;
-}
-.c-details .c-visibility .visibility-wrap * {
-	align-self: center;
 }
 .c-details .c-visibility .visibility-wrap {
 	display: flex;
@@ -881,53 +878,52 @@ span.inline-icon {
 	width: 100%;
 	margin: 0.3rem 0 0.5rem 0;
 }
+.c-details .c-visibility .visibility-wrap * {
+	align-self: center;
+}
 .c-details .c-visibility .visibility-wrap .inline-icon {
 	margin-top: -0.3em;
 	border: none;
 }
-.c-details .c-visibility .scale {
+.c-details .c-visibility .visibility-wrap .scale {
+	position: relative;
+	width: calc(100% + 1.6rem);
+	height: 1rem;
+	margin: 0 -0.5rem -0.5rem -0.5rem;
+	overflow: hidden;
+	font-size: 0.6em;
 	background-color: var(--scale-bg);
 	background-image: url(../svg/graph.svg);
 	background-position: left -1px bottom -1px;
 	border-top: 1px solid var(--bg-md);
-	height: 1rem;
-	width: calc(100% + 1.6rem);
-	position: relative;
-	overflow: hidden;
-	font-size: 0.6em;
-	transition: all 0.5s ease;
-	margin: 0 -0.5rem -0.5rem -0.5rem;
 	border-bottom-right-radius: 2px;
 	border-bottom-left-radius: 2px;
+	transition: all 0.5s ease;
 }
-.c-details .c-visibility .scale::before,
+.c-details .c-visibility .visibility-wrap .scale::before,
 .c-details .c-visibility .scale::after {
-	box-sizing: content-box !important;
 	position: absolute;
 	top: 0.1rem;
 	z-index: 1;
+	box-sizing: content-box !important;
 	color: var(--theme-black);
 }
-.c-details .c-visibility .scale::before {
-	content: "0 |";
-	left: 0.6rem;
-}
-.c-details .c-visibility .scale::after {
-	content: "| 5km/3.11mi";
+.c-details .c-visibility .scale .scale::after {
 	right: 1rem;
+	content: "| 5km/3.11mi";
 }
 .c-details .c-visibility .scale .distance {
-	background: linear-gradient(to left, var(--theme-white) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
-	border-right: 80px solid var(--theme-white);
-	padding-left: 10px;
-	background-repeat: no-repeat;
-	overflow: hidden;
 	position: absolute;
-	height: 200%;
-	width: calc(100% - (10px + -0.6rem));
 	z-index: 0;
-	will-change: transform;
+	width: calc(100% - (10px + -0.6rem));
+	height: 200%;
+	padding-left: 10px;
+	overflow: hidden;
+	background: linear-gradient(to left, var(--theme-white) calc(var(--distance) - 20px), rgba(255, 255, 255, 0) calc(var(--distance) + 20px));
+	background-repeat: no-repeat;
+	border-right: 80px solid var(--theme-white);
 	animation: distance-loading 2s ease forwards;
+	will-change: transform;
 }
 
 @keyframes distance-loading {
@@ -1076,38 +1072,37 @@ span.inline-icon {
 * Screens component, including errors
 */
 #app .screen {
-	padding: 2rem;
-	border-radius: 10px;
-	background-color: var(--bg-lt);
-	margin: 0.2rem 0.3rem;
-	box-shadow: var(--bg-dk) 1px 1px 1px;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
-	overflow-wrap: break-word;
+	justify-content: center;
+	margin: 0.2rem 0.3rem;
+	padding: 2rem;
+	/* Adds a hyphen where the word breaks, if supported (No Blink) */
+	text-align: left;
 	word-wrap: break-word;
 	-ms-word-break: break-all;
 	/* This is the dangerous one in WebKit, as it breaks things wherever */
 	word-break: break-all;
-	/* Instead use this non-standard one: */
 	word-break: break-word;
-	/* Adds a hyphen where the word breaks, if supported (No Blink) */
+	overflow-wrap: break-word;
 	-ms-hyphens: auto;
 	-moz-hyphens: auto;
 	-webkit-hyphens: auto;
 	hyphens: auto;
-	text-align: left;
+	background-color: var(--bg-lt);
+	border-radius: 10px;
+	box-shadow: var(--bg-dk) 1px 1px 1px;
 }
 #app .screen h3 {
-	text-align: center;
 	display: inline-block;
 	margin-bottom: 1rem;
+	text-align: center;
 }
 #app .screen .errors-wrap {
-	background: var(--bg-vdk);
 	padding: 1rem;
 	overflow-y: scroll;
+	background: var(--bg-vdk);
 	border-radius: 3px;
 }
 #app .screen .screen-icon {

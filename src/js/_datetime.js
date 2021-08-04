@@ -19,22 +19,22 @@
  * @returns {string} date as string with time component
  */
 function fAddTimeToDateString(sDate) {
-    // If we have recieved ob_time, repalce the space with a 'T'
-    if (sDate.length >= 16) return sDate.replace(' ', 'T')
+  // If we have recieved ob_time, repalce the space with a 'T'
+  if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
-    // Will produce a string that can be converted into a valid date object
-    const sNewDate = `${sDate}T00:00`
-    const oDate = new Date(sNewDate)
+  // Will produce a string that can be converted into a valid date object
+  const sNewDate = `${sDate}T00:00`
+  const oDate = new Date(sNewDate)
 
-    // test to see if we now have string which creates a valid date
-    if (typeof oDate.getMonth !== 'function') {
-        throw new Error(
-            `fAddTimeToDateString not provided a string that can be converted to a valid date: "${sDate}:`
-        )
-    }
+  // test to see if we now have string which creates a valid date
+  if (typeof oDate.getMonth !== 'function') {
+    throw new Error(
+      `fAddTimeToDateString not provided a string that can be converted to a valid date: "${sDate}:`
+    )
+  }
 
-    // return the new date string vaild for cases 2, 3, and 4)
-    return sNewDate
+  // return the new date string vaild for cases 2, 3, and 4)
+  return sNewDate
 }
 
 /**
@@ -46,19 +46,19 @@ function fAddTimeToDateString(sDate) {
  * @returns {string} converted time as string with units
  */
 export const fTime = function (sTime24, _oSettings) {
-    if (!sTime24.includes(':') || !sTime24.length === '5') {
-        throw new Error('fTime not given a valid time string: HH:MM')
-    }
+  if (!sTime24.includes(':') || !sTime24.length === '5') {
+    throw new Error('fTime not given a valid time string: HH:MM')
+  }
 
-    if (_oSettings.units === 'M') return sTime24
-    console.log('sTime24', `${sTime24}`)
-    console.log('sTime24 length', `${sTime24.length}`)
+  if (_oSettings.units === 'M') return sTime24
+  console.log('sTime24', `${sTime24}`)
+  console.log('sTime24 length', `${sTime24.length}`)
 
-    const [sHours, minutes] = sTime24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1)
-    const period = +sHours < 12 ? 'AM' : 'PM'
-    const hours = +sHours % 12 || 12
+  const [sHours, minutes] = sTime24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1)
+  const period = +sHours < 12 ? 'AM' : 'PM'
+  const hours = +sHours % 12 || 12
 
-    return `${hours}:${minutes}&nbsp;${period}`
+  return `${hours}:${minutes}&nbsp;${period}`
 }
 
 /**
@@ -71,42 +71,42 @@ export const fTime = function (sTime24, _oSettings) {
  * @returns {string} Time as string
  */
 export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
-    let oDate, aTime
-    console.log('sDate', sDate)
-    if (sDate !== '') {
-        oDate = new Date(fAddTimeToDateString(sDate))
-    } else {
-        oDate = new Date()
-    }
-    if (sTime24 !== '') {
-        aTime = sTime24.split(':')
-    } else {
-        aTime = [oDate.getUTCHours(), oDate.getUTCMinutes()]
-    }
-    const aDate = [
-        oDate.getUTCFullYear(),
-        oDate.getUTCMonth(),
-        oDate.getUTCDate(),
-        aTime[0],
-        aTime[1],
-    ]
+  let oDate, aTime
+  console.log('sDate', sDate)
+  if (sDate !== '') {
+    oDate = new Date(fAddTimeToDateString(sDate))
+  } else {
+    oDate = new Date()
+  }
+  if (sTime24 !== '') {
+    aTime = sTime24.split(':')
+  } else {
+    aTime = [oDate.getUTCHours(), oDate.getUTCMinutes()]
+  }
+  const aDate = [
+    oDate.getUTCFullYear(),
+    oDate.getUTCMonth(),
+    oDate.getUTCDate(),
+    aTime[0],
+    aTime[1]
+  ]
 
-    const oDateUtc = new Date(Date.UTC(...aDate))
+  const oDateUtc = new Date(Date.UTC(...aDate))
 
-    if (_oSettings.debug === true) {
-        console.log('fGetLocalTime provided sTime24: ', sTime24)
-        console.log(
-            'fGetLocalTime UTC converted time:',
-            `${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`
-        )
-    }
-    console.log(oDate)
-    return fTime(
-        `${oDateUtc.getHours()}`.padStart(2, '0') +
-            ':' +
-            `${oDateUtc.getMinutes()}`.padStart(2, '0'),
-        _oSettings
+  if (_oSettings.debug === true) {
+    console.log('fGetLocalTime provided sTime24: ', sTime24)
+    console.log(
+      'fGetLocalTime UTC converted time:',
+      `${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`
     )
+  }
+  console.log(oDate)
+  return fTime(
+    `${oDateUtc.getHours()}`.padStart(2, '0') +
+      ':' +
+      `${oDateUtc.getMinutes()}`.padStart(2, '0'),
+    _oSettings
+  )
 }
 
 /**
@@ -116,14 +116,14 @@ export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
  * @returns {string}
  */
 export const fGetWeekday = function (sDate) {
-    const oDate = new Date(fAddTimeToDateString(sDate))
+  const oDate = new Date(fAddTimeToDateString(sDate))
 
-    // test our oDate object
-    if (!oDate || typeof oDate.getMonth !== 'function') {
-        throw new Error('fGetWeekday provided invalid date')
-    }
+  // test our oDate object
+  if (!oDate || typeof oDate.getMonth !== 'function') {
+    throw new Error('fGetWeekday provided invalid date')
+  }
 
-    return oDate.toLocaleString('default', { weekday: 'short' })
+  return oDate.toLocaleString('default', { weekday: 'short' })
 }
 
 /**
@@ -133,21 +133,21 @@ export const fGetWeekday = function (sDate) {
  * @returns string, weekday ordinal number
  */
 export const fGetDayOrdinal = function (sDate) {
-    const oDate = new Date(fAddTimeToDateString(sDate))
+  const oDate = new Date(fAddTimeToDateString(sDate))
 
-    // test our date object
-    if (!oDate || typeof oDate.getMonth !== 'function') {
-        throw new Error('fFormatDayOrdinal provided invalid date')
-    }
+  // test our date object
+  if (!oDate || typeof oDate.getMonth !== 'function') {
+    throw new Error('fFormatDayOrdinal provided invalid date')
+  }
 
-    const sFormatedDate =
-        oDate.getDate() +
-        (oDate.getDate() % 10 === 1 && oDate.getDate() !== 11
-            ? 'st'
-            : oDate.getDate() % 10 === 2 && oDate.getDate() !== 12
-            ? 'nd'
-            : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
-            ? 'rd'
-            : 'th')
-    return sFormatedDate
+  const sFormatedDate =
+    oDate.getDate() +
+    (oDate.getDate() % 10 === 1 && oDate.getDate() !== 11
+      ? 'st'
+      : oDate.getDate() % 10 === 2 && oDate.getDate() !== 12
+      ? 'nd'
+      : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
+      ? 'rd'
+      : 'th')
+  return sFormatedDate
 }
