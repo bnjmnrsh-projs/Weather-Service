@@ -1,0 +1,32 @@
+{
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "eslint.run": "onType",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml",
+    "toml"
+  ],
+  "css.validate": true,
+  "scss.validate": true,
+  "javascript.validate.enable": false,
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true
+  },
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.renderWhitespace": "all",
+    "editor.acceptSuggestionOnEnter": "off"
+  },
+  "[json]": { "editor.formatOnSave": true, "editor.formatOnPaste": true }
+}

@@ -1,6 +1,7 @@
+// Comptibility settings for StandardJS + Prettier
 module.exports = {
-    trailingComma: 'es5',
-    tabWidth: 4,
-    semi: false,
-    singleQuote: true,
+  editorconfig: 'true',
+  trailingComma: 'none',
+  semi: false,
+  singleQuote: true
 }
