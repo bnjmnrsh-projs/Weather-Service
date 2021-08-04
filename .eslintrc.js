@@ -5,11 +5,11 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'standard',
     'plugin:import/recommended',
     'plugin:promise/recommended',
     'plugin:json-schema-validator/recommended',
-    'prettier'
+    'standard',
+    'plugin:prettier/recommended'
   ],
   parserOptions: {
     ecmaVersion: 12,
