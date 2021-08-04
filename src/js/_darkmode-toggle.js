@@ -3,290 +3,308 @@
  *
  * @author bnjmnrsh@gmail.com
  */
-export const ThemeToggle = function (oOptions = {}) {
-    //
-    // Settings & Defaults
-    //
 
-    const oDefaults = {
-        buttonID: '#theme-toggler',
-        debug: false,
-    }
+//
+// Private methods
+//
 
-    // Merge user options into defaults
-    const oSettings = Object.assign({}, oDefaults, oOptions)
-    oSettings.STORAGE_KEY = 'user-color-scheme'
-    oSettings.COLOR_MODE_CSS_PROP = '--color-mode'
-    this.oSettings = oSettings
+/**
+ * Get the current value of the CSS '--color-mode' property.
+ * https://piccalil.li/tutorial/get-css-custom-property-value-with-javascript/
+ *
+ * @returns {string} dark || light
+ */
+const fGetColorModeCSSpropVal = function (oSettings = {}) {
+  let sResponse = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue(oSettings.COLOR_MODE_CSS_PROP)
+  if (sResponse.length) {
+    sResponse = sResponse.replace(/"/g, '').trim()
+  }
 
-    //
-    // Varriables
-    //
+  if (oSettings.debug) {
+    console.log('ThemeToggle:fGetColorModeCSSpropVal: sResponse:', sResponse)
+  }
 
-    const nThemeToggel = document.querySelector(oSettings.buttonID)
-    const nHTML = document.documentElement
+  return sResponse
+}
 
-    //
-    // Private Methods
-    //
+/**
+ * Get the last saved value from local storage, falling back to System prefers-color-scheme via CSS prop.
+ *
+ * @param {obj} oSettings
+ * @returns {string} light || dark
+ */
+const fGetLocalStoreColorSchemeVal = function (oSettings = {}) {
+  let sCurrentSetting = window.localStorage.getItem(oSettings.STORAGE_KEY)
 
-    /**
-     * Get the current value of the CSS '--color-mode' property.
-     *
-     * https://piccalil.li/tutorial/get-css-custom-property-value-with-javascript/
-     *
-     * @returns {string} dark || light
-     */
-    const fGetColorModeCSSpropVal = function () {
-        let sResponse = getComputedStyle(nHTML).getPropertyValue(
-            oSettings.COLOR_MODE_CSS_PROP
+  // If nothing stored, check which style sheet is active
+  if (sCurrentSetting === null) {
+    sCurrentSetting =
+      fGetColorModeCSSpropVal(oSettings) === 'dark' ? 'dark' : 'light'
+    // Set to localStorage
+    window.localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
+  }
+  if (oSettings.debug) {
+    console.log(
+      'ThemeToggle:fGetLocalStoreColorSchemeVal: sCurrentSetting:',
+      sCurrentSetting
+    )
+  }
+
+  return sCurrentSetting
+}
+
+/**
+ * Save user perfered theme to localStorage
+ *
+ * @param {string} sCurrentSetting 'light' || 'dark'
+ * @param {obj} oSettings
+ */
+const fSetLocalStoreColorSchemeVal = function (
+  sCurrentSetting,
+  oSettings = {}
+) {
+  if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
+    window.localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
+  }
+
+  if (oSettings.debug) {
+    console.log(
+      'ThemeToggle:fSetLocalStoreColorSchemeVal: sCurrentSetting:',
+      sCurrentSetting
+    )
+  }
+}
+
+/**
+ * Apply data-user-color-scheme to document, update localStore.
+ *
+ * @param {string} sColorSetting
+ * @param {obj} oSettings
+ */
+const fSetHTMLdataAttr = function (sColorSetting, oSettings = {}) {
+  const sCurrentSetting =
+    sColorSetting || fGetLocalStoreColorSchemeVal(oSettings)
+
+  if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
+    // Set the data attr
+    document.documentElement.setAttribute(
+      'data-user-color-scheme',
+      sCurrentSetting
+    )
+  }
+
+  if (oSettings.debug) {
+    console.log('ThemeToggle:fSetHTMLdataAttr: sColorSetting:', sColorSetting)
+  }
+}
+
+/**
+ * Update the aria-pressed state of toggle-button based on passed value.
+ *
+ * @param {string} sSetButtonState 'light' || 'dark'
+ * @param {obj} oSettings
+ */
+const fSetButtonState = function (
+  sSetButtonState,
+  nThemeToggel,
+  oSettings = {}
+) {
+  switch (sSetButtonState) {
+    case 'dark':
+      nThemeToggel.setAttribute('aria-pressed', 'true')
+      break
+    case 'light':
+      nThemeToggel.removeAttribute('aria-pressed')
+      break
+  }
+
+  if (oSettings.debug) {
+    console.log(
+      'ThemeToggle:fSetButtonState: sSetButtonState:',
+      sSetButtonState
+    )
+  }
+}
+
+/**
+ * Set the UI color scheme, button state, and update localStore.
+ *
+ * @param {string} sColorSetting 'light' || 'dark'
+ * @param {obj} oSettings
+ */
+const fSetGlobalColorScheme = function (
+  sColorSetting,
+  nThemeToggel,
+  oSettings
+) {
+  const sCurrentSetting =
+    sColorSetting || fGetLocalStoreColorSchemeVal(oSettings)
+
+  switch (sCurrentSetting) {
+    case 'light':
+      fSetHTMLdataAttr('light', oSettings)
+      fSetButtonState('light', nThemeToggel, oSettings)
+      fSetLocalStoreColorSchemeVal('light', oSettings)
+      break
+    case 'dark':
+      fSetHTMLdataAttr('dark', oSettings)
+      fSetButtonState('dark', nThemeToggel, oSettings)
+      fSetLocalStoreColorSchemeVal('dark', oSettings)
+      break
+  }
+
+  if (oSettings.debug) {
+    console.log(
+      'ThemeToggle:fSetGlobalColorScheme: sCurrentSetting:',
+      sCurrentSetting
+    )
+  }
+}
+
+/**
+ * Toggle the UI color scheme & button state based on value saved in window.localStorage.
+ *
+ * @param {obj} oSettings
+ */
+const fToggleGlobalColorScheme = function (nThemeToggel, oSettings = {}) {
+  const sCurrentSetting = fGetLocalStoreColorSchemeVal(oSettings)
+
+  switch (sCurrentSetting) {
+    case 'light':
+      fSetGlobalColorScheme('dark', nThemeToggel, oSettings)
+      break
+    case 'dark':
+      fSetGlobalColorScheme('light', nThemeToggel, oSettings)
+      break
+  }
+
+  if (oSettings.debug) {
+    console.log(
+      'ThemeToggle:fToggleGlobalColorScheme: sCurrentSetting:',
+      sCurrentSetting
+    )
+  }
+}
+
+/**
+ * Add listeners for button clicks, changes to prefers-color-scheme, and the html data-user-color-scheme attr.
+ *
+ * @param {obj} oSettings
+ */
+const fAddEventListeners = function (nThemeToggel, oSettings = {}) {
+  // Detect prefers-color-scheme system preference changes
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', function (e) {
+      if (e.matches) {
+        fSetGlobalColorScheme('dark', nThemeToggel, oSettings)
+      } else {
+        fSetGlobalColorScheme('light', nThemeToggel, oSettings)
+      }
+
+      if (oSettings.debug && e.matches) {
+        console.log(
+          `ThemeToggle:fAddEventListeners: Window detected system color pref change: ${e.matches}`
         )
-        if (sResponse.length) {
-            sResponse = sResponse.replace(/"/g, '').trim()
-        }
+      }
+    })
+
+  // Capture clicks on the toggle
+  document.addEventListener('click', function (e) {
+    if (e.target.id === nThemeToggel.id) {
+      fToggleGlobalColorScheme(nThemeToggel, oSettings)
+
+      if (oSettings.debug) {
+        console.log(
+          `ThemeToggle:fAddEventListeners: button "${e.target.id}" clicked.`
+        )
+      }
+    }
+  })
+
+  // listen for changes to on html data-user-color-scheme attr if mutiple toggle-buttons
+  const observer = new window.MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.attributeName === `data-${oSettings.STORAGE_KEY}`) {
+        const sHTMLcolorMode = document.documentElement.getAttribute(
+          `data-${oSettings.STORAGE_KEY}`
+        )
+        // Update button state to reflect change
+        fSetButtonState(sHTMLcolorMode, nThemeToggel, oSettings)
+        // Update localStorage value to reflect change
+        fSetLocalStoreColorSchemeVal(sHTMLcolorMode, oSettings)
 
         if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fGetColorModeCSSpropVal: sResponse:',
-                sResponse
-            )
+          console.log(
+            `ThemeToggle:fAddEventListeners: MutationObserver change: data-${oSettings.STORAGE_KEY}="${sHTMLcolorMode}"`
+          )
         }
+      }
+    })
+  })
+  // MutationObserver options
+  observer.observe(document.documentElement, {
+    attributeFilter: [`data-${oSettings.STORAGE_KEY}`],
+    attributeOldValue: true
+  })
+}
 
-        return sResponse
+export const ThemeToggle = function (oOptions = {}) {
+  //
+  // Settings & Defaults
+  //
+
+  const oDefaults = {
+    buttonID: '#theme-toggler',
+    debug: false
+  }
+
+  // Merge user options into defaults
+  const oSettings = Object.assign({}, oDefaults, oOptions)
+  oSettings.STORAGE_KEY = 'user-color-scheme'
+  oSettings.COLOR_MODE_CSS_PROP = '--color-mode'
+  this.oSettings = oSettings
+
+  //
+  // Varriables
+  //
+
+  const nThemeToggel = document.querySelector(oSettings.buttonID)
+
+  /**
+   * Public init method
+   *
+   * @returns public init method
+   */
+  this.init = function () {
+    if (!nThemeToggel) {
+      console.warn(
+        "ThemeToggle: Couldn't find the theme toggel button with selector:",
+        nThemeToggel
+      )
+      return
+    } else {
+      // Enable the button
+      nThemeToggel.removeAttribute('disabled')
     }
 
-    /**
-     * Get the last saved value from local storage, falling back to System prefers-color-scheme via CSS prop.
-     *
-     * @returns {string} light || dark
-     */
+    // Add event listeners
+    fAddEventListeners(nThemeToggel, oSettings)
 
-    const fGetLocalStoreColorSchemeVal = function () {
-        let sCurrentSetting = localStorage.getItem(oSettings.STORAGE_KEY)
+    // Establish toggle/theme state based on system and/or last pref saved in localStorage
+    fSetGlobalColorScheme(
+      fGetLocalStoreColorSchemeVal(oSettings),
+      nThemeToggel,
+      oSettings
+    )
 
-        // If nothing stored, check which style sheet is active
-        if (sCurrentSetting === null) {
-            sCurrentSetting =
-                fGetColorModeCSSpropVal() === 'dark' ? 'dark' : 'light'
-            // Set to localStorage
-            localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
-        }
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fGetLocalStoreColorSchemeVal: sCurrentSetting:',
-                sCurrentSetting
-            )
-        }
-
-        return sCurrentSetting
-    }
-
-    /**
-     * Save user perfered theme to localStorage
-     *
-     * @param {string} sCurrentSetting 'light' || 'dark'
-     */
-    const fSetLocalStoreColorSchemeVal = function (sCurrentSetting) {
-        if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
-            localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting)
-        }
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fSetLocalStoreColorSchemeVal: sCurrentSetting:',
-                sCurrentSetting
-            )
-        }
-    }
-
-    /**
-     * Apply data-user-color-scheme to document, update localStore.
-     *
-     * @param {string} sColorSetting
-     */
-    const fSetHTMLdataAttr = function (sColorSetting) {
-        const sCurrentSetting = sColorSetting || fGetLocalStoreColorSchemeVal()
-
-        if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
-            // Set the data attr
-            nHTML.setAttribute('data-user-color-scheme', sCurrentSetting)
-        }
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fSetHTMLdataAttr: sColorSetting:',
-                sColorSetting
-            )
-        }
-    }
-
-    /**
-     * Update the aria-pressed state of toggle-button based on passed value.
-     *
-     * @param {string} sSetButtonState 'light' || 'dark'
-     */
-    const fSetButtonState = function (sSetButtonState) {
-        switch (sSetButtonState) {
-            case 'dark':
-                nThemeToggel.setAttribute('aria-pressed', 'true')
-                break
-            case 'light':
-                nThemeToggel.removeAttribute('aria-pressed')
-                break
-        }
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fSetButtonState: sSetButtonState:',
-                sSetButtonState
-            )
-        }
-    }
-
-    /**
-     * Set the UI color scheme, button state, and update localStore.
-     *
-     * @param {string} sColorSetting 'light' || 'dark'
-     */
-    const fSetGlobalColorScheme = function (sColorSetting) {
-        const sCurrentSetting = sColorSetting || fGetLocalStoreColorSchemeVal()
-
-        switch (sCurrentSetting) {
-            case 'light':
-                fSetHTMLdataAttr('light')
-                fSetButtonState('light')
-                fSetLocalStoreColorSchemeVal('light')
-                break
-            case 'dark':
-                fSetHTMLdataAttr('dark')
-                fSetButtonState('dark')
-                fSetLocalStoreColorSchemeVal('dark')
-                break
-        }
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fSetGlobalColorScheme: sCurrentSetting:',
-                sCurrentSetting
-            )
-        }
-    }
-
-    /**
-     * Toggle the UI color scheme & button state based on value saved in localStorage.
-     */
-    const fToggleGlobalColorScheme = function () {
-        const sCurrentSetting = fGetLocalStoreColorSchemeVal()
-
-        switch (sCurrentSetting) {
-            case 'light':
-                fSetGlobalColorScheme('dark')
-                break
-            case 'dark':
-                fSetGlobalColorScheme('light')
-                break
-        }
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:fToggleGlobalColorScheme: sCurrentSetting:',
-                sCurrentSetting
-            )
-        }
-    }
-
-    /**
-     * Add listeners for button clicks, changes to prefers-color-scheme, and the html data-user-color-scheme attr
-     */
-    const fAddEventListeners = function () {
-        // Detect prefers-color-scheme system preference changes
-        window
-            .matchMedia('(prefers-color-scheme: dark)')
-            .addEventListener('change', function (e) {
-                if (e.matches) {
-                    fSetGlobalColorScheme('dark')
-                } else {
-                    fSetGlobalColorScheme('light')
-                }
-
-                if (oSettings.debug && e.matches) {
-                    console.log(
-                        `ThemeToggle:fAddEventListeners: Window detected system color pref change: ${e.matches}`
-                    )
-                }
-            })
-
-        // Capture clicks on the toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.id === nThemeToggel.id) {
-                fToggleGlobalColorScheme()
-
-                if (oSettings.debug) {
-                    console.log(
-                        `ThemeToggle:fAddEventListeners: button "${e.target.id}" clicked.`
-                    )
-                }
-            }
-        })
-
-        // listen for changes to on html data-user-color-scheme attr if mutiple toggle-buttons
-        const observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-                if (
-                    mutation.attributeName === `data-${oSettings.STORAGE_KEY}`
-                ) {
-                    const sHTMLcolorMode = nHTML.getAttribute(
-                        `data-${oSettings.STORAGE_KEY}`
-                    )
-                    // Update button state to reflect change
-                    fSetButtonState(sHTMLcolorMode)
-                    // Update localStorage value to reflect change
-                    fSetLocalStoreColorSchemeVal(sHTMLcolorMode)
-
-                    if (oSettings.debug) {
-                        console.log(
-                            `ThemeToggle:fAddEventListeners: MutationObserver change: data-${oSettings.STORAGE_KEY}="${sHTMLcolorMode}"`
-                        )
-                    }
-                }
-            })
-        })
-        // MutationObserver options
-        observer.observe(nHTML, {
-            attributeFilter: [`data-${oSettings.STORAGE_KEY}`],
-            attributeOldValue: true,
-        })
-    }
-
-    /**
-     * Public init method
-     *
-     * @returns public init method
-     */
-    this.init = function () {
-        if (!nThemeToggel) {
-            console.warn(
-                "ThemeToggle: Couldn't find the theme toggel button with node selector:",
-                nThemeToggel
-            )
-            return
-        } else {
-            // Enable the button
-            nThemeToggel.removeAttribute('disabled')
-        }
-
-        // Add event listeners
-        fAddEventListeners()
-
-        // Establish toggle/theme state based on system and/or last pref saved in localStorage
-        fSetGlobalColorScheme(fGetLocalStoreColorSchemeVal())
-
-        if (oSettings.debug) {
-            console.log(
-                'ThemeToggle:Init,  current localStore setting: ',
-                localStorage.getItem(oSettings.STORAGE_KEY)
-            )
-        }
+    if (oSettings.debug) {
+      console.log(
+        'ThemeToggle:Init,  current localStore setting: ',
+        window.localStorage.getItem(oSettings.STORAGE_KEY)
+      )
     }
 
     //
