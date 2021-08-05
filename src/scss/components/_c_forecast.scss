@@ -3,69 +3,69 @@
 */
 
 .c-forecast {
-    @include code-font;
+  @include code-font;
 
-    text-align: center;
-    margin: 0.2rem 0.3rem;
+  margin: 0.2rem 0.3rem;
+  text-align: center;
 
-    h4 {
-        margin: 0.3rem;
-        text-align: left;
+  h4 {
+    margin: 0.3rem;
+    text-align: left;
+  }
+  h5 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+      justify-content: space-around;
+      width: 50%;
+      min-width: 100px;
+      min-height: 8rem;
+      margin-right: 0.3rem;
+      padding: 0.3rem;
+      background-color: var(--bg-md);
+      border-radius: 2px;
+      box-shadow: var(--bg-dk) 1px 1px 2px;
+      scroll-snap-align: start end;
+
+      &:first-child {
+        border-bottom-left-radius: 10px;
+      }
+      &:last-child {
+        margin-right: 0.1rem;
+        border-bottom-right-radius: 10px;
+      }
     }
-    h5 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-    }
+  }
 
-    ul {
-        display: flex;
-        flex-direction: row;
-        overflow-y: scroll;
-        scroll-snap-type: y mandatory;
-
-        li {
-            background-color: var(--bg-md);
-            border-radius: 2px;
-            width: 50%;
-            min-width: 100px;
-            padding: 0.3rem;
-            margin-right: 0.3rem;
-            box-shadow: var(--bg-dk) 1px 1px 2px;
-            min-height: 8rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-content: center;
-            align-items: center;
-            scroll-snap-align: start end;
-
-            &:first-child {
-                border-bottom-left-radius: 10px;
-            }
-            &:last-child {
-                margin-right: 0.1rem;
-                border-bottom-right-radius: 10px;
-            }
-        }
-    }
-
-    .forecast-description {
-        font-size: var(--step--1);
-        margin-top: 0;
-    }
-    .weather-icon {
-        width: 80%;
-        height: auto;
-    }
+  .forecast-description {
+    margin-top: 0;
+    font-size: var(--step--1);
+  }
+  .weather-icon {
+    width: 80%;
+    height: auto;
+  }
 }
 
 @media screen and (max-width: 545px) {
-    .c-forecast .weather-icon {
-        width: 45%;
-        height: auto;
-    }
+  .c-forecast .weather-icon {
+    width: 45%;
+    height: auto;
+  }
 }
 
 // @media (prefers-color-scheme: dark) {

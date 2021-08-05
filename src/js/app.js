@@ -30,7 +30,11 @@ const weatherApp = function (_oSettings = {}) {
 
   // API urls
   const sIpapiLocationApi = 'https://ipapi.co/json/'
+<<<<<<< HEAD
   let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?'
+=======
+  let sWeatherApi = `https://weatherserv.bnjmnrsh.workers.dev/?`
+>>>>>>> css-regression
 
   if (_oSettings.dev === true) {
     sWeatherApi = `${sWeatherApi}&DEV=true`
@@ -97,6 +101,7 @@ const weatherApp = function (_oSettings = {}) {
   fInit()
 
   // Enable ThemeToggle
+<<<<<<< HEAD
   const themeToggle = new ThemeToggle({ debug: true })
   themeToggle.init()
 
@@ -105,6 +110,10 @@ const weatherApp = function (_oSettings = {}) {
   //   buttonID: '#theme-toggler-2'
   // })
   // themeToggle2.init()
+=======
+  const toggle = new ThemeToggle()
+  toggle.init()
+>>>>>>> css-regression
 }
 
 // with debugging and Imperial Units

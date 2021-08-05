@@ -3,29 +3,29 @@
 */
 
 .c-sun-rise-set {
-    --icon-fill-color: var(--grey-8);
+  --icon-fill-color: var(--grey-8);
 
-    .inline-icon {
-        background-color: var(--yellow-3);
-    }
+  .inline-icon {
+    background-color: var(--yellow-3);
+  }
 }
 .c-moonphase .inline-icon.moon {
-    background-color: var(--yellow-3);
+  background-color: var(--yellow-3);
 
-    // reminder: moon is loaded as img, so this isn't an option
-    // --icon-fill-color: var(--grey-8);
+  // reminder: moon is loaded as img, so this isn't an option
+  // --icon-fill-color: var(--grey-8);
 }
 
 @media screen and (max-width: 545px) {
-    .inline-icon.svg-wi-sunrise {
-        margin-bottom: 0;
-    }
-    .inline-icon.svg-wi-sunset {
-        margin-bottom: 0;
-    }
-    .inline-icon.moon {
-        margin-bottom: 0;
-    }
+  .inline-icon.svg-wi-sunrise {
+    margin-bottom: 0;
+  }
+  .inline-icon.svg-wi-sunset {
+    margin-bottom: 0;
+  }
+  .inline-icon.moon {
+    margin-bottom: 0;
+  }
 }
 
 // @media (prefers-color-scheme: dark) {

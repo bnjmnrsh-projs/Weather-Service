@@ -3,84 +3,125 @@
 */
 
 button.c-toggle {
-    background: none;
-    border: none;
-    .toggle {
-        pointer-events: none;
-    }
+  background: none;
+  border: none;
+  .toggle {
+    pointer-events: none;
+  }
 }
 button.c-toggle,
 label.c-toggle {
-    cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  .toggle {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    .toggle {
-        width: 50px;
-        height: 25px;
+    width: 50px;
+    height: 25px;
+    margin-left: 1em;
+    vertical-align: middle;
+    background-color: var(--grey-2);
+    border: 1px solid var(--grey-4);
+    border-radius: 1em;
+    cursor: pointer;
+    transition: transform 0.1s linear;
+
+    &::after {
+      position: absolute;
+      width: 21px;
+      height: 21px;
+      margin: 1px;
+      background-color: var(--theme-white);
+      border: 1px solid var(--theme-white);
+      border-radius: 1em;
+      box-shadow: 2px 5px 10px -2px rgba(0, 0, 0, 0.2);
+      transition: transform 0.1s linear;
+      content: '';
+      @media screen and (prefers-reduced-motion: reduce) {
+        position: absolute;
+        width: 21px;
+        height: 21px;
+        margin: 1px;
+        background-color: var(--theme-white);
+        border: 1px solid var(--theme-white);
         border-radius: 1em;
-        cursor: pointer;
-        background-color: var(--grey-2);
-        border: 1px solid var(--grey-4);
-        transition: all 0.1s linear;
-        display: flex;
-        flex-direction: row;
-        vertical-align: middle;
-        margin-left: 1em;
+        box-shadow: 2px 5px 10px -2px rgba(0, 0, 0, 0.2);
+        transition: none;
+        content: '';
+      }
+    }
+    @media screen and (prefers-reduced-motion: reduce) {
+      display: flex;
+      flex-direction: row;
+      width: 50px;
+      height: 25px;
+      margin-left: 1em;
+      vertical-align: middle;
+      background-color: var(--grey-2);
+      border: 1px solid var(--grey-4);
+      border-radius: 1em;
+      cursor: pointer;
+      transition: none;
 
-        &::after {
-            content: '';
-            position: absolute;
-            width: 21px;
-            height: 21px;
-            margin: 1px;
-            border-radius: 1em;
-            background-color: var(--theme-white);
-            border: 1px solid var(--theme-white);
-            box-shadow: 2px 5px 10px -2px rgba(0, 0, 0, 0.2);
-            transition: all 0.1s linear;
-        }
-    }
-    input[type='checkbox'] {
-        @extend %sr-only;
-    }
-    /* stylelint-disable */
-    &:focus,
-    input[type='checkbox']:focus {
-        box-shadow: none;
-        outline: 2px solid transparent;
-    }
-    &:focus > .toggle,
-    input[type='checkbox']:focus + .toggle {
-        box-shadow: 0 0 0 3px var(--blue-3), 0 0 0 2px var(--blue-2);
-        outline: none;
-    }
-    &:focus:not(:focus-visible) > .toggle,
-    input[type='checkbox']:focus:not(:focus-visible) + .toggle {
-        box-shadow: none;
-    }
-    &[aria-pressed] > .toggle,
-    input[type='checkbox']:checked + .toggle {
-        background-color: var(--green-2);
-        border-color: var(--green-2);
-    }
-
-    &[aria-pressed] > .toggle::after,
-    input[type='checkbox']:checked + .toggle::after {
-        transform: translateX(24px);
+      &::after {
+        position: absolute;
+        width: 21px;
+        height: 21px;
+        margin: 1px;
+        background-color: var(--theme-white);
+        border: 1px solid var(--theme-white);
+        border-radius: 1em;
+        box-shadow: 2px 5px 10px -2px rgba(0, 0, 0, 0.2);
         transition: transform 0.1s linear;
-        border-color: var(--theme-white);
+        content: '';
+      }
     }
-    &:disabled > .toggle,
-    input[type='checkbox']:disabled + .toggle {
-        pointer-events: none;
-        cursor: not-allowed;
-        opacity: 0.5;
+  }
+  /* stylelint-disable no-descending-specificity */
+  input[type='checkbox'] {
+    @extend %sr-only;
+  }
+  &[aria-pressed] > .toggle,
+  input[type='checkbox']:checked + .toggle {
+    background-color: var(--green-2);
+    border-color: var(--green-2);
+  }
+  &[aria-pressed] > .toggle::after,
+  input[type='checkbox']:checked + .toggle::after {
+    border-color: var(--theme-white);
+    transform: translateX(24px);
+    transition: transform 0.1s linear;
+    @media screen and (prefers-reduced-motion: reduce) {
+      border-color: var(--theme-white);
+      transform: translateX(24px);
+      transition: none;
     }
-    /* stylelint-enable */
+  }
+  &:disabled > .toggle,
+  input[type='checkbox']:disabled + .toggle {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  &:focus,
+  input[type='checkbox']:focus {
+    outline: 2px solid transparent;
+    box-shadow: none;
+  }
+  &:focus:not(:focus-visible) > .toggle,
+  input[type='checkbox']:focus:not(:focus-visible) + .toggle {
+    box-shadow: none;
+  }
+  &:focus > .toggle,
+  input[type='checkbox']:focus + .toggle {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--blue-3), 0 0 0 2px var(--blue-2);
+  }
 }
-
+/* stylelint-enable no-descending-specificity */
 // @media (prefers-color-scheme: dark) {
 //     :root:not([data-user-color-scheme='dark']) {}
 // }

@@ -2,20 +2,20 @@
 * Current feels-like component styles
 */
 .c-precipitation {
-    // Temp
-    --temp-0: var(--blue-2);
-    --temp-1: var(--cyan-2);
-    --temp-2: var(--green-2);
-    --temp-3: var(--yellow-2);
-    --temp-4: var(--orange-2);
-    --temp-5: var(--red-2);
+  // Temp
+  --temp-0: var(--blue-2);
+  --temp-1: var(--cyan-2);
+  --temp-2: var(--green-2);
+  --temp-3: var(--yellow-2);
+  --temp-4: var(--orange-2);
+  --temp-5: var(--red-2);
 
-    .inline-icon {
-        border: none;
-    }
-    svg {
-        --icon-fill-color: var(--cyan-4);
-    }
+  .inline-icon {
+    border: none;
+  }
+  svg {
+    --icon-fill-color: var(--cyan-4);
+  }
 }
 
 // @media (prefers-color-scheme: dark) {

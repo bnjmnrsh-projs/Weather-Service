@@ -3,33 +3,33 @@
 */
 
 .c-site-footer {
-    font-size: var(--step--1);
-    text-align: center;
-    background-color: var(--bg-vdk);
-    padding: 0.5rem 0;
-    color: var(--bg-lt);
-    width: 100vw;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  padding: 0.5rem 0;
+  color: var(--bg-lt);
+  font-size: var(--step--1);
+  text-align: center;
+  background-color: var(--bg-vdk);
 
-    .wrap {
-        margin: 1rem 0;
-    }
-    a {
-        color: currentColor;
+  .wrap {
+    margin: 1rem 0;
+  }
+  a {
+    color: currentColor;
 
-        &:hover,
-        &:focus {
-            text-decoration: underline;
-        }
+    &:hover,
+    &:focus {
+      text-decoration: underline;
     }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-    :root:not([data-user-color-scheme='light']) {
-        .c-site-footer {
-            background-color: var(--bg-dk);
-            color: var(--grey-3);
-        }
+  :root:not([data-user-color-scheme='light']) {
+    .c-site-footer {
+      color: var(--grey-3);
+      background-color: var(--bg-dk);
     }
+  }
 }

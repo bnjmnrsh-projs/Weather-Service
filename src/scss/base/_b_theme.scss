@@ -3,69 +3,51 @@
  */
 
 :root {
-    --color-mode: 'light';
-    --theme-white: var(--grey-0);
-    --theme-black: var(--grey-10);
+  --color-mode: 'light';
+  --theme-white: var(--grey-0);
+  --theme-black: var(--grey-10);
 
-    // Text
-    --text: var(--grey-9);
+  // Text
+  --text: var(--grey-9);
 
-    // Backgrounds
-    --bg-lt: var(--grey-1);
-    --bg: var(--grey-2);
-    --bg-md: var(--grey-3);
-    --bg-dk: var(--gray-6);
-    --bg-vdk: var(--grey-7);
-    --bg-lite: var(--text);
+  // Backgrounds
+  --bg-lt: var(--grey-1);
+  --bg: var(--grey-2);
+  --bg-md: var(--grey-3);
+  --bg-dk: var(--gray-6);
+  --bg-vdk: var(--grey-7);
+  --bg-lite: var(--text);
 
-    // Icons
-    --icon-bg: var(--grey-7);
-    --icon-accent: var(--grey-6);
+  // Icons
+  --icon-bg: var(--grey-7);
+  --icon-accent: var(--grey-6);
 
-    // Temp
-    --temp-0: var(--blue-2);
-    --temp-1: var(--cyan-2);
-    --temp-2: var(--green-2);
-    --temp-3: var(--yellow-2);
-    --temp-4: var(--orange-2);
-    --temp-5: var(--red-2);
+  // Temp
+  --temp-0: var(--blue-2);
+  --temp-1: var(--cyan-2);
+  --temp-2: var(--green-2);
+  --temp-3: var(--yellow-2);
+  --temp-4: var(--orange-2);
+  --temp-5: var(--red-2);
 
-    // UV
-    --uv-0: var(--blue-3);
-    --uv-1: var(--cyan-3);
-    --uv-2: var(--green-3);
-    --uv-3: var(--yellow-2);
-    --uv-4: var(--orange-2);
-    --uv-5: var(--red-2);
+  // UV
+  --uv-0: var(--blue-3);
+  --uv-1: var(--cyan-3);
+  --uv-2: var(--green-3);
+  --uv-3: var(--yellow-2);
+  --uv-4: var(--orange-2);
+  --uv-5: var(--red-2);
 
-    // Base background value
-    background-color: var(--bg-md);
+  // Base background value
+  background-color: var(--bg-md);
+
+  @media (prefers-color-scheme: dark) {
+    --color-mode: 'dark';
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --color-mode: 'dark';
-    }
-    :root:not([data-user-color-scheme]) {
-        --text: var(--theme-white);
-        --bg-lt: var(--grey-6);
-        --bg: var(--grey-7);
-        --bg-md: var(--grey-8);
-        --bg-dk: var(--grey-9);
-        --bg-vdk: var(--grey-9);
-        --icon-bg: var(--grey-8);
-        --icon-accent: var(--grey-4);
-
-        html {
-            color: var(--text);
-        }
-        svg {
-            fill: var(--text);
-        }
-    }
-}
-
-:root[data-user-color-scheme='dark'] {
+  :root:not([data-user-color-scheme]) {
     --text: var(--theme-white);
     --bg-lt: var(--grey-6);
     --bg: var(--grey-7);
@@ -76,9 +58,28 @@
     --icon-accent: var(--grey-4);
 
     html {
-        color: var(--text);
+      color: var(--text);
     }
     svg {
-        fill: var(--text);
+      fill: var(--text);
     }
+  }
+}
+
+:root[data-user-color-scheme='dark'] {
+  --text: var(--theme-white);
+  --bg-lt: var(--grey-6);
+  --bg: var(--grey-7);
+  --bg-md: var(--grey-8);
+  --bg-dk: var(--grey-9);
+  --bg-vdk: var(--grey-9);
+  --icon-bg: var(--grey-8);
+  --icon-accent: var(--grey-4);
+
+  html {
+    color: var(--text);
+  }
+  svg {
+    fill: var(--text);
+  }
 }

@@ -50,8 +50,13 @@ a:not([class]) {
 /* Make images easier to work with */
 img,
 picture {
+<<<<<<< HEAD
   display: block;
   max-width: 100%;
+=======
+    display: block;
+    max-width: 100%;
+>>>>>>> css-regression
 }
 
 /* Inherit fonts for inputs and buttons */
@@ -68,6 +73,7 @@ select {
     scroll-behavior: auto;
   }
 
+<<<<<<< HEAD
   *,
   *::before,
   *::after {
@@ -76,4 +82,14 @@ select {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
+=======
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+>>>>>>> css-regression
 }
