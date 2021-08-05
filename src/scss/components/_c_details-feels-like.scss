@@ -2,25 +2,25 @@
 * Current feels-like component styles
 */
 .c-feels-like {
-    // Gloabal data-temp styles stored in utilites/_u_data-scales
-    [data-temp='0'] {
-        --icon-fill-color: var(--theme-white);
-    }
-    [data-temp='1'] {
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-temp='2'] {
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-temp='3'] {
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-temp='4'] {
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-temp='5'] {
-        --icon-fill-color: var(--theme-white);
-    }
+  // Gloabal data-temp styles stored in utilites/_u_data-scales
+  [data-temp='0'] {
+    --icon-fill-color: var(--theme-white);
+  }
+  [data-temp='1'] {
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-temp='2'] {
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-temp='3'] {
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-temp='4'] {
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-temp='5'] {
+    --icon-fill-color: var(--theme-white);
+  }
 }
 
 // @media (prefers-color-scheme: dark) {

@@ -5,33 +5,42 @@
 // Used across the Loading screen, as well as HUD and Forecast components
 // Invert default icon fill color (black)
 .weather-icon {
-    filter: invert(95%) hue-rotate(180deg)
-        drop-shadow(2px 3px 1px var(--grey-7));
+  filter: invert(95%) hue-rotate(180deg) drop-shadow(2px 3px 1px var(--grey-7));
 }
 
 // Set the var for icon fill on details icons to white by default
 .c-details {
-    --icon-fill-color: var(--theme-white);
+  --icon-fill-color: var(--theme-white);
 }
 
 // Lone icon
 .inline-icon {
+  display: inline-block;
+  width: auto;
+  height: 1.8rem;
+  padding: 2px;
+  background-color: var(--icon-bg);
+  border: 1px solid var(--grey-3);
+  border-radius: 15px;
+  transition: transform 1s ease;
+  @media screen and (prefers-reduced-motion: reduce) {
     display: inline-block;
-    height: 1.8rem;
     width: auto;
+    height: 1.8rem;
     padding: 2px;
     background-color: var(--icon-bg);
     border: 1px solid var(--grey-3);
     border-radius: 15px;
-    transition: 1s all ease;
+    transition: none;
+  }
 }
 
 // Icon group
 span.inline-icon {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 // @media (prefers-color-scheme: dark) {

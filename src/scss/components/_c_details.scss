@@ -12,45 +12,43 @@
 @import './_c_details-sun-moon';
 
 .c-details {
-    @include code-font;
+  @include code-font;
 
-    .left-col {
-        max-width: 70%;
-        display: inline-block;
+  .left-col {
+    display: inline-block;
+    max-width: 70%;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0.15rem;
+
+    li {
+      display: flex;
+      flex: 1 0 auto;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 1.8rem;
+      margin: 0.2rem;
+      padding: 0.5rem 0.8rem;
+      text-align: left;
+      background-color: var(--bg-lt);
+      border-radius: 2px;
+      box-shadow: var(--bg-dk) 1px 1px 2px;
     }
+  }
+
+  @media screen and (max-width: 545px) {
+    max-height: 40vh;
+    overflow-x: scroll;
+    font-size: var(--step--1);
     ul {
-        display: flex;
-        flex-wrap: wrap;
-        margin: 0 0.15rem;
-
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
-            margin: 0.2rem;
-            padding: 0.5rem 0.8rem;
-            border-radius: 2px;
-            background-color: var(--bg-lt);
-            box-shadow: var(--bg-dk) 1px 1px 2px;
-            min-height: 1.8rem;
-            flex: 1 0 auto;
-        }
+      // display: block;
+      li {
+        padding: 0.4rem 0.8rem;
+      }
     }
-}
-
-@media screen and (max-width: 545px) {
-    .c-details {
-        font-size: var(--step--1);
-        max-height: 40vh;
-        overflow-x: scroll;
-        ul {
-            // display: block;
-            li {
-                padding: 0.4rem 0.8rem;
-            }
-        }
-    }
+  }
 }
 
 // @media (prefers-color-scheme: dark) {

@@ -2,37 +2,37 @@
 * Current feels-like component styles
 */
 .c-cloud-cover {
-    // UV
-    [data-cloud='0'] {
-        background-color: var(--blue-3) !important;
+  // UV
+  [data-cloud='0'] {
+    background-color: var(--blue-3) !important;
 
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-cloud='1'] {
-        background-color: var(--blue-4) !important;
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-cloud='1'] {
+    background-color: var(--blue-4) !important;
 
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-cloud='2'] {
-        background-color: var(--cyan-3) !important;
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-cloud='2'] {
+    background-color: var(--cyan-3) !important;
 
-        --icon-fill-color: var(--grey-8);
-    }
-    [data-cloud='3'] {
-        background-color: var(--grey-1) !important;
+    --icon-fill-color: var(--grey-8);
+  }
+  [data-cloud='3'] {
+    background-color: var(--grey-1) !important;
 
-        --icon-fill-color: var(--grey-9);
-    }
-    [data-cloud='4'] {
-        background-color: var(--grey-5) !important;
+    --icon-fill-color: var(--grey-9);
+  }
+  [data-cloud='4'] {
+    background-color: var(--grey-5) !important;
 
-        --icon-fill-color: var(--theme-white);
-    }
-    [data-cloud='5'] {
-        background-color: var(--grey-8) !important;
+    --icon-fill-color: var(--theme-white);
+  }
+  [data-cloud='5'] {
+    background-color: var(--grey-8) !important;
 
-        --icon-fill-color: var(--theme-white);
-    }
+    --icon-fill-color: var(--theme-white);
+  }
 }
 
 // @media (prefers-color-scheme: dark) {
