@@ -12,59 +12,6 @@
 
   .visibility-wrap {
     display: flex;
-<<<<<<< HEAD
-    flex: 1 1 100%;
-    flex-direction: column;
-    justify-content: space-between;
-
-    .visibility-wrap {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-        margin: 0.3rem 0 0.5rem 0;
-
-        * {
-            align-self: center;
-        }
-        .inline-icon {
-            margin-top: -0.3em;
-            border: none;
-        }
-
-        .scale {
-            position: relative;
-            width: calc(100% + 1.6rem);
-            height: 1rem;
-            margin: 0 -0.5rem -0.5rem -0.5rem;
-            overflow: hidden;
-            font-size: 0.6em;
-            background-color: var(--scale-bg);
-            background-image: url(../svg/graph.svg);
-            background-position: left -1px bottom -1px;
-            border-top: 1px solid var(--bg-md);
-            border-bottom-right-radius: 2px;
-            border-bottom-left-radius: 2px;
-            transition: all 0.5s ease;
-            // margin-bottom: -0.9em;
-        }
-    }
-
-    .visibility-wrap .scale::before,
-    .scale::after {
-        position: absolute;
-        top: 0.1rem;
-        z-index: 1;
-        box-sizing: content-box !important;
-        color: var(--theme-black);
-    }
-
-    .scale .scale::after {
-        right: 1rem;
-        content: '| 5km/3.11mi';
-    }
-    .scale .distance {
-=======
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
@@ -142,7 +89,6 @@
       animation: distance-loading 2s ease forwards;
       will-change: transform;
       @media screen and (prefers-reduced-motion: reduce) {
->>>>>>> css-regression
         position: absolute;
         z-index: 0;
         width: calc(100% - (10px + -0.6rem));
@@ -156,14 +102,9 @@
         );
         background-repeat: no-repeat;
         border-right: 80px solid var(--theme-white);
-<<<<<<< HEAD
-        animation: distance-loading 2s ease forwards;
-        will-change: transform;
-=======
         animation: none;
         will-change: transform;
       }
->>>>>>> css-regression
     }
   }
 }

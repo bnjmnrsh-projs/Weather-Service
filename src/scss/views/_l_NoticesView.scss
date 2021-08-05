@@ -2,32 +2,18 @@
 * Screens component, including errors
 */
 
-<<<<<<< HEAD
-#app .screen {
-=======
 .c-screen {
->>>>>>> css-regression
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0.2rem 0.3rem;
   padding: 2rem;
-<<<<<<< HEAD
-
-  /* Adds a hyphen where the word breaks, if supported (No Blink) */
-  text-align: left;
-  word-wrap: break-word;
-  -ms-word-break: break-all; /* This is the dangerous one in WebKit, as it breaks things wherever */
-  word-break: break-all;
-  word-break: break-word;
-=======
   text-align: left;
   word-wrap: break-word;
   -ms-word-break: break-all;
   word-break: break-word;
   word-break: break-all;
->>>>>>> css-regression
   overflow-wrap: break-word;
   -ms-hyphens: auto;
   -moz-hyphens: auto;
@@ -56,11 +42,7 @@
 }
 
 @media screen and (max-width: 545px) {
-<<<<<<< HEAD
-  #app.errors-screen {
-=======
   .errors-screen {
->>>>>>> css-regression
     padding: 1.5rem;
   }
 }

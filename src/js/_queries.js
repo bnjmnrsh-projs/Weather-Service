@@ -6,11 +6,7 @@ import { fClean } from './_helpers'
  * @returns {object} coordiantes object
  */
 export const fIPapi = async function (sIpapiLocationApi) {
-<<<<<<< HEAD
-  const pResp = await window.fetch(sIpapiLocationApi).then(function (pResp) {
-=======
   const pResp = await fetch(sIpapiLocationApi).then(function (pResp) {
->>>>>>> css-regression
     if (pResp.ok) {
       return pResp.json()
     } else {
@@ -29,7 +25,6 @@ export const fIPapi = async function (sIpapiLocationApi) {
  */
 export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
   if (!oLoc) return
-<<<<<<< HEAD
 
   let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`
 
@@ -38,16 +33,6 @@ export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
     let sState
     let sCountry = ''
 
-=======
-
-  let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`
-
-  if (!oLoc.latitude || !oLoc.longitude) {
-    let sCity
-    let sState
-    let sCountry = ''
-
->>>>>>> css-regression
     if ('city' in oLoc && oLoc.city) {
       sCity = `&city=${oLoc.city}`
     }
@@ -113,21 +98,12 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
       try {
         if (_oSettings.debug) {
           console.warn('Falling back to IP address lookup instead.')
-<<<<<<< HEAD
         }
         return await fIPapi(sIpapiLocationApi)
       } catch (e) {
         if (_oSettings.debug) {
           console.warn('fGetLocation: failed sIpapiLocationApi: ', e)
         }
-=======
-        }
-        return await fIPapi(sIpapiLocationApi)
-      } catch (e) {
-        if (_oSettings.debug) {
-          console.warn('fGetLocation: failed sIpapiLocationApi: ', e)
-        }
->>>>>>> css-regression
       }
     }
   }
@@ -140,17 +116,6 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
  * @returns {object} weather object
  */
 export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
-<<<<<<< HEAD
-  const pResp = await window
-    .fetch(fAssembledQuery(sWeatherApi, oLoc, _oSettings))
-    .then(function (pResp) {
-      if (pResp.ok) {
-        return pResp.json()
-      } else {
-        return Promise.reject(pResp)
-      }
-    })
-=======
   const pResp = await fetch(
     fAssembledQuery(sWeatherApi, oLoc, _oSettings)
   ).then(function (pResp) {
@@ -160,6 +125,5 @@ export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
       return Promise.reject(pResp)
     }
   })
->>>>>>> css-regression
   return await pResp
 }
