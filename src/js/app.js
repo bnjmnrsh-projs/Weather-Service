@@ -97,7 +97,7 @@ const weatherApp = function (_oSettings = {}) {
   fInit()
 
   // Enable ThemeToggle
-  const themeToggle = new ThemeToggle({ debug: true })
+  const themeToggle = new ThemeToggle({ debug: _oSettings.debug })
   themeToggle.init()
 
   // const themeToggle2 = new ThemeToggle({
@@ -110,7 +110,7 @@ const weatherApp = function (_oSettings = {}) {
 // with debugging and Imperial Units
 const settings = {
   units: 'I',
-  debug: true,
+  debug: 'DUMMY', // DUMMY, OVER_QUOTA, 5XX_FULL, 5XX_PARTIAL, NO_KEY
   dev: false
 }
 
