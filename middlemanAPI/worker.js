@@ -219,27 +219,7 @@ const fHandleRequest = async function (event) {
       aResponses.map((resp) => fGatherResponse(resp))
     )
 
-    /**
-     * Collate results into new object
-     *
-     * return {object}
-     */
-    const fCollated = function () {
-      const oColated = {}
-      aResults.forEach(function (el, i) {
-        try {
-          JSON.parse(el)
-        } catch (oError) {
-          console.error('fCollated error', oError)
-          return (oColated[aToFetch[i][0]] = {
-            error: `Error collating: ${oError}`
-          })
-        }
-        oColated[aToFetch[i][0]] = JSON.parse(el)
-      })
-      return oColated
-    }
-    return new Response(JSON.stringify(fCollated()), oInit)
+    return new Response(JSON.stringify(fCollated(aResults)), oInit)
   }
 }
 
