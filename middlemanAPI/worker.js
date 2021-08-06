@@ -200,7 +200,11 @@ const fHandleRequest = async function (event) {
     // Fetch from all the APIs
     const aResponses = await Promise.all(
       aToFetch.map(function (aURL, i) {
-        return fetch(aURL[1] + searchParams.toString(), oInit)
+        return fFetchWithRetry(
+          aURL[1] + searchParams.toString(),
+          oInit,
+          nFetchRetry
+        )
           .then((oResponse) => {
             return oResponse
           })
