@@ -9,7 +9,7 @@
  * ex: https://YOURWORKER.YOURACCOUNT.workers.dev/?lat=28.385233&lon=-81.563873
  * Environmental variable: WB_KEY (weatherbit.io api key)
  *
- * KV Store WEATHERSERV_DUMMYRESPONSE as DUMMYRESPONSE.{5XX_FULL, 5XX_PARTIAL, DUMMY, NO_KEY, OVER_QUOTA}
+ * KV Store WEATHERSERV_DUMMYRESPONSE as DUMMYRESPONSE.{5XX_FULL, 5XX_PARTIAL, DUMMY, NO_KEY, OVER_QUOTA, API_ERROR}
  *
  */
 
@@ -51,15 +51,16 @@ const bCacheEverything = true
 // Allowed origins whitelist
 const aAllowed = ['https://bnjmnrsh-projs.github.io']
 
-/*
- * A named array of endpoints to fetch
- */
+// Number of times to retry fetch on failure
+const nFetchRetry = 3
+
+// A named array of endpoints to fetch
 // prettier-ignore
 const aToFetch = [
-        [
-            'USEAGE',
-            `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`,
-        ],
+        // [
+        //     'USEAGE',
+        //     `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`,
+        // ],
         [
             'CURRENT',
             `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
@@ -102,26 +103,73 @@ async function fGatherResponse(response) {
   } else {
     return JSON.stringify(
       {
-        status_code: `${code}`,
-        status_message: `${text}: URL: ${URL}`
+        error: `HTTP status: ${code} ${text}: URL: ${URL}`,
+        error_code: `${code}`
       },
       oInit
     )
   }
 }
 
-async function dummyResponse(devFlag) {
+/**
+ * Substitute request response with pre-made responses for development & debugging.
+ * Uses Workers KV Global DUMMYRESPONSE
+ *
+ * @param {string} devFlag
+ * @returns stringified JSON
+ */
+const fDummyResponse = async function (devFlag) {
   const value = await DUMMYRESPONSE.get(`${devFlag}`)
   return value
 }
 
 /**
- * Fetch json from Weatherbit APIs
+ * Fetch with retry n times on failure
+ *
+ * https://dev.to/ycmjason/javascript-fetch-retry-upon-failure-3p6g
+ *
+ * @param {string} url
+ * @param {obj} options
+ * @param {int} n
+ * @returns Promise
+ */
+const fFetchWithRetry = async function (url, options, n) {
+  try {
+    return await fetch(url, options)
+  } catch (err) {
+    if (n === 1) throw err // pass error out to colated object
+    return await fFetchWithRetry(url, options, n - 1)
+  }
+}
+
+/**
+ * Collate results objects into a new stringified Response
+ * @param {*} obj
+ * @returns {object}
+ */
+const fCollated = function (obj) {
+  const oColated = {}
+  obj.forEach(function (el, i) {
+    try {
+      JSON.parse(el)
+    } catch (oError) {
+      console.error('fCollated error', oError)
+      return (oColated[aToFetch[i][0]] = {
+        error: `Error collating: ${oError}`
+      })
+    }
+    oColated[aToFetch[i][0]] = JSON.parse(el)
+  })
+  return oColated
+}
+
+/**
+ * Fetch JSON from APIs
  *
  * @param {object} request
  * @returns {JSON string}
  */
-async function fHandleRequest(event) {
+const fHandleRequest = async function (event) {
   const oRequest = event.request
 
   // If origin domain is not whitelisted, return 403
@@ -169,7 +217,7 @@ async function fHandleRequest(event) {
       })
     )
 
-    // Gather responses into a results array
+    // Gather responses into an array
     const aResults = await Promise.all(
       aResponses.map((resp) => fGatherResponse(resp))
     )
