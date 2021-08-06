@@ -32,18 +32,18 @@
       })
  */
 
+//
+// VARRIABLES
+//
+
 // Debugging: set to true to disable origin whitelist checks
 const bDBG = true
 
-/*
- * Caching settings:
- *
- * nTTL (Time To Live) the length of time for Cloudflare to perserve a cached value (Time To Live)
- * nBrowserExpiry sets browser expirey headers
- *
- * https://developers.cloudflare.com/workers/learning/how-the-cache-works
- */
-
+// Caching settings:
+// nTTL (Time To Live) the length of time for Cloudflare to perserve a cached value (Time To Live)
+// nBrowserExpiry sets browser expirey headers
+//
+// https://developers.cloudflare.com/workers/learning/how-the-cache-works
 const nTTL = 1800 // (seconds), 30 min
 const nCacheCont = new Date(new Date().getTime() + 25 * 60000) // 25 min
 const bCacheEverything = true
@@ -83,6 +83,10 @@ const oInit = {
   },
   cf: { cacheTtl: `${nTTL}`, cacheEverything: `${bCacheEverything}` }
 }
+
+//
+// METHODS
+//
 
 /**
  * Gather returning response from Weatherbit API fetch request
@@ -187,19 +191,8 @@ const fHandleRequest = async function (event) {
   // const oHeaders = new Headers(oInit.headers)
   const { searchParams } = new URL(oRequest.url)
 
-  // Capture and process any custom flags
-  // const foo = searchParams.get('foo')
-  // if (foo){
-  //     console.log(foo)
-  // }
-
-  /**
-   * We've stored a dummy response in Workers KV
-   * When developing and testing, we can use these responses so we dont tap out our quota
-   *
-   */
+  // We've stored dummy responses in Workers KV for developing and testing
   const devFlag = searchParams.get('DEV')
-  console.log('devFlag:', `DUMMY.${devFlag}`)
   if (devFlag) {
     // Break out early
     return new Response(await dummyResponse(devFlag), oInit) // returns promise
