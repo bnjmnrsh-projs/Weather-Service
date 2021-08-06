@@ -94,7 +94,7 @@ const oInit = {
  * @param {Response object} response
  * @returns {JSON string}
  */
-async function fGatherResponse(response) {
+const fGatherResponse = async function (response) {
   const { headers } = response
   const sContentType = headers.get('content-type') || ''
   const code = await response.status
@@ -195,7 +195,7 @@ const fHandleRequest = async function (event) {
   const devFlag = searchParams.get('DEV')
   if (devFlag) {
     // Break out early
-    return new Response(await dummyResponse(devFlag), oInit) // returns promise
+    return new Response(await fDummyResponse(devFlag), oInit) // returns Promise
   } else {
     // Fetch from all the APIs
     const aResponses = await Promise.all(
