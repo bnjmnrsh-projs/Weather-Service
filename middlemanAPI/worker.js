@@ -94,17 +94,14 @@ const oInit = {
  * @param {Response object} response
  * @returns {JSON string}
  */
-const fGatherResponse = async function (response) {
-  const { headers } = response
-  const sContentType = headers.get('content-type') || ''
-  const code = await response.status
-  const text = await response.statusText
-  const URL = await response.url.split('?')[0]
+const fStringifyAPIresponse = async function (response) {
+  if (!response.ok) {
+    const { headers } = response
+    const sContentType = headers.get('content-type') || ''
+    const code = response.status
+    const text = response.statusText
+    const URL = response.url.split('?')[0]
 
-  // We're checking for JSON header as our api will return usefull details for , 2**, 4**
-  if (sContentType.includes('application/json')) {
-    return JSON.stringify(await response.json())
-  } else {
     return JSON.stringify(
       {
         error: `HTTP status: ${code} ${text}: URL: ${URL}`,
@@ -216,7 +213,7 @@ const fHandleRequest = async function (event) {
 
     // Gather responses into an array
     const aResults = await Promise.all(
-      aResponses.map((resp) => fGatherResponse(resp))
+      aResponses.map((resp) => fStringifyAPIresponse(resp))
     )
 
     return new Response(JSON.stringify(fCollated(aResults)), oInit)
