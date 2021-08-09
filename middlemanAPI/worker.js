@@ -89,30 +89,6 @@ const oInit = {
 //
 
 /**
- * Gather returning response from Weatherbit API fetch request
- *
- * @param {Response object} response
- * @returns {JSON string}
- */
-const fStringifyAPIresponse = async function (response) {
-  if (!response.ok) {
-    const { headers } = response
-    const sContentType = headers.get('content-type') || ''
-    const code = response.status
-    const text = response.statusText
-    const URL = response.url.split('?')[0]
-
-    return JSON.stringify(
-      {
-        error: `HTTP status: ${code} ${text}: URL: ${URL}`,
-        error_code: `${code}`
-      },
-      oInit
-    )
-  }
-}
-
-/**
  * Substitute request response with pre-made responses for development & debugging.
  * Uses Workers KV Global DUMMYRESPONSE
  *
@@ -122,6 +98,81 @@ const fStringifyAPIresponse = async function (response) {
 const fDummyResponse = async function (devFlag) {
   const value = await DUMMYRESPONSE.get(`${devFlag}`)
   return value
+}
+
+/**
+ * Parses the JSON returned by a network request
+ *
+ * @param  {object}         A a network request response
+ *
+ * @return {object}         The parsed JSON, status from the response
+ */
+
+/* eslint prefer-promise-reject-errors: "off"
+  ----
+  We want the error text to pass through at part of the JSON response to handel downstream within app */
+const fParseJSONresponse = async function (response) {
+  //   console.log('fParseJSONresponse', response)
+  return new Promise((resolve, reject) => {
+    try {
+      if (response.ok) {
+        response
+          .json()
+          .then((json) => {
+            return resolve({
+              status: response.status,
+              ok: response.ok,
+              json
+            })
+          })
+          .catch((error) => {
+            console.error('catch error 2 ', error)
+            console.error('catch error 1 resp', response)
+            return reject({ 'fParseJSONresponse error': error })
+          })
+      } else {
+        return reject({
+          error: response.status,
+          error_text: `${response.statusText} ${response.ur}`
+        })
+      }
+    } catch (error) {
+      console.error('catch error 3 ', error)
+      return reject({ 'fParseJSONresponse catch error': error })
+    }
+  })
+}
+
+// eslint prefer-promise-reject-errors: "error"
+/**
+ * Fetch replacement with better error handeling.
+ *
+ * @param {*} url
+ * @param {*} options
+ * @returns Promise
+ */
+const fRequest = async function (url, options) {
+  return new Promise((resolve, reject) => {
+    fetch(url, options)
+      .then(fParseJSONresponse)
+      .then((response) => {
+        if (response.ok) {
+          console.log('fRequest', 'ok')
+          return resolve(response.json)
+        }
+        // extract the error from the server's json
+        console.error('fRequest', 'JSON not ok')
+        console.error(
+          'fRequest response.json.meta.error',
+          response.json.meta.error
+        )
+        return reject(response.json.meta.error)
+      })
+      .catch((error) => {
+        console.error('fRequest catch', { ...error })
+        return reject({ ...error })
+      })
+  })
 }
 
 /**
@@ -136,9 +187,9 @@ const fDummyResponse = async function (devFlag) {
  */
 const fFetchWithRetry = async function (url, options, n) {
   try {
-    return await fetch(url, options)
+    return await fRequest(url, options)
   } catch (err) {
-    if (n === 1) throw err // pass error out to colated object
+    if (n >= 1) throw err // pass error out to colated object
     return await fFetchWithRetry(url, options, n - 1)
   }
 }
@@ -173,7 +224,7 @@ const fCollated = function (obj) {
 const fHandleRequest = async function (event) {
   const oRequest = event.request
 
-  // If origin domain is not whitelisted, return 403
+  // If we're not debugging, and origin domain is not whitelisted, return 403
   if (bDBG === false) {
     if (!aAllowed.includes(oRequest.headers.get('origin'))) {
       console.log(oRequest.headers.get('origin'))
@@ -206,14 +257,17 @@ const fHandleRequest = async function (event) {
             return oResponse
           })
           .catch(function (oError) {
-            console.error('aResponses error', oError)
+            console.error('aResponses error', { ...oError })
+            return { ...oError }
           })
       })
     )
 
     // Gather responses into an array
     const aResults = await Promise.all(
-      aResponses.map((resp) => fStringifyAPIresponse(resp))
+      //   aResponses.map((resp) => fStringifyAPIresponse(resp))
+
+      aResponses.map((resp) => JSON.stringify(resp))
     )
 
     return new Response(JSON.stringify(fCollated(aResults)), oInit)
