@@ -91,18 +91,6 @@ const oInit = {
 //
 
 /**
- * Substitute request response with pre-made responses for development & debugging.
- * Uses Workers KV Global DUMMYRESPONSE
- *
- * @param {string} devFlag
- * @returns stringified JSON
- */
-const fDummyResponse = async function (devFlag) {
-  const value = await DUMMYRESPONSE.get(`${devFlag}`)
-  return value
-}
-
-/**
  * Parses the JSON returned by a network request.
  * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
@@ -263,7 +251,11 @@ const fHandleRequest = async function (oEvent) {
             return { ...oError }
           })
       })
+    return new Response(
+      await DUMMYRESPONSE.get(`${searchParams.get('DEV')}`),
+      oInit
     )
+  }
 
     // Make sure we have lat & lang values
     const sLat = searchParams.get('lat')
