@@ -40,10 +40,9 @@
 const bDBG = true
 
 // Caching settings:
-// nTTL (Time To Live) the length of time for Cloudflare to perserve a cached value (Time To Live)
-// nBrowserExpiry sets browser expirey headers
-//
 // https://developers.cloudflare.com/workers/learning/how-the-cache-works
+
+// nTTL (Time To Live) the length of time for Cloudflare to perserve a cached value (Time To Live)
 const nTTL = 1800 // (seconds), 30 min
 const nCacheCont = new Date(new Date().getTime() + 25 * 60000) // 25 min
 const bCacheEverything = true
@@ -55,8 +54,7 @@ const aAllowed = ['https://bnjmnrsh-projs.github.io']
 const nFetchRetry = 3
 
 // A named array of endpoints to fetch
-
-// prettier-ignore
+// Usefull for testing: https://httpstat.us/
 const aToFetch = [
   // [
   //     'USEAGE',
@@ -75,6 +73,7 @@ const aToFetch = [
 ]
 
 // Response headers
+// cf: https://developers.cloudflare.com/workers/runtime-apis/request#requestinitcfproperties
 const oInit = {
   headers: {
     'Access-Control-Allow-Origin': '*',
@@ -146,8 +145,8 @@ const fParseJSONresponse = async function (oResponse) {
  * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
  *
- * @param {*} sUrl
- * @param {*} oOptions
+ * @param {string} sUrl
+ * @param {object} oOptions
  * @returns Promise
  */
 
@@ -222,7 +221,7 @@ const fCollated = function (obj) {
  * Fetch JSON from APIs
  *
  * @param {object} oEvent
- * @returns {JSON string}
+ * @returns {string} stringified JSON
  */
 const fHandleRequest = async function (oEvent) {
   const oRequest = oEvent.request
