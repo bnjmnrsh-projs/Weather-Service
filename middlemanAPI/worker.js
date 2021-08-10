@@ -178,17 +178,20 @@ const fRequest = async function (url, options) {
  *
  * https://dev.to/ycmjason/javascript-fetch-retry-upon-failure-3p6g
  *
- * @param {string} url
- * @param {obj} options
+ * @param {string} sUrl
+ * @param {obj} oOptions
  * @param {int} n
  * @returns Promise
  */
-const fFetchWithRetry = async function (url, options, n) {
+const fFetchWithRetry = async function (sUrl, oOptions, n) {
   try {
-    return await fRequest(url, options)
-  } catch (err) {
-    if (n >= 1) throw err // pass error out to colated object
-    return await fFetchWithRetry(url, options, n - 1)
+    return await fRequest(sUrl, oOptions)
+  } catch (oError) {
+    console.log('error', oError)
+    if (oError.status) throw oError // recieved a reply from server, pass it on
+    if (n <= 1) throw oError // out of trys
+    console.warn(`fFetchWithRetry: Retrying fetch request: ${n}`)
+    return await fFetchWithRetry(sUrl, oOptions, n - 1)
   }
 }
 
