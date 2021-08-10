@@ -1,4 +1,4 @@
-/* global DUMMYRESPONSE Response addEventListener */
+/* global DUMMYRESPONSE Response addEventListener fetch */
 
 /**
  * Cloudflare Worker middleman API
@@ -160,12 +160,11 @@ const fRequest = async function (url, options) {
           return resolve(response.json)
         }
         // extract the error from the server's json
-        console.error('fRequest', 'JSON not ok')
-        console.error(
-          'fRequest response.json.meta.error',
-          response.json.meta.error
-        )
-        return reject(response.json.meta.error)
+        console.error('fRequest not ok')
+        return reject({
+          status: response.status,
+          status_message: response.json.error
+        })
       })
       .catch((error) => {
         console.error('fRequest catch', { ...error })
