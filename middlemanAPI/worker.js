@@ -55,21 +55,24 @@ const aAllowed = ['https://bnjmnrsh-projs.github.io']
 const nFetchRetry = 3
 
 // A named array of endpoints to fetch
+
 // prettier-ignore
 const aToFetch = [
-        // [
-        //     'USEAGE',
-        //     `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`,
-        // ],
-        [
-            'CURRENT',
-            `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
-        ],
-        [
-            'DAILY',
-            `https://api.weatherbit.io/v2.0/forecast/daily?key=${WB_KEY}&days=16&`,
-        ],
-    ]
+  // [
+  //     'USEAGE',
+  //     `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`,
+  // ],
+  [
+    'CURRENT',
+    `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
+    // 'http://httpstat.us/426'
+  ],
+  [
+    'DAILY',
+    `https://api.weatherbit.io/v2.0/forecast/daily?key=${WB_KEY}&days=16&`
+    // 'http://httpstat.us/524'
+  ]
+]
 
 // Response headers
 const oInit = {
@@ -101,7 +104,8 @@ const fDummyResponse = async function (devFlag) {
 }
 
 /**
- * Parses the JSON returned by a network request
+ * Parses the JSON returned by a network request.
+ * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
  * @param  {object}         A a network request response
  *
@@ -110,7 +114,8 @@ const fDummyResponse = async function (devFlag) {
 
 /* eslint prefer-promise-reject-errors: "off"
   ----
-  We want the error text to pass through at part of the JSON response to handel downstream within app */
+  We want to return error object with our API response rather then thowing a new Error.
+*/
 const fParseJSONresponse = async function (response) {
   //   console.log('fParseJSONresponse', response)
   return new Promise((resolve, reject) => {
@@ -143,14 +148,17 @@ const fParseJSONresponse = async function (response) {
   })
 }
 
-// eslint prefer-promise-reject-errors: "error"
 /**
  * Fetch replacement with better error handeling.
+ * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
+ *
  *
  * @param {*} url
  * @param {*} options
  * @returns Promise
  */
+
+/* eslint prefer-promise-reject-errors: "off" */
 const fRequest = async function (url, options) {
   return new Promise((resolve, reject) => {
     fetch(url, options)
