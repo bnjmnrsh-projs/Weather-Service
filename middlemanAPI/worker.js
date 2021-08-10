@@ -264,6 +264,17 @@ const fHandleRequest = async function (event) {
       })
     )
 
+    // Make sure we have lat & lang values
+    const sLat = searchParams.get('lat')
+    const sLon = searchParams.get('lon')
+    if (!sLat || !sLon) {
+      // Break out early
+      return new Response('Invalid Parameters supplied.', {
+        status: 400,
+        status_message: 'Invalid Parameters supplied.'
+      })
+    }
+
     // Gather responses into an array
     const aResults = await Promise.all(
       //   aResponses.map((resp) => fStringifyAPIresponse(resp))
