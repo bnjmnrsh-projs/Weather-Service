@@ -1,4 +1,4 @@
-/* global DUMMYRESPONSE */
+/* global DUMMYRESPONSE Response addEventListener */
 
 /**
  * Cloudflare Worker middleman API
