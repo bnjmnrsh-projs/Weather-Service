@@ -1,5 +1,5 @@
 /**
- * Theme Toggle
+ * Darkmode Theme Toggle
  *
  * @author bnjmnrsh@gmail.com
  */

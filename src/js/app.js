@@ -5,7 +5,7 @@ import { fRenderHUD } from './components/_hud'
 import { fRenderForecast } from './components/_forecast'
 import { fRenderDetails } from './components/_details'
 import { fRenderErrors } from './components/_errors'
-import { ThemeToggle } from './_darkmode-toggle'
+import { ThemeToggle } from './_ThemeToggle'
 
 /**
  * The Weather Service
@@ -30,7 +30,7 @@ const weatherApp = function (_oSettings = {}) {
 
   // API urls
   const sIpapiLocationApi = 'https://ipapi.co/json/'
-  let sWeatherApi = `https://weatherserv.bnjmnrsh.workers.dev/?`
+  let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?'
 
   if (_oSettings.dev === true) {
     sWeatherApi = `${sWeatherApi}&DEV=true`
