@@ -119,32 +119,23 @@ const fDummyResponse = async function (devFlag) {
 const fParseJSONresponse = async function (response) {
   //   console.log('fParseJSONresponse', response)
   return new Promise((resolve, reject) => {
-    try {
-      if (response.ok) {
-        response
-          .json()
-          .then((json) => {
-            return resolve({
-              status: response.status,
-              ok: response.ok,
-              json
-            })
-          })
-          .catch((error) => {
-            console.error('catch error 2 ', error)
-            console.error('catch error 1 resp', response)
-            return reject({ 'fParseJSONresponse error': error })
-          })
-      } else {
+    response
+      .json()
+      .then((json) => {
+        return resolve({
+          status: response.status,
+          ok: response.ok,
+          json
+        })
+      })
+      .catch((error) => {
+        console.error('fParseJSONresponse catch 1 error', error)
+        console.error('fParseJSONresponse catch 1 resp', response)
         return reject({
           error: response.status,
           error_text: `${response.statusText} ${response.ur}`
         })
-      }
-    } catch (error) {
-      console.error('catch error 3 ', error)
-      return reject({ 'fParseJSONresponse catch error': error })
-    }
+      })
   })
 }
 
