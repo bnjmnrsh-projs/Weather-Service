@@ -1043,7 +1043,7 @@
   };
 
   /**
-   * Theme Toggle
+   * Darkmode Theme Toggle
    *
    * @author bnjmnrsh@gmail.com
    */
@@ -1376,7 +1376,7 @@
 
     // API urls
     const sIpapiLocationApi = 'https://ipapi.co/json/';
-    let sWeatherApi = `https://weatherserv.bnjmnrsh.workers.dev/?`;
+    let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?';
 
     if (_oSettings.dev === true) {
       sWeatherApi = `${sWeatherApi}&DEV=true`;
@@ -1443,7 +1443,7 @@
     fInit();
 
     // Enable ThemeToggle
-    const themeToggle = new ThemeToggle({ debug: true });
+    const themeToggle = new ThemeToggle({ debug: _oSettings.debug });
     themeToggle.init();
 
     // const themeToggle2 = new ThemeToggle({
@@ -1456,7 +1456,7 @@
   // with debugging and Imperial Units
   const settings = {
     units: 'I',
-    debug: true,
+    debug: 'DUMMY', // DUMMY, OVER_QUOTA, 5XX_FULL, 5XX_PARTIAL, NO_KEY
     dev: false
   };
 
