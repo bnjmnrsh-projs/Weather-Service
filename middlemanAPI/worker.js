@@ -213,70 +213,60 @@ const fCollated = function (obj) {
  */
 const fHandleRequest = async function (oEvent) {
   const oRequest = oEvent.request
-
-  // If we're not debugging, and origin domain is not whitelisted, return 403
-  if (bDBG === false) {
-    if (!aAllowed.includes(oRequest.headers.get('origin'))) {
-      console.log(oRequest.headers.get('origin'))
-
-      return new Response('Requests are not allowed from this domain.', {
-        status: 403.503,
-        status_message: 'Not a whitelisted domain.'
-      })
-    }
-  }
-
-  // const oHeaders = new Headers(oInit.headers)
   const { searchParams } = new URL(oRequest.url)
 
-  // We've stored dummy responses in Workers KV for developing and testing
-  const devFlag = searchParams.get('DEV')
-  if (devFlag) {
+  // If we're not debugging, and origin domain is not whitelisted, return 403
+  if (bDBG === false && !aAllowed.includes(oRequest.headers.get('origin'))) {
+    console.log(oRequest.headers.get('origin'))
     // Break out early
-    return new Response(await fDummyResponse(devFlag), oInit) // returns Promise
-  } else {
-    // Fetch from all the APIs
-    const aResponses = await Promise.all(
-      aToFetch.map(function (aURL, i) {
-        return fFetchWithRetry(
-          aURL[1] + searchParams.toString(),
-          oInit,
-          nFetchRetry
-        )
-          .then((oResponse) => {
-            return oResponse
-          })
-          .catch(function (oError) {
-            console.error('aResponses error', { ...oError })
-            return { ...oError }
-          })
-      })
+    return new Response('Requests are not allowed from this domain.', {
+      status: 403.503,
+      status_message: 'Not a whitelisted domain.'
+    })
+  }
+
+  // Are we asking for dummy responses?
+  if (searchParams.get('DEV')) {
+    // Break out early
     return new Response(
       await DUMMYRESPONSE.get(`${searchParams.get('DEV')}`),
       oInit
     )
   }
 
-    // Make sure we have lat & lang values
-    const sLat = searchParams.get('lat')
-    const sLon = searchParams.get('lon')
-    if (!sLat || !sLon) {
-      // Break out early
-      return new Response('Invalid Parameters supplied.', {
-        status: 400,
-        status_message: 'Invalid Parameters supplied.'
-      })
-    }
-
-    // Gather responses into an array
-    const aResults = await Promise.all(
-      //   aResponses.map((resp) => fStringifyAPIresponse(resp))
-
-      aResponses.map((resp) => JSON.stringify(resp))
-    )
-
-    return new Response(JSON.stringify(fCollated(aResults)), oInit)
+  // Make sure we have lat & lang values
+  if (!searchParams.get('lat') || !searchParams.get('lon')) {
+    // Break out early
+    return new Response('Invalid parameters supplied.', {
+      status: 400,
+      status_message: 'Invalid prameters supplied.'
+    })
   }
+
+  // Fetch from all the APIs
+  const aResponses = await Promise.all(
+    aToFetch.map(function (aURL, i) {
+      return fFetchWithRetry(
+        aURL[1] + searchParams.toString(),
+        oInit,
+        nFetchRetry
+      )
+        .then((oResponse) => {
+          return oResponse
+        })
+        .catch(function (oError) {
+          console.error('aResponses error', { ...oError })
+          return { ...oError }
+        })
+    })
+  )
+
+  // Gather responses into an array
+  const aResults = await Promise.all(
+    aResponses.map((resp) => JSON.stringify(resp))
+  )
+
+  return new Response(JSON.stringify(fCollated(aResults)), oInit)
 }
 
 // Event listener
