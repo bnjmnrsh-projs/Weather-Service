@@ -40,10 +40,9 @@
 const bDBG = true
 
 // Caching settings:
-// nTTL (Time To Live) the length of time for Cloudflare to perserve a cached value (Time To Live)
-// nBrowserExpiry sets browser expirey headers
-//
 // https://developers.cloudflare.com/workers/learning/how-the-cache-works
+
+// nTTL (Time To Live) the length of time for Cloudflare to perserve a cached value (Time To Live)
 const nTTL = 1800 // (seconds), 30 min
 const nCacheCont = new Date(new Date().getTime() + 25 * 60000) // 25 min
 const bCacheEverything = true
@@ -55,8 +54,7 @@ const aAllowed = ['https://bnjmnrsh-projs.github.io']
 const nFetchRetry = 3
 
 // A named array of endpoints to fetch
-
-// prettier-ignore
+// Usefull for testing: https://httpstat.us/
 const aToFetch = [
   // [
   //     'USEAGE',
@@ -75,6 +73,7 @@ const aToFetch = [
 ]
 
 // Response headers
+// cf: https://developers.cloudflare.com/workers/runtime-apis/request#requestinitcfproperties
 const oInit = {
   headers: {
     'Access-Control-Allow-Origin': '*',
@@ -90,18 +89,6 @@ const oInit = {
 //
 // METHODS
 //
-
-/**
- * Substitute request response with pre-made responses for development & debugging.
- * Uses Workers KV Global DUMMYRESPONSE
- *
- * @param {string} devFlag
- * @returns stringified JSON
- */
-const fDummyResponse = async function (devFlag) {
-  const value = await DUMMYRESPONSE.get(`${devFlag}`)
-  return value
-}
 
 /**
  * Parses the JSON returned by a network request.
@@ -146,8 +133,8 @@ const fParseJSONresponse = async function (oResponse) {
  * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
  *
- * @param {*} sUrl
- * @param {*} oOptions
+ * @param {string} sUrl
+ * @param {object} oOptions
  * @returns Promise
  */
 
@@ -222,70 +209,64 @@ const fCollated = function (obj) {
  * Fetch JSON from APIs
  *
  * @param {object} oEvent
- * @returns {JSON string}
+ * @returns {string} stringified JSON
  */
 const fHandleRequest = async function (oEvent) {
   const oRequest = oEvent.request
-
-  // If we're not debugging, and origin domain is not whitelisted, return 403
-  if (bDBG === false) {
-    if (!aAllowed.includes(oRequest.headers.get('origin'))) {
-      console.log(oRequest.headers.get('origin'))
-
-      return new Response('Requests are not allowed from this domain.', {
-        status: 403.503,
-        status_message: 'Not a whitelisted domain.'
-      })
-    }
-  }
-
-  // const oHeaders = new Headers(oInit.headers)
   const { searchParams } = new URL(oRequest.url)
 
-  // We've stored dummy responses in Workers KV for developing and testing
-  const devFlag = searchParams.get('DEV')
-  if (devFlag) {
+  // If we're not debugging, and origin domain is not whitelisted, return 403
+  if (bDBG === false && !aAllowed.includes(oRequest.headers.get('origin'))) {
+    console.log(oRequest.headers.get('origin'))
     // Break out early
-    return new Response(await fDummyResponse(devFlag), oInit) // returns Promise
-  } else {
-    // Fetch from all the APIs
-    const aResponses = await Promise.all(
-      aToFetch.map(function (aURL, i) {
-        return fFetchWithRetry(
-          aURL[1] + searchParams.toString(),
-          oInit,
-          nFetchRetry
-        )
-          .then((oResponse) => {
-            return oResponse
-          })
-          .catch(function (oError) {
-            console.error('aResponses error', { ...oError })
-            return { ...oError }
-          })
-      })
-    )
-
-    // Make sure we have lat & lang values
-    const sLat = searchParams.get('lat')
-    const sLon = searchParams.get('lon')
-    if (!sLat || !sLon) {
-      // Break out early
-      return new Response('Invalid Parameters supplied.', {
-        status: 400,
-        status_message: 'Invalid Parameters supplied.'
-      })
-    }
-
-    // Gather responses into an array
-    const aResults = await Promise.all(
-      //   aResponses.map((resp) => fStringifyAPIresponse(resp))
-
-      aResponses.map((resp) => JSON.stringify(resp))
-    )
-
-    return new Response(JSON.stringify(fCollated(aResults)), oInit)
+    return new Response('Requests are not allowed from this domain.', {
+      status: 403.503,
+      status_message: 'Not a whitelisted domain.'
+    })
   }
+
+  // Are we asking for dummy responses?
+  if (searchParams.get('DEV')) {
+    // Break out early
+    return new Response(
+      await DUMMYRESPONSE.get(`${searchParams.get('DEV')}`),
+      oInit
+    )
+  }
+
+  // Make sure we have lat & lang values
+  if (!searchParams.get('lat') || !searchParams.get('lon')) {
+    // Break out early
+    return new Response('Invalid parameters supplied.', {
+      status: 400,
+      status_message: 'Invalid prameters supplied.'
+    })
+  }
+
+  // Fetch from all the APIs
+  const aResponses = await Promise.all(
+    aToFetch.map(function (aURL, i) {
+      return fFetchWithRetry(
+        aURL[1] + searchParams.toString(),
+        oInit,
+        nFetchRetry
+      )
+        .then((oResponse) => {
+          return oResponse
+        })
+        .catch(function (oError) {
+          console.error('aResponses error', { ...oError })
+          return { ...oError }
+        })
+    })
+  )
+
+  // Gather responses into an array
+  const aResults = await Promise.all(
+    aResponses.map((resp) => JSON.stringify(resp))
+  )
+
+  return new Response(JSON.stringify(fCollated(aResults)), oInit)
 }
 
 // Event listener
