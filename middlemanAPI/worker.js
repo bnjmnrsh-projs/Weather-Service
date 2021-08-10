@@ -116,24 +116,24 @@ const fDummyResponse = async function (devFlag) {
   ----
   We want to return error object with our API response rather then thowing a new Error.
 */
-const fParseJSONresponse = async function (response) {
+const fParseJSONresponse = async function (oResponse) {
   //   console.log('fParseJSONresponse', response)
   return new Promise((resolve, reject) => {
-    response
+    oResponse
       .json()
       .then((json) => {
         return resolve({
-          status: response.status,
-          ok: response.ok,
+          status: oResponse.status,
+          ok: oResponse.ok,
           json
         })
       })
-      .catch((error) => {
-        console.error('fParseJSONresponse catch 1 error', error)
-        console.error('fParseJSONresponse catch 1 resp', response)
+      .catch((oError) => {
+        console.error('fParseJSONresponse catch 1 error', oError)
+        console.error('fParseJSONresponse catch 1 resp', oResponse)
         return reject({
-          error: response.status,
-          error_text: `${response.statusText} ${response.url.split('?')[0]}`
+          error: oResponse.status,
+          error_text: `${oResponse.statusText} ${oResponse.url.split('?')[0]}`
         })
       })
   })
@@ -144,31 +144,31 @@ const fParseJSONresponse = async function (response) {
  * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
  *
- * @param {*} url
- * @param {*} options
+ * @param {*} sUrl
+ * @param {*} oOptions
  * @returns Promise
  */
 
 /* eslint prefer-promise-reject-errors: "off" */
-const fRequest = async function (url, options) {
+const fRequest = async function (sUrl, oOptions) {
   return new Promise((resolve, reject) => {
-    fetch(url, options)
+    fetch(sUrl, oOptions)
       .then(fParseJSONresponse)
-      .then((response) => {
-        if (response.ok) {
+      .then((oResponse) => {
+        if (oResponse.ok) {
           console.log('fRequest', 'ok')
-          return resolve(response.json)
+          return resolve(oResponse.json)
         }
         // extract the error from the server's json
         console.error('fRequest not ok')
         return reject({
-          status: response.status,
-          status_message: response.json.error
+          status: oResponse.status,
+          status_message: oResponse.json.error
         })
       })
-      .catch((error) => {
-        console.error('fRequest catch', { ...error })
-        return reject({ ...error })
+      .catch((oError) => {
+        console.error('fRequest catch', { ...oError })
+        return reject({ ...oError })
       })
   })
 }
@@ -197,7 +197,7 @@ const fFetchWithRetry = async function (sUrl, oOptions, n) {
 
 /**
  * Collate results objects into a new stringified Response
- * @param {*} obj
+ * @param {object} obj
  * @returns {object}
  */
 const fCollated = function (obj) {
@@ -219,11 +219,11 @@ const fCollated = function (obj) {
 /**
  * Fetch JSON from APIs
  *
- * @param {object} request
+ * @param {object} oEvent
  * @returns {JSON string}
  */
-const fHandleRequest = async function (event) {
-  const oRequest = event.request
+const fHandleRequest = async function (oEvent) {
+  const oRequest = oEvent.request
 
   // If we're not debugging, and origin domain is not whitelisted, return 403
   if (bDBG === false) {
