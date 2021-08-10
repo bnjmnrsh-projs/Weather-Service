@@ -231,7 +231,7 @@ const fHandleRequest = async function (event) {
       console.log(oRequest.headers.get('origin'))
 
       return new Response('Requests are not allowed from this domain.', {
-        status_code: 403.503,
+        status: 403.503,
         status_message: 'Not a whitelisted domain.'
       })
     }
