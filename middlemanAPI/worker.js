@@ -133,7 +133,9 @@ const fParseJSONresponse = async function (oResponse) {
         console.error('fParseJSONresponse catch 1 resp', oResponse)
         return reject({
           error: oResponse.status,
-          error_text: `${oResponse.statusText} ${oResponse.url.split('?')[0]}`
+          error_message: `${oResponse.statusText} ${
+            oResponse.url.split('?')[0]
+          }`
         })
       })
   })
