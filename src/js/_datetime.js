@@ -18,7 +18,7 @@
  * @param {string} sDate
  * @returns {string} date as string with time component
  */
-function fAddTimeToDateString (sDate) {
+const fAddTimeToDateString = function (sDate) {
   // If we have recieved ob_time, repalce the space with a 'T'
   if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
