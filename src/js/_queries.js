@@ -6,7 +6,7 @@ import { fClean } from './_helpers'
  * @returns {object} coordiantes object
  */
 export const fIPapi = async function (sIpapiLocationApi) {
-  const pResp = await fetch(sIpapiLocationApi).then(function (pResp) {
+  const pResp = await window.fetch(sIpapiLocationApi).then(function (pResp) {
     if (pResp.ok) {
       return pResp.json()
     } else {
