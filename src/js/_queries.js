@@ -116,14 +116,14 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
  * @returns {object} weather object
  */
 export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
-  const pResp = await fetch(
-    fAssembledQuery(sWeatherApi, oLoc, _oSettings)
-  ).then(function (pResp) {
-    if (pResp.ok) {
-      return pResp.json()
-    } else {
-      return Promise.reject(pResp)
-    }
-  })
+  const pResp = await window
+    .fetch(fAssembledQuery(sWeatherApi, oLoc, _oSettings))
+    .then(function (pResp) {
+      if (pResp.ok) {
+        return pResp.json()
+      } else {
+        return Promise.reject(pResp)
+      }
+    })
   return await pResp
 }
