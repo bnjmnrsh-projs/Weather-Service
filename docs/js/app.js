@@ -1456,8 +1456,8 @@
   // with debugging and Imperial Units
   const settings = {
     units: 'I',
-    debug: 'DUMMY', // DUMMY, OVER_QUOTA, 5XX_FULL, 5XX_PARTIAL, NO_KEY
-    dev: false
+    debug: false,
+    dev: false // 5XX_FULL, 5XX_PARTIAL, DUMMY, NO_KEY, OVER_QUOTA, API_ERROR
   };
 
   weatherApp(settings);
