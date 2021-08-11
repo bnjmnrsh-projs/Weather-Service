@@ -32,8 +32,8 @@ const weatherApp = function (_oSettings = {}) {
   const sIpapiLocationApi = 'https://ipapi.co/json/'
   let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?'
 
-  if (_oSettings.dev === true) {
-    sWeatherApi = `${sWeatherApi}&DEV=true`
+  if (_oSettings.dev) {
+    sWeatherApi = `${sWeatherApi}&DEV=${_oSettings.dev}`
   }
 
   // DOM Target
