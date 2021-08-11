@@ -10,7 +10,7 @@ export const fIPapi = async function (sIpapiLocationApi) {
     if (pResp.ok) {
       return pResp.json()
     } else {
-      return Promise.reject(pResp)
+      throw pResp
     }
   })
   return await pResp
@@ -122,7 +122,7 @@ export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
       if (pResp.ok) {
         return pResp.json()
       } else {
-        return Promise.reject(pResp)
+        throw pResp
       }
     })
   return await pResp
