@@ -27,7 +27,7 @@
       if (pResp.ok) {
         return pResp.json()
       } else {
-        return Promise.reject(pResp)
+        throw pResp
       }
     });
     return await pResp
@@ -139,7 +139,7 @@
         if (pResp.ok) {
           return pResp.json()
         } else {
-          return Promise.reject(pResp)
+          throw pResp
         }
       });
     return await pResp
@@ -502,7 +502,7 @@
    * @param {string} sDate
    * @returns {string} date as string with time component
    */
-  function fAddTimeToDateString (sDate) {
+  const fAddTimeToDateString = function (sDate) {
     // If we have recieved ob_time, repalce the space with a 'T'
     if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
@@ -519,7 +519,7 @@
 
     // return the new date string vaild for cases 2, 3, and 4)
     return sNewDate
-  }
+  };
 
   /**
    * 24H to 12H conversion based on _oSettings.units = I or M
