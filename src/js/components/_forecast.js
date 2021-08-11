@@ -12,9 +12,10 @@ import { fClean } from '../_helpers'
  * @returns {string}
  */
 const fRenderForecastList = function (_oForecast, _oSettings) {
-  console.log('fRenderForcast: ', _oForecast)
-  console.log('_oSettings: ', _oSettings)
-
+  if (_oSettings.debug) {
+    console.log('fRenderForcast: ', _oForecast)
+    console.log('_oSettings: ', _oSettings)
+  }
   const days = Object.keys(_oForecast)
   return days
     .map(function (el) {

@@ -18,7 +18,7 @@
  * @param {string} sDate
  * @returns {string} date as string with time component
  */
-function fAddTimeToDateString(sDate) {
+function fAddTimeToDateString (sDate) {
   // If we have recieved ob_time, repalce the space with a 'T'
   if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
@@ -51,9 +51,10 @@ export const fTime = function (sTime24, _oSettings) {
   }
 
   if (_oSettings.units === 'M') return sTime24
-  console.log('sTime24', `${sTime24}`)
-  console.log('sTime24 length', `${sTime24.length}`)
-
+  if (_oSettings.debug) {
+    console.log('fTime: sTime24', `${sTime24}`)
+    console.log('fTime: sTime24 length', `${sTime24.length}`)
+  }
   const [sHours, minutes] = sTime24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1)
   const period = +sHours < 12 ? 'AM' : 'PM'
   const hours = +sHours % 12 || 12
@@ -72,7 +73,9 @@ export const fTime = function (sTime24, _oSettings) {
  */
 export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
   let oDate, aTime
-  console.log('sDate', sDate)
+  if (_oSettings.debug) {
+    console.log('fGetLocalTime: sDate', sDate)
+  }
   if (sDate !== '') {
     oDate = new Date(fAddTimeToDateString(sDate))
   } else {
@@ -93,14 +96,14 @@ export const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
 
   const oDateUtc = new Date(Date.UTC(...aDate))
 
-  if (_oSettings.debug === true) {
+  if (_oSettings.debug) {
     console.log('fGetLocalTime provided sTime24: ', sTime24)
     console.log(
       'fGetLocalTime UTC converted time:',
       `${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`
     )
+    console.log('fGetLocalTime: oDate', oDate)
   }
-  console.log(oDate)
   return fTime(
     `${oDateUtc.getHours()}`.padStart(2, '0') +
       ':' +
@@ -139,15 +142,15 @@ export const fGetDayOrdinal = function (sDate) {
   if (!oDate || typeof oDate.getMonth !== 'function') {
     throw new Error('fFormatDayOrdinal provided invalid date')
   }
-
+  // prettier-ignore
   const sFormatedDate =
     oDate.getDate() +
     (oDate.getDate() % 10 === 1 && oDate.getDate() !== 11
       ? 'st'
       : oDate.getDate() % 10 === 2 && oDate.getDate() !== 12
-      ? 'nd'
-      : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
-      ? 'rd'
-      : 'th')
+        ? 'nd'
+        : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
+          ? 'rd'
+          : 'th')
   return sFormatedDate
 }
