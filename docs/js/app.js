@@ -23,7 +23,7 @@
    * @returns {object} coordiantes object
    */
   const fIPapi = async function (sIpapiLocationApi) {
-    const pResp = await fetch(sIpapiLocationApi).then(function (pResp) {
+    const pResp = await window.fetch(sIpapiLocationApi).then(function (pResp) {
       if (pResp.ok) {
         return pResp.json()
       } else {
@@ -133,15 +133,15 @@
    * @returns {object} weather object
    */
   const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
-    const pResp = await fetch(
-      fAssembledQuery(sWeatherApi, oLoc, _oSettings)
-    ).then(function (pResp) {
-      if (pResp.ok) {
-        return pResp.json()
-      } else {
-        return Promise.reject(pResp)
-      }
-    });
+    const pResp = await window
+      .fetch(fAssembledQuery(sWeatherApi, oLoc, _oSettings))
+      .then(function (pResp) {
+        if (pResp.ok) {
+          return pResp.json()
+        } else {
+          return Promise.reject(pResp)
+        }
+      });
     return await pResp
   };
 
@@ -502,7 +502,7 @@
    * @param {string} sDate
    * @returns {string} date as string with time component
    */
-  function fAddTimeToDateString(sDate) {
+  function fAddTimeToDateString (sDate) {
     // If we have recieved ob_time, repalce the space with a 'T'
     if (sDate.length >= 16) return sDate.replace(' ', 'T')
 
@@ -535,9 +535,10 @@
     }
 
     if (_oSettings.units === 'M') return sTime24
-    console.log('sTime24', `${sTime24}`);
-    console.log('sTime24 length', `${sTime24.length}`);
-
+    if (_oSettings.debug) {
+      console.log('fTime: sTime24', `${sTime24}`);
+      console.log('fTime: sTime24 length', `${sTime24.length}`);
+    }
     const [sHours, minutes] = sTime24.match(/([0-9]{1,2}):([0-9]{2})/).slice(1);
     const period = +sHours < 12 ? 'AM' : 'PM';
     const hours = +sHours % 12 || 12;
@@ -556,7 +557,9 @@
    */
   const fGetLocalTime = function (sDate = '', _oSettings, sTime24 = '') {
     let oDate, aTime;
-    console.log('sDate', sDate);
+    if (_oSettings.debug) {
+      console.log('fGetLocalTime: sDate', sDate);
+    }
     if (sDate !== '') {
       oDate = new Date(fAddTimeToDateString(sDate));
     } else {
@@ -577,14 +580,14 @@
 
     const oDateUtc = new Date(Date.UTC(...aDate));
 
-    if (_oSettings.debug === true) {
+    if (_oSettings.debug) {
       console.log('fGetLocalTime provided sTime24: ', sTime24);
       console.log(
         'fGetLocalTime UTC converted time:',
         `${oDateUtc.getHours()}:${oDateUtc.getMinutes()}`
       );
+      console.log('fGetLocalTime: oDate', oDate);
     }
-    console.log(oDate);
     return fTime(
       `${oDateUtc.getHours()}`.padStart(2, '0') +
         ':' +
@@ -623,16 +626,16 @@
     if (!oDate || typeof oDate.getMonth !== 'function') {
       throw new Error('fFormatDayOrdinal provided invalid date')
     }
-
+    // prettier-ignore
     const sFormatedDate =
       oDate.getDate() +
       (oDate.getDate() % 10 === 1 && oDate.getDate() !== 11
         ? 'st'
         : oDate.getDate() % 10 === 2 && oDate.getDate() !== 12
-        ? 'nd'
-        : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
-        ? 'rd'
-        : 'th');
+          ? 'nd'
+          : oDate.getDate() % 10 === 3 && oDate.getDate() !== 13
+            ? 'rd'
+            : 'th');
     return sFormatedDate
   };
 
@@ -804,9 +807,10 @@
    * @returns {string}
    */
   const fRenderForecastList = function (_oForecast, _oSettings) {
-    console.log('fRenderForcast: ', _oForecast);
-    console.log('_oSettings: ', _oSettings);
-
+    if (_oSettings.debug) {
+      console.log('fRenderForcast: ', _oForecast);
+      console.log('_oSettings: ', _oSettings);
+    }
     const days = Object.keys(_oForecast);
     return days
       .map(function (el) {
@@ -1378,8 +1382,8 @@
     const sIpapiLocationApi = 'https://ipapi.co/json/';
     let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?';
 
-    if (_oSettings.dev === true) {
-      sWeatherApi = `${sWeatherApi}&DEV=true`;
+    if (_oSettings.dev) {
+      sWeatherApi = `${sWeatherApi}&DEV=${_oSettings.dev}`;
     }
 
     // DOM Target
