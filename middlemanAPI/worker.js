@@ -57,18 +57,13 @@ const nFetchRetry = 3
 // Usefull for testing: https://httpstat.us/
 const aToFetch = [
   // [
-  //     'USEAGE',
-  //     `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`,
+  //   'USEAGE',
+  //   `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`
   // ],
-  [
-    'CURRENT',
-    `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
-    // 'http://httpstat.us/426'
-  ],
+  ['CURRENT', `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`],
   [
     'DAILY',
     `https://api.weatherbit.io/v2.0/forecast/daily?key=${WB_KEY}&days=16&`
-    // 'http://httpstat.us/524'
   ]
 ]
 
@@ -99,7 +94,7 @@ const oInit = {
  * @return {object}         The parsed JSON, status from the response
  */
 
-/* eslint prefer-promise-reject-errors: "off"
+/* eslint-disable prefer-promise-reject-errors
   ----
   We want to return error object with our API response rather then thowing a new Error.
 */
@@ -137,8 +132,6 @@ const fParseJSONresponse = async function (oResponse) {
  * @param {object} oOptions
  * @returns Promise
  */
-
-/* eslint prefer-promise-reject-errors: "off" */
 const fRequest = async function (sUrl, oOptions) {
   return new Promise((resolve, reject) => {
     fetch(sUrl, oOptions)
@@ -161,6 +154,7 @@ const fRequest = async function (sUrl, oOptions) {
       })
   })
 }
+/* eslint-enable prefer-promise-reject-errors */
 
 /**
  * Fetch with retry n times on failure
