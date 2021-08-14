@@ -189,7 +189,8 @@ const fToggleGlobalColorScheme = function (nThemeToggel, oSettings = {}) {
 }
 
 /**
- * Add listeners for button clicks, changes to prefers-color-scheme, and the html data-user-color-scheme attr.
+ * Add listeners for button clicks, changes to ststem prefers-color-scheme, and the html attr data-user-color-scheme .
+ * @TODO: Listen for changes to our data store
  *
  * @param {obj} oSettings
  */
@@ -211,7 +212,7 @@ const fAddEventListeners = function (nThemeToggel, oSettings = {}) {
       }
     })
 
-  // Capture clicks on the toggle
+  // Capture clicks on our toggle
   document.addEventListener('click', function (e) {
     if (e.target.id === nThemeToggel.id) {
       fToggleGlobalColorScheme(nThemeToggel, oSettings)
@@ -224,7 +225,7 @@ const fAddEventListeners = function (nThemeToggel, oSettings = {}) {
     }
   })
 
-  // listen for changes to on html data-user-color-scheme attr if mutiple toggle-buttons
+  // Listen for changes to on the html attr data-user-color-scheme attr using MutationObserver, in the case of mutiple toggle-buttons
   const observer = new window.MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
       if (mutation.attributeName === `data-${oSettings.STORAGE_KEY}`) {
