@@ -125,7 +125,7 @@ const fParseJSONresponse = async function (oResponse) {
 
 /**
  * Fetch replacement with better error handeling.
- * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
+ * https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
  *
  * @param {string} sUrl
