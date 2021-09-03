@@ -18,6 +18,9 @@
   --bg-vdk: var(--grey-7);
   --bg-lite: var(--text);
 
+  // Base background value
+  background-color: var(--bg-md);
+
   // Icons
   --icon-bg: var(--grey-7);
   --icon-accent: var(--grey-6);
@@ -38,8 +41,16 @@
   --uv-4: var(--orange-2);
   --uv-5: var(--red-2);
 
-  // Base background value
-  background-color: var(--bg-md);
+  // Border radius values
+  --bdradius-lg: 10px;
+  --bdradius-md: 6px;
+  --bdradius-sm: 2px;
+
+  // Alerts
+  --bg-error: var(--red-solid-1);
+  --bg-warnihg: var(--orange-solid-3);
+  --bg-success: var(--green-solid-2);
+  --bg-nutral: var(--blue-solid-3);
 
   @media (prefers-color-scheme: dark) {
     --color-mode: 'dark';
