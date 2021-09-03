@@ -41,8 +41,21 @@ span.inline-icon {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  border: 1px solid var(--grey-3);
 }
 
 // @media (prefers-color-scheme: dark) {
 //     :root:not([data-user-color-scheme='dark']) {}
 // }
+
+.icon-spin {
+  animation: rotating 60s ease infinite;
+  @media screen and (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.text-icon {
+  width: 2em;
+  height: 2em;
+}

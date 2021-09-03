@@ -20,3 +20,33 @@
   }
 }
 /* stylelint-enable */
+
+/* Delayed fade-in */
+
+/*
+
+h1 {
+    @include fade-in('800ms', '300ms');
+}
+*/
+@mixin fade-in($waitTime, $fadeTime) {
+  animation: wait #{$waitTime}, fade-in #{$fadeTime} #{$waitTime};
+}
+
+@keyframes wait {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
