@@ -29,6 +29,21 @@ const weatherApp = function (_oSettings = {}) {
   // Merge settings with defaults
   _oSettings = Object.assign(_oDefaults, _oSettings)
 
+  // Enable debugging & dev API responses via URL
+  const { searchParams } = new URL(document.URL)
+  _oSettings.debug = searchParams.has('DEBUG')
+  if (searchParams.has('DEV')) {
+    _oSettings.dev = searchParams.get('DEV')
+  }
+
+  // Set location lat lon via URL
+  if (searchParams.has('lat') && searchParams.has('lon')) {
+    _oSettings.loc = {
+      longitude: searchParams.has('lat'),
+      latitude: searchParams.has('lon')
+    }
+  }
+
   // API urls
   const sIpapiLocationApi = 'https://ipapi.co/json/'
   let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?'
