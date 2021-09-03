@@ -12,11 +12,9 @@ export const fRenderErrors = function (err) {
                         ${err.stack ? '<code>' + err.stack + '</code>' : ''}
                         ${
                           err.status
-                            ? '<code>' +
-                              err.statusText +
-                              ': ' +
-                              err.status +
-                              '</code>'
+                            ? `<code>${err.status}: ${
+                                err.statusText ?? err.status_message
+                              }</code>`
                             : ''
                         }
                     </div>

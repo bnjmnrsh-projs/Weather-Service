@@ -65,14 +65,28 @@ const weatherApp = function (_oSettings = {}) {
    * @param {array} data
    */
   const fBuildUI = function (_oData) {
-    nApp.classList.remove('loading')
-    nApp.innerHTML =
-      fRenderHUD(_oData, _oSettings) +
-      fRenderDetails(_oData, _oSettings) +
-      fRenderForecast(_oData.DAILY.data, _oSettings)
+    nApp.querySelector('#hud').outerHTML = fRenderHUD(_oData, _oSettings)
 
-    // Adjust the visibility 'fogg' bar in the details section
-    Scales.fSetVisabilityScale(_oData.CURRENT.data[0].vis)
+    if (_oData.CURRENT.error || _oData.CURRENT.status) {
+      nApp.querySelector('#details').classList.remove('loading')
+      nApp.querySelector('#details').classList.add('error')
+    } else {
+      nApp.querySelector('#details').outerHTML = fRenderDetails(
+        _oData.CURRENT.data[0],
+        _oData,
+        _oSettings
+      )
+    }
+
+    nApp.querySelector('#forecast').outerHTML = fRenderForecast(
+      _oData.DAILY,
+      _oSettings
+    )
+    if (!_oData.CURRENT.error && !_oData.CURRENT.status) {
+      // Adjust the visibility 'fogg' bar in the details section
+      Scales.fSetVisabilityScale(_oData.CURRENT.data[0].vis)
+    }
+    nApp.classList.remove('loading')
   }
 
   /**
@@ -80,6 +94,12 @@ const weatherApp = function (_oSettings = {}) {
    */
   const fInit = async function () {
     try {
+      if (!_oSettings.loc) {
+        _oSettings.loc = await Queries.fGetLocation(
+          sIpapiLocationApi,
+          _oSettings
+        )
+      }
       const loc = await Queries.fGetLocation(sIpapiLocationApi, _oSettings)
       const _oWeather = await Queries.fGetWeather(loc, sWeatherApi, _oSettings)
 
@@ -87,8 +107,9 @@ const weatherApp = function (_oSettings = {}) {
         console.log('fGetLocation response:', loc)
         console.log('fGetWeather response:', _oWeather)
       }
-
-      fBuildUI(_oWeather)
+      if (_oWeather) {
+        fBuildUI(_oWeather)
+      }
     } catch (e) {
       console.error('init error: ', e)
       nApp.innerHTML = fRenderErrors(e)

@@ -11,8 +11,7 @@ import { fClean } from '../_helpers'
  * @param {object} _oSettings
  * @returns {string}
  */
-export const fRenderDetails = function (_oData, _oSettings) {
-  const oCURRENT = _oData.CURRENT.data[0]
+export const fRenderDetails = function (oCURRENT, _oData, _oSettings) {
   const iconCloud = Icons.fGetCloudCoverIcon(oCURRENT.clouds)
   const oMoon = Moon.fPhase(oCURRENT.obj_time, _oSettings)
   const oIcons = _oSettings.icon
@@ -22,7 +21,7 @@ export const fRenderDetails = function (_oData, _oSettings) {
             <ul class="unstyled">
                 <li class="c-feels-like">
                     <span class="left-col">{{feels_like}} {{app_temp}}</span>
-                    ${Icons.fSetStringElAttrs(_oSettings.icon.sThermometer, {
+                    ${Icons.fSetStringElAttrs(oIcons.sThermometer, {
                       class: 'inline-icon',
                       data: {
                         temp: Scales.fTempDataPt(fClean(oCURRENT.app_temp))
@@ -33,18 +32,15 @@ export const fRenderDetails = function (_oData, _oSettings) {
                   oCURRENT.uv
                     ? `<li class="c-uv-index">
                             <span class="left-col">{{uv}} {{uv_index}}</span>
-                            ${Icons.fSetStringElAttrs(
-                              _oSettings.icon.sSunnyDay,
-                              {
-                                class: 'inline-icon',
-                                data: {
-                                  uv: Scales.fUvDataPt(
-                                    fClean(oCURRENT.uv),
-                                    _oSettings
-                                  )
-                                }
+                            ${Icons.fSetStringElAttrs(oIcons.sSunnyDay, {
+                              class: 'inline-icon',
+                              data: {
+                                uv: Scales.fUvDataPt(
+                                  fClean(oCURRENT.uv),
+                                  _oSettings
+                                )
                               }
-                            )}
+                            })}
                           </li>`
                     : ''
                 }

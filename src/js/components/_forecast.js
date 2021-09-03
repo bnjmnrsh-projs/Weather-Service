@@ -53,10 +53,34 @@ const fRenderForecastList = function (_oForecast, _oSettings) {
  * @returns {string}
  */
 export const fRenderForecast = function (_oForecast, _oSettings) {
+  if (_oSettings.debug) {
+    console.log('fRenderForecast: ', _oForecast)
+  }
+  const bErrorState = _oForecast ? '' : 'error'
+
+  const sErrorResponse = `<li class="error">
+                            <p>There was an error loading the forecast: ${
+                              _oForecast.error
+                                ? `<code>${_oForecast.error}</code>`
+                                : ''
+                            }
+                            ${
+                              _oForecast.status
+                                ? `<code>${_oForecast.status}</code>`
+                                : ''
+                            }</p>
+                            <button class="rounded">${
+                              _oSettings.icon.sRefresh
+                            } reload</button>
+                          </li>`
   return `
-        <div id="forecast" class="c-forecast" aria-description="The weather forecast for the next 16 days.">
+        <div id="forecast" class="c-forecast ${bErrorState}" aria-description="The weather forecast for the next 16 days.">
             <ul class="unstyled">
-                ${fRenderForecastList(_oForecast, _oSettings)}
+                ${
+                  _oForecast.data
+                    ? fRenderForecastList(_oForecast.data, _oSettings)
+                    : sErrorResponse
+                }
             </ul>
         </div>
         `
