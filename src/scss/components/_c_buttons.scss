@@ -1,0 +1,16 @@
+button {
+  padding-right: 0.8rem;
+
+  > * {
+    vertical-align: middle;
+  }
+  svg {
+    display: inline-flex;
+    align-self: center;
+    fill: currentColor;
+  }
+
+  &.rounded {
+    border-radius: 90px;
+  }
+}
