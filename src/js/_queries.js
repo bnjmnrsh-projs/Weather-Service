@@ -1,19 +1,22 @@
 import { fClean } from './_helpers'
-
+import { RequestWithRetry } from './_request'
 /**
  * IP address based location API
  *
  * @returns {object} coordiantes object
  */
-export const fIPapi = async function (sIpapiLocationApi) {
-  const pResp = await window.fetch(sIpapiLocationApi).then(function (pResp) {
+export const fIPapi = async function (sIpapiLocationApi, _oSettings) {
+  return await RequestWithRetry(
+    sIpapiLocationApi,
+    {},
+    _oSettings.api_retries
+  ).then(function (pResp) {
     if (pResp.ok) {
-      return pResp.json()
+      return pResp.json
     } else {
       throw pResp
     }
   })
-  return await pResp
 }
 
 /**
@@ -91,18 +94,18 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
         console.log('fGetLocation: Checking geoLoccation API: fGeoLocApi.')
       }
       return await fGeoLocApi()
-    } catch (e) {
+    } catch (oError) {
       if (_oSettings.debug) {
-        console.warn('fGetLocationL: failed using fGeoLocApi: ', e)
+        console.warn('fGetLocationL: failed using fGeoLocApi: ', oError)
       }
       try {
         if (_oSettings.debug) {
           console.warn('Falling back to IP address lookup instead.')
         }
-        return await fIPapi(sIpapiLocationApi)
-      } catch (e) {
+        return await fIPapi(sIpapiLocationApi, _oSettings)
+      } catch (oError) {
         if (_oSettings.debug) {
-          console.warn('fGetLocation: failed sIpapiLocationApi: ', e)
+          console.warn('fGetLocation: failed sIpapiLocationApi: ', oError)
         }
       }
     }
@@ -116,14 +119,16 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
  * @returns {object} weather object
  */
 export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
-  const pResp = await window
-    .fetch(fAssembledQuery(sWeatherApi, oLoc, _oSettings))
-    .then(function (pResp) {
-      if (pResp.ok) {
-        return pResp.json()
-      } else {
-        throw pResp
-      }
-    })
+  const pResp = await RequestWithRetry(
+    fAssembledQuery(sWeatherApi, oLoc, _oSettings),
+    {},
+    _oSettings.api_retries
+  ).then(function (pResp) {
+    if (pResp.ok) {
+      return pResp.json
+    } else {
+      throw pResp
+    }
+  })
   return await pResp
 }
