@@ -5,7 +5,7 @@
 
 :root {
   // Greyscale
-  --grey-0: hsl(13, 7%, 96%);
+  --grey-0: hsl(13, 7%, 100%, 0.9);
   --grey-1: hsla(13, 7%, 96%, 0.9);
   --grey-2: hsla(13, 7%, 78%, 0.9);
   --grey-3: hsla(13, 7%, 70%, 0.9);
@@ -15,7 +15,19 @@
   --grey-7: hsla(13, 7%, 30%, 0.9);
   --grey-8: hsla(13, 7%, 20%, 0.9);
   --grey-9: hsla(13, 7%, 12%, 0.9);
-  --grey-10: hsla(13, 7%, 8%);
+  --grey-10: hsla(13, 7%, 8%, 0.9);
+  // Greyscale solids
+  --grey-solid-0: hsl(13, 7%, 100%);
+  --grey-solid-1: hsla(13, 7%, 96%);
+  --grey-solid-2: hsla(13, 7%, 78%);
+  --grey-solid-3: hsla(13, 7%, 70%);
+  --grey-solid-4: hsla(13, 7%, 60%);
+  --grey-solid-5: hsla(13, 7%, 50%);
+  --grey-solid-6: hsla(13, 7%, 40%);
+  --grey-solid-7: hsla(13, 7%, 30%);
+  --grey-solid-8: hsla(13, 7%, 20%);
+  --grey-solid-9: hsla(13, 7%, 12%);
+  --grey-solid-10: hsla(13, 7%, 8%);
 
   // Color Scales
   --red-1: hsla(9, 95%, 30%, 0.7);
@@ -42,4 +54,30 @@
   --blue-2: hsla(195, 95%, 50%, 0.7);
   --blue-3: hsla(195, 95%, 70%, 0.7);
   --blue-4: hsla(195, 95%, 85%, 0.7);
+
+  // Color Scales Solids
+  --red-solid-1: hsla(9, 95%, 30%);
+  --red-solid-2: hsla(9, 95%, 50%);
+  --red-solid-3: hsla(9, 100%, 70%);
+  --red-solid-4: hsla(9, 100%, 85%);
+  --orange-solid-1: hsla(33, 95%, 30%);
+  --orange-solid-2: hsla(33, 95%, 50%);
+  --orange-solid-3: hsla(33, 95%, 70%);
+  --orange-solid-4: hsla(33, 95%, 85%);
+  --yellow-solid-1: hsla(60, 95%, 25%);
+  --yellow-solid-2: hsla(60, 95%, 50%);
+  --yellow-solid-3: hsla(60, 95%, 70%);
+  --yellow-solid-4: hsla(60, 95%, 85%);
+  --green-solid-1: hsla(144, 95%, 25%);
+  --green-solid-2: hsla(144, 95%, 50%);
+  --green-solid-3: hsla(144, 95%, 70%);
+  --green-solid-4: hsla(144, 95%, 85%);
+  --cyan-solid-1: hsla(176, 95%, 25%);
+  --cyan-solid-2: hsla(176, 95%, 50%);
+  --cyan-solid-3: hsla(176, 95%, 70%);
+  --cyan-solid-4: hsla(176, 95%, 85%);
+  --blue-solid-1: hsla(195, 95%, 30%);
+  --blue-solid-2: hsla(195, 95%, 50%);
+  --blue-solid-3: hsla(195, 95%, 70%);
+  --blue-solid-4: hsla(195, 95%, 85%);
 }
