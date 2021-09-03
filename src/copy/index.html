@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en" class="js-disabled">
   <head>
     <meta charset="utf-8" />
     <title>The Weather Service</title>
@@ -37,17 +37,23 @@
       </a>
     </header>
     <main id="app" role="main" class="loading" aria-live="polite">
-      <header id="hud" class="c-hud">
-        <img
-          alt=""
-          class="loading-icon weather-icon"
-          src="./svg/icons/weather/svg/wi-day-sunny.svg"
-        />
+      <header id="hud" class="c-hud loading">
+        <h3>
+          <img
+            alt=""
+            class="loading-icon weather-icon"
+            src="./svg/icons/weather/svg/wi-day-sunny.svg"
+          />
+        </h3>
         <ul class="unstyled">
-          <li>Checking the weather near you...</li>
+          <li>           </li>
+          <li class="js-enabled">Checking the weather near you...</li>
+          <li class="error js-disabled">
+            Please enable JavaScript to use this app.
+          </li>
         </ul>
       </header>
-      <div id="details" class="c-details">
+      <div id="details" class="c-details loading">
         <ul class="local-data unstyled">
           <li class="loading-bg c-feels-like">
             <span class="left-col">           </span>
