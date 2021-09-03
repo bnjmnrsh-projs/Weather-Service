@@ -20,7 +20,7 @@
   -webkit-hyphens: auto;
   hyphens: auto;
   background-color: var(--bg-lt);
-  border-radius: 10px;
+  border-radius: var(--bdradius-lg);
   box-shadow: var(--bg-dk) 1px 1px 1px;
 
   h3 {
@@ -33,7 +33,7 @@
     padding: 1rem;
     overflow-y: scroll;
     background: var(--bg-vdk);
-    border-radius: 3px;
+    border-radius: var(--bdradius-sm);
   }
 
   .screen-icon {
@@ -41,6 +41,13 @@
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-user-color-scheme='dark']) {
+    code {
+      color: var(--theme-white);
+    }
+  }
+}
 @media screen and (max-width: 545px) {
   .errors-screen {
     padding: 1.5rem;
