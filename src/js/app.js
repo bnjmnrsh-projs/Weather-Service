@@ -22,7 +22,8 @@ const weatherApp = function (_oSettings = {}) {
     target: '#app',
     units: 'M',
     debug: false,
-    dev: false
+    dev: false,
+    api_retries: 3
   }
 
   // Merge settings with defaults
