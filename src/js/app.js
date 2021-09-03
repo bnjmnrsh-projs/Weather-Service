@@ -45,6 +45,7 @@ const weatherApp = function (_oSettings = {}) {
   const nIcons = document.querySelector('#svgs')
 
   _oSettings.icon = {
+    sRefresh: nIcons.querySelector('.svg-refresh').outerHTML,
     // degrees/compass inline
     sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
     sThermometer: nIcons.querySelector('.svg-wi-thermometer').outerHTML,
