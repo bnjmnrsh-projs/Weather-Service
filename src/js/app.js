@@ -131,9 +131,9 @@ const weatherApp = function (_oSettings = {}) {
 
 // with debugging and Imperial Units
 const settings = {
-  units: 'I',
+  units: 'I', // I, M
   debug: false,
-  dev: false // 5XX_FULL, 5XX_PARTIAL, DUMMY, NO_KEY, OVER_QUOTA, API_ERROR
+  dev: false // true (malformed json), '5XX_FULL', '5XX_PARTIAL', 'DUMMY', 'NO_KEY', 'OVER_QUOTA', 'API_ERROR'
 }
 
 weatherApp(settings)
