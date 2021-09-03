@@ -20,3 +20,17 @@
   padding-right: var(--scale-500);
   padding-left: var(--scale-500);
 }
+
+/** Conditional js enabled styles */
+html.js-disabled {
+  .js-enabled {
+    display: none;
+    visibility: hidden;
+  }
+}
+html:not(.error.js-disabled) {
+  body .js-disabled {
+    display: none;
+    visibility: hidden;
+  }
+}
