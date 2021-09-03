@@ -36,8 +36,8 @@
     background-image: url(../svg/graph.svg);
     background-position: left -1px bottom -1px;
     border-top: 1px solid var(--bg-md);
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: var(--bdradius-sm);
+    border-bottom-left-radius: var(--bdradius-sm);
     transition: transform 0.5s ease;
     @media screen and (prefers-reduced-motion: reduce) {
       position: relative;
@@ -51,8 +51,8 @@
       background-image: url(../svg/graph.svg);
       background-position: left -1px bottom -1px;
       border-top: 1px solid var(--bg-md);
-      border-bottom-right-radius: 2px;
-      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: var(--bdradius-sm);
+      border-bottom-left-radius: var(--bdradius-sm);
       transition: none;
     }
     &::before,

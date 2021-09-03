@@ -48,6 +48,12 @@ main {
   }
 }
 
+.app {
+  margin: 0.5rem;
+  background-color: var(--bg-lt);
+  border-radius: var(--bdradius-lg);
+}
+
 @media screen and (max-width: 545px) {
   .site-footer {
     display: none;
