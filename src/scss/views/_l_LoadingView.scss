@@ -1,86 +1,37 @@
 /**
-* Appearance of inital loading state
+* General apearance of inital loading state across components
 */
 
 .loading {
-  .loading-icon {
-    display: inline-block;
-    width: calc(var(--step-5) * 3.1);
-    height: calc(var(--step-5) * 3.1);
-    margin: 0 auto;
-    animation: rotating 30s linear infinite;
-    @media screen and (prefers-reduced-motion: reduce) {
-      display: inline-block;
-      width: calc(var(--step-5) * 3.1);
-      height: calc(var(--step-5) * 3.1);
-      margin: 0 auto;
-      animation: none;
-    }
+  cursor: progress;
+}
+
+.loading-bg {
+  background: linear-gradient(
+    89deg,
+    var(--bg-lt),
+    var(--bg-md),
+    var(--bg-md),
+    var(--bg-md)
+  );
+  background-size: 200% 100%;
+  animation: loading 10s ease-in-out infinite;
+
+  /* @media Rules */
+  @media screen and (prefers-reduced-motion: reduce) {
+    background: linear-gradient(
+      89deg,
+      var(--bg-lt),
+      var(--bg-md),
+      var(--bg-md),
+      var(--bg-md)
+    );
+    background-size: 200% 100%;
+    animation: none;
   }
 
-  .c-hud {
-    background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
-      radial-gradient(
-        ellipse at center,
-        var(--temp-5),
-        var(--temp-4),
-        var(--temp-3),
-        var(--temp-2),
-        var(--temp-1),
-        var(--temp-0)
-      );
-    background-size: 400% 400%;
-    animation: loading 60s ease infinite;
-    @media screen and (prefers-reduced-motion: reduce) {
-      background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
-        radial-gradient(
-          ellipse at center,
-          var(--temp-5),
-          var(--temp-4),
-          var(--temp-3),
-          var(--temp-2),
-          var(--temp-1),
-          var(--temp-0)
-        );
-      background-size: 400% 400%;
-      animation: none;
-    }
-  }
-
-  .c-details {
-    .inline-icon {
-      background-color: var(--bg-dk);
-      border: 1px solid transparent;
-    }
-    .c-visibility .scale {
-      opacity: 0.3;
-
-      &::before,
-      &::after {
-        content: '';
-      }
-    }
-
-    ul {
-      li {
-        // background-color: var(--grey-8);
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3),
-        &:nth-child(4) {
-          min-height: 3.8rem;
-        }
-      }
-    }
-  }
-
-  .c-forecast .weather-icon {
-    width: 75%;
-    background-color: var(--bg-md);
-    border-radius: 3rem;
-    filter: none !important;
-  }
-  .loading-bg {
+  @media (prefers-color-scheme: dark) {
+    // :root:not([data-user-color-scheme='dark']) {}
     background: linear-gradient(
       89deg,
       var(--bg-lt),
@@ -90,87 +41,5 @@
     );
     background-size: 200% 100%;
     animation: loading 10s ease-in-out infinite;
-    @media screen and (prefers-reduced-motion: reduce) {
-      background: linear-gradient(
-        89deg,
-        var(--bg-lt),
-        var(--bg-md),
-        var(--bg-md),
-        var(--bg-md)
-      );
-      background-size: 200% 100%;
-      animation: none;
-    }
-  }
-}
-
-/* @media Rules */
-@media screen and (prefers-reduced-motion: reduce) {
-  .loading {
-    .section-hud,
-    .loading-icon {
-      animation: none;
-    }
-  }
-}
-
-@media screen and (max-width: 545px) {
-  .loading {
-    .loading-icon {
-      width: calc(var(--step-5) * 2.7);
-      height: calc(var(--step-5) * 2.7);
-    }
-    .c-details ul {
-      li:nth-child(1),
-      li:nth-child(2),
-      li:nth-child(3),
-      li:nth-child(4) {
-        min-height: auto;
-      }
-    }
-
-    .c-forecast .weather-icon {
-      width: 45%;
-    }
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  .loading {
-    .loading-icon {
-      width: calc(var(--step-5) * 3);
-      height: calc(var(--step-5) * 3);
-    }
-  }
-}
-@media (prefers-color-scheme: dark) {
-  // :root:not([data-user-color-scheme='dark']) {}
-  .loading {
-    .c-details .inline-icon,
-    .c-forecast .weather-icon {
-      background-color: var(--bg-vdk);
-    }
-    .loading-bg {
-      background: linear-gradient(
-        89deg,
-        var(--bg-lt),
-        var(--bg-md),
-        var(--bg-md),
-        var(--bg-md)
-      );
-      background-size: 200% 100%;
-      animation: loading 10s ease-in-out infinite;
-      @media screen and (prefers-reduced-motion: reduce) {
-        background: linear-gradient(
-          89deg,
-          var(--bg-lt),
-          var(--bg-md),
-          var(--bg-md),
-          var(--bg-md)
-        );
-        background-size: 200% 100%;
-        animation: none;
-      }
-    }
   }
 }

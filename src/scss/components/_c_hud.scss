@@ -9,7 +9,8 @@
   margin: 0.2rem 0.3rem;
   padding: 2rem;
   background-color: var(--bg-lt);
-  border-radius: 10px 10px 2px 2px;
+  border-radius: var(--bdradius-lg) var(--bdradius-lg) var(--bdradius-sm)
+    var(--bdradius-sm);
   box-shadow: var(--bg-dk) 1px 1px 1px;
 
   h3 {
@@ -31,17 +32,94 @@
     font-family: 'Turret Road', sans-serif;
     li {
       margin: 0 auto;
-      :first-child {
+      :not(button) :first-child {
         margin-bottom: 0.4rem;
         padding-bottom: 0.2rem;
         font-size: var(--step--1);
         border-bottom: 1px solid var(--text);
+      }
+      &.error {
+        margin: 0 auto;
+        padding: 0 1rem;
+        background: var(--bg-error);
+        border-radius: var(--bdradius-sm);
+        @include fade-in('3000ms', '300ms');
+      }
+    }
+  }
+
+  &.error {
+    padding-bottom: 1.5rem;
+    color: var(--grey-solid-1);
+    background-color: var(--bg-vdk);
+    li {
+      margin: 0.3rem auto;
+    }
+    .weather-icon {
+      width: 20.5%;
+      height: auto;
+    }
+  }
+
+  &.loading {
+    .loading-icon {
+      display: inline-block;
+      width: 25%;
+      height: auto;
+      margin: 0 auto;
+      animation: rotating 30s linear infinite;
+      @media screen and (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+    }
+    // min-height: 257px;
+    background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
+      radial-gradient(
+        ellipse at center,
+        var(--temp-5),
+        var(--temp-4),
+        var(--temp-3),
+        var(--temp-2),
+        var(--temp-1),
+        var(--temp-0)
+      );
+    background-size: 400% 400%;
+    animation: loading 60s ease infinite;
+    @media screen and (prefers-reduced-motion: reduce) {
+      background: radial-gradient(ellipse at top, var(--temp-3), var(--temp-0)),
+        radial-gradient(
+          ellipse at center,
+          var(--temp-5),
+          var(--temp-4),
+          var(--temp-3),
+          var(--temp-2),
+          var(--temp-1),
+          var(--temp-0)
+        );
+      background-size: 400% 400%;
+      animation: none;
+    }
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      .section-hud,
+      .loading-icon {
+        animation: none;
       }
     }
   }
 
   @media screen and (max-width: 545px) {
     padding: 1.5rem;
+    .loading-icon {
+      width: calc(var(--step-5) * 2.7);
+      height: calc(var(--step-5) * 2.7);
+    }
+  }
+  @media screen and (min-width: 1500px) {
+    .loading-icon {
+      width: calc(var(--step-5) * 3);
+      height: calc(var(--step-5) * 3);
+    }
   }
 }
 
