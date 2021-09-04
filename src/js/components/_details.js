@@ -70,7 +70,7 @@ export const fRenderDetails = function (oCURRENT, _oData, _oSettings) {
                             oCURRENT.wind_dir + 180
                           )}deg)`
                         })}
-                        ${oIcons.sWind}
+                        ${oIcons.sStrongWind}
                     </span>
                 </li>
                 <li class="c-visibility">

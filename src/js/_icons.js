@@ -162,3 +162,25 @@ export const fSetStringElAttrs = function (sEl, props = {}) {
   }
   return ''
 }
+
+/**
+ *
+ * @param {string} parentNodeSelector
+ * @param {string} nestedNodesSelector
+ * @returns {object} An object of nodes strings with their ID as the object perameter
+ */
+export const floadIconObject = function (
+  parentNodeSelector = '#svgs',
+  nestedNodesSelector = 'svg'
+) {
+  const parentNode = document.querySelector(parentNodeSelector)
+
+  const nlSVGs = parentNode.querySelectorAll(nestedNodesSelector)
+  const object = {}
+
+  nlSVGs.forEach(function (node) {
+    // add each node object with node node ID as key
+    object[node.id] = node.outerHTML
+  })
+  return object
+}

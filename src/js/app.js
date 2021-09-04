@@ -1,6 +1,6 @@
 import * as Queries from './_queries'
 import * as Scales from './_scales'
-
+import { floadIconObject } from './_icons'
 import { fRenderHUD } from './components/_hud'
 import { fRenderForecast } from './components/_forecast'
 import { fRenderDetails } from './components/_details'
@@ -52,29 +52,11 @@ const weatherApp = function (_oSettings = {}) {
     sWeatherApi = `${sWeatherApi}&DEV=${_oSettings.dev}`
   }
 
-  // DOM Target
-  const nApp = document.querySelector(_oSettings.target)
-
-  // SVGs are staged in HTML for details section,
-  // the remainder of images are inlined(except Cloudcover & Moon, loaded dynamically)
-  const nIcons = document.querySelector('#svgs')
-
-  _oSettings.icon = {
-    sRefresh: nIcons.querySelector('.svg-refresh').outerHTML,
-    // degrees/compass inline
-    sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
-    sThermometer: nIcons.querySelector('.svg-wi-thermometer').outerHTML,
-    sWindDirection: nIcons.querySelector('.svg-wi-wind-deg').outerHTML,
-    sSnow: nIcons.querySelector('.svg-wi-snow').outerHTML,
-
-    // cloud lodaded dynamically
-    sRaindrop: nIcons.querySelector('.svg-wi-raindrop').outerHTML,
-    sBinoculars: nIcons.querySelector('.svg-binoculars').outerHTML,
-    sSunrise: nIcons.querySelector('.svg-wi-sunrise').outerHTML,
-    sSunset: nIcons.querySelector('.svg-wi-sunset').outerHTML,
-    sSunnyDay: nIcons.querySelector('.svg-wi-day-sunny').outerHTML
-    // moon phases are loaded as img pathsL: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
-  }
+  /**
+   * SVG icons staged in index.html
+   * TODO: Moon phases loaded as img paths: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+   */
+  _oSettings.icon = floadIconObject()
 
   /**
    * Build the UI
