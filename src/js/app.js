@@ -64,6 +64,7 @@ const weatherApp = function (_oSettings = {}) {
    * @param {array} data
    */
   const fBuildUI = function (_oData) {
+    const nApp = document.querySelector(_oSettings.target)
     nApp.querySelector('#hud').outerHTML = fRenderHUD(_oData, _oSettings)
 
     if (_oData.CURRENT.error || _oData.CURRENT.status) {
@@ -111,7 +112,7 @@ const weatherApp = function (_oSettings = {}) {
       }
     } catch (e) {
       console.error('init error: ', e)
-      nApp.innerHTML = fRenderErrors(e)
+      fRenderErrors(e, _oSettings)
     }
   }
   fInit()

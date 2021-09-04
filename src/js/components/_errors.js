@@ -4,8 +4,9 @@
  * @param {obj} err
  * @returns
  */
-export const fRenderErrors = function (err) {
-  return `<div id="ohnos" class="c-screen errors">
+export const fRenderErrors = function (err, _oSettings) {
+  const nApp = document.querySelector(_oSettings.target)
+  nApp.innerHTML = `<div id="ohnos" class="c-screen errors">
                 <h3><span aria-hidden="true">⥀.⥀</span><br>Oh Nooos!</h3>
                 <p class="sr-only">There has been a crittical error:</p>
                     <div class="errors-wrap">
