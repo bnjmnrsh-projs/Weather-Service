@@ -18,12 +18,29 @@ import { ThemeToggle } from './_ThemeToggle'
 const weatherApp = function (_oSettings = {}) {
   document.documentElement.classList.remove('no-js')
 
+  /**
+   * Default params
+   *
+   * fBuildBaseWeatherApiQuery() returns the base url with def flags only.
+   * Location information is assembeled in Queries.fAssembleWeatherQuery()
+   */
   const _oDefaults = {
     target: '#app',
     units: 'M',
     debug: false,
-    dev: false,
-    api_retries: 3
+    devFlags: false,
+    loc: {
+      longitude: '',
+      latitude: ''
+    },
+    api_retries: 3,
+    locApi: 'https://ipapi.co/json/',
+    weatherApi: 'https://weatherserv.bnjmnrsh.workers.dev/?',
+    fBuildBaseWeatherApiQuery() {
+      return this.devFlags
+        ? `${this.weatherApi}&DEV=${this.devFlags}`
+        : `${this.weatherApi}`
+    }
   }
 
   // Merge settings with defaults
@@ -44,13 +61,6 @@ const weatherApp = function (_oSettings = {}) {
     }
   }
 
-  // API urls
-  const sIpapiLocationApi = 'https://ipapi.co/json/'
-  let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?'
-
-  if (_oSettings.dev) {
-    sWeatherApi = `${sWeatherApi}&DEV=${_oSettings.dev}`
-  }
 
   /**
    * SVG icons staged in index.html
@@ -96,12 +106,16 @@ const weatherApp = function (_oSettings = {}) {
     try {
       if (!_oSettings.loc) {
         _oSettings.loc = await Queries.fGetLocation(
-          sIpapiLocationApi,
+          _oSettings.locApi,
           _oSettings
         )
       }
-      const loc = await Queries.fGetLocation(sIpapiLocationApi, _oSettings)
-      const _oWeather = await Queries.fGetWeather(loc, sWeatherApi, _oSettings)
+      const loc = await Queries.fGetLocation(_oSettings.locApi, _oSettings)
+      const _oWeather = await Queries.fGetWeather(
+        loc,
+        _oSettings.fBuildBaseWeatherApiQuery(),
+        _oSettings
+      )
 
       if (_oSettings.debug) {
         console.log('fGetLocation response:', loc)
