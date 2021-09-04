@@ -46,21 +46,20 @@ const weatherApp = function (_oSettings = {}) {
   // Merge settings with defaults
   _oSettings = Object.assign(_oDefaults, _oSettings)
 
-  // Enable debugging & dev API responses via URL
+  // Set debugging & dev flags via URL
   const { searchParams } = new URL(document.URL)
   _oSettings.debug = searchParams.has('DEBUG')
   if (searchParams.has('DEV')) {
     _oSettings.dev = searchParams.get('DEV')
   }
 
-  // Set location lat lon via URL
+  // Set location lat lon flags via URL
   if (searchParams.has('lat') && searchParams.has('lon')) {
     _oSettings.loc = {
       longitude: searchParams.has('lat'),
       latitude: searchParams.has('lon')
     }
   }
-
 
   /**
    * SVG icons staged in index.html
@@ -146,7 +145,7 @@ const weatherApp = function (_oSettings = {}) {
 const settings = {
   units: 'I', // I, M
   debug: false,
-  dev: false // true (malformed json), '5XX_FULL', '5XX_PARTIAL', 'DUMMY', 'NO_KEY', 'OVER_QUOTA', 'API_ERROR'
+  devFlags: false // true (error screen, malformed json), '5XX_FULL', '5XX_PARTIAL', 'DUMMY', 'NO_KEY', 'OVER_QUOTA', 'API_ERROR'
 }
 
 weatherApp(settings)
