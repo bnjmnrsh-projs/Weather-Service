@@ -18,29 +18,149 @@
   };
 
   /**
+   * Parses the JSON returned by a network request.
+   * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
+   *
+   * @param  {object}         A a network request response
+   *
+   * @return {object}         The parsed JSON, status from the response
+   */
+
+  /* eslint-disable prefer-promise-reject-errors
+    ----
+    We want to return error object with our API response rather then thowing a new Error?
+  */
+  const fParseJSONresponse = async function (oResponse, bDebug = false) {
+    if (bDebug) {
+      console.log('fParseJSONresponse', oResponse);
+    }
+    return new Promise((resolve) => {
+      oResponse
+        .json()
+        .then((json) => {
+          return resolve({
+            status: oResponse.status,
+            ok: oResponse.ok,
+            json
+          })
+        })
+        .catch((oError) => {
+          resolve({
+            ok: false,
+            status: 'Request()::fParseJSONresponse()',
+            status_message: oError
+          });
+        });
+    })
+  };
+
+  const Request = async function (sUrl, oOptions, bDebug = false) {
+    try {
+      if (sUrl) {
+        return new Promise((resolve, reject) => {
+          window
+            .fetch(sUrl, oOptions)
+            .then((oResponse) => fParseJSONresponse(oResponse, bDebug))
+            .then((oResponse) => {
+              if (oResponse.ok) {
+                if (bDebug) {
+                  console.log('fRequest', 'ok');
+                  console.log('fRequest response', oResponse.json);
+                }
+                return resolve(oResponse)
+              }
+              // extract the error from the server's json
+
+              if (bDebug) {
+                console.error('fRequest not ok');
+                console.error('oResponse', oResponse);
+              }
+              if (Object.prototype.hasOwnProperty.call(oResponse, 'json.error')) {
+                return resolve({
+                  status: oResponse.status,
+                  status_message: oResponse.json.error
+                })
+              }
+              return resolve(oResponse)
+            })
+            .catch((oError) => {
+              if (bDebug) {
+                console.error('fRequest catch', { ...oError });
+                console.warn('oError', oError);
+              }
+              if (Object.keys(oError).length === 0) {
+                resolve({
+                  ok: false,
+                  status: 'Request() fetch error',
+                  status_message: oError
+                });
+              }
+              throw new Error(oError)
+            });
+        })
+      } else {
+        return {
+          ok: false,
+          status: 'Request() fetch error',
+          status_message: `Invalid fetch URL: ${sUrl}`
+        }
+      }
+    } catch (oError) {
+      if (bDebug) {
+        console.warn('Request() error', oError);
+      }
+      throw new Error({ ...oError })
+    }
+  };
+
+  const RequestWithRetry = async function (
+    sUrl,
+    oOptions = {},
+    n = 1,
+    bDebug = false
+  ) {
+    try {
+      return await Request(sUrl, oOptions, bDebug)
+    } catch (oError) {
+      if (bDebug) {
+        console.error('fRequestWithRetry() error', oError);
+      }
+      if (oError.status) throw oError // recieved a reply from server, pass it on
+      if (n <= 1) throw oError // out of trys
+      if (bDebug) {
+        console.warn(`Request::fRequestWithRetry(): Retrying fetch request: ${n}`);
+      }
+      return await RequestWithRetry(sUrl, oOptions, n - 1, bDebug)
+    }
+  };
+
+  /**
    * IP address based location API
    *
    * @returns {object} coordiantes object
    */
-  const fIPapi = async function (sIpapiLocationApi) {
-    const pResp = await window.fetch(sIpapiLocationApi).then(function (pResp) {
+  const fIPapi = async function (sIpapiLocationApi, _oSettings) {
+    return await RequestWithRetry(
+      sIpapiLocationApi,
+      {},
+      _oSettings.api_retries
+    ).then(function (pResp) {
       if (pResp.ok) {
-        return pResp.json()
+        return pResp.json
       } else {
         throw pResp
       }
-    });
-    return await pResp
+    })
   };
 
   /**
-   * Assembles the formatted query string for CF API requests
+   * Assembles the formatted weather API URL & query string
    *
    * @param {string} urlBase
    * @param {obj} oLoc Response from oLocation API
    * @returns {string} Assembled url with query (cleaned)
    */
-  const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
+  const fAssembleWeatherQuery = function (urlBase, oLoc, _oSettings) {
     if (!oLoc) return
 
     let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`;
@@ -108,19 +228,18 @@
           console.log('fGetLocation: Checking geoLoccation API: fGeoLocApi.');
         }
         return await fGeoLocApi()
-      } catch (e) {
+      } catch (oError) {
         if (_oSettings.debug) {
-          console.warn('fGetLocationL: failed using fGeoLocApi: ', e);
+          console.warn(`fGetLocation: failed using fGeoLocApi: ${oError}`);
+          console.warn('Falling back to IP address lookup instead.');
         }
         try {
+          return await fIPapi(sIpapiLocationApi, _oSettings)
+        } catch (oError) {
           if (_oSettings.debug) {
-            console.warn('Falling back to IP address lookup instead.');
+            console.warn(`fGetLocation: failed sIpapiLocationApi: ${oError}`);
           }
-          return await fIPapi(sIpapiLocationApi)
-        } catch (e) {
-          if (_oSettings.debug) {
-            console.warn('fGetLocation: failed sIpapiLocationApi: ', e);
-          }
+          throw new Error({ ...oError })
         }
       }
     }
@@ -133,15 +252,17 @@
    * @returns {object} weather object
    */
   const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
-    const pResp = await window
-      .fetch(fAssembledQuery(sWeatherApi, oLoc, _oSettings))
-      .then(function (pResp) {
-        if (pResp.ok) {
-          return pResp.json()
-        } else {
-          throw pResp
-        }
-      });
+    const pResp = await RequestWithRetry(
+      fAssembleWeatherQuery(sWeatherApi, oLoc, _oSettings),
+      {},
+      _oSettings.api_retries
+    ).then(function (pResp) {
+      if (pResp.ok) {
+        return pResp.json
+      } else {
+        throw pResp
+      }
+    });
     return await pResp
   };
 
@@ -388,6 +509,28 @@
       return nEl.innerHTML
     }
     return ''
+  };
+
+  /**
+   *
+   * @param {string} parentNodeSelector
+   * @param {string} nestedNodesSelector
+   * @returns {object} An object of nodes strings with their ID as the object perameter
+   */
+  const floadIconObject = function (
+    parentNodeSelector = '#svgs',
+    nestedNodesSelector = 'svg'
+  ) {
+    const parentNode = document.querySelector(parentNodeSelector);
+
+    const nlSVGs = parentNode.querySelectorAll(nestedNodesSelector);
+    const object = {};
+
+    nlSVGs.forEach(function (node) {
+      // add each node object with node node ID as key
+      object[node.id] = node.outerHTML;
+    });
+    return object
   };
 
   /**
@@ -774,29 +917,57 @@
    * @returns {string}
    */
   const fRenderHUD = function (_oData, _oSettings) {
-    if (_oSettings.log) {
+    if (_oSettings.debug) {
       console.log('fRenderHUD: ', _oData);
+    }
+    const sErrorResponse = `<header id="hud" class="c-hud error">
+            <h3>
+              <img class="weather-icon icon-spin" alt="" src="./svg/icons/weather/svg/wi-wind-deg.svg" />
+              Whoops!
+            </h3>
+            <ul class="unstyled">
+              <li class="">There was an error loading the current weather:
+                ${
+                  _oData.CURRENT.error
+                    ? `<code>${_oData.CURRENT.error}</code>`
+                    : ''
+                }
+                ${
+                  _oData.CURRENT.status
+                    ? `<code>${_oData.CURRENT.status}</code>`
+                    : ''
+                }
+              </li>
+              <li class=""><button class="rounded">${
+                _oSettings.icon.sRefresh
+              } reload</button></li>
+            </ul>
+        </header>
+        `;
+    if (_oData.CURRENT.error || _oData.CURRENT.status) {
+      return sErrorResponse
     }
 
     const oCURRENT = _oData.CURRENT.data[0];
     const sIconName = fGetWeatherIcon(oCURRENT);
 
-    const template = `<header
+    const sTemplate = `<header
         id="hud" class="c-hud" data-temp="${fTempDataPt(
           fClean(oCURRENT.temp)
         )}">
-            <h3>
-                <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
-                <span aria-hidden="true">{{temp}}</span>
-                </h3>
-                <ul class="unstyled">
-                <li aria-hidden="true">{{now}} {{weather_description}}</li>
-                <li hidden>{{aira_weather_description}}</li>
-                <li>{{city}}, {{country}}</li>
-            </ul>
+          <h3>
+            <img class="weather-icon" alt="" src="./svg/icons/weather/svg/${sIconName}.svg" />
+            <span aria-hidden="true">{{temp}}</span>
+          </h3>
+          <ul class="unstyled">
+            <li aria-hidden="true">{{now}} {{weather_description}}</li>
+            <li hidden>{{aira_weather_description}}</li>
+            <li>{{city}}, {{country}}</li>
+          </ul>
         </header>
         `;
-    return fHUDstr(template, _oData, _oSettings)
+
+    return fHUDstr(sTemplate, _oData, _oSettings)
   };
 
   /**
@@ -846,10 +1017,34 @@
    * @returns {string}
    */
   const fRenderForecast = function (_oForecast, _oSettings) {
+    if (_oSettings.debug) {
+      console.log('fRenderForecast: ', _oForecast);
+    }
+    const bErrorState = _oForecast ? '' : 'error';
+
+    const sErrorResponse = `<li class="error">
+                            <p>There was an error loading the forecast: ${
+                              _oForecast.error
+                                ? `<code>${_oForecast.error}</code>`
+                                : ''
+                            }
+                            ${
+                              _oForecast.status
+                                ? `<code>${_oForecast.status}</code>`
+                                : ''
+                            }</p>
+                            <button class="rounded">${
+                              _oSettings.icon.sRefresh
+                            } reload</button>
+                          </li>`;
     return `
-        <div id="forecast" class="c-forecast" aria-description="The weather forecast for the next 16 days.">
+        <div id="forecast" class="c-forecast ${bErrorState}" aria-description="The weather forecast for the next 16 days.">
             <ul class="unstyled">
-                ${fRenderForecastList(_oForecast, _oSettings)}
+                ${
+                  _oForecast.data
+                    ? fRenderForecastList(_oForecast.data, _oSettings)
+                    : sErrorResponse
+                }
             </ul>
         </div>
         `
@@ -933,8 +1128,7 @@
    * @param {object} _oSettings
    * @returns {string}
    */
-  const fRenderDetails = function (_oData, _oSettings) {
-    const oCURRENT = _oData.CURRENT.data[0];
+  const fRenderDetails = function (oCURRENT, _oData, _oSettings) {
     const iconCloud = fGetCloudCoverIcon(oCURRENT.clouds);
     const oMoon = fPhase(oCURRENT.obj_time, _oSettings);
     const oIcons = _oSettings.icon;
@@ -944,7 +1138,7 @@
             <ul class="unstyled">
                 <li class="c-feels-like">
                     <span class="left-col">{{feels_like}} {{app_temp}}</span>
-                    ${fSetStringElAttrs(_oSettings.icon.sThermometer, {
+                    ${fSetStringElAttrs(oIcons.sThermometer, {
                       class: 'inline-icon',
                       data: {
                         temp: fTempDataPt(fClean(oCURRENT.app_temp))
@@ -955,16 +1149,13 @@
                   oCURRENT.uv
                     ? `<li class="c-uv-index">
                             <span class="left-col">{{uv}} {{uv_index}}</span>
-                            ${fSetStringElAttrs(
-                              _oSettings.icon.sSunnyDay,
-                              {
-                                class: 'inline-icon',
-                                data: {
-                                  uv: fUvDataPt(
-                                    fClean(oCURRENT.uv))
-                                }
+                            ${fSetStringElAttrs(oIcons.sSunnyDay, {
+                              class: 'inline-icon',
+                              data: {
+                                uv: fUvDataPt(
+                                  fClean(oCURRENT.uv))
                               }
-                            )}
+                            })}
                           </li>`
                     : ''
                 }
@@ -994,7 +1185,7 @@
                             oCURRENT.wind_dir + 180
                           )}deg)`
                         })}
-                        ${oIcons.sWind}
+                        ${oIcons.sStrongWind}
                     </span>
                 </li>
                 <li class="c-visibility">
@@ -1026,24 +1217,23 @@
    * @param {obj} err
    * @returns
    */
-  const fRenderErrors = function (err) {
-    return `<div id="ohnos" class="c-screen errors">
+  const fRenderErrors = function (err, _oSettings) {
+    const nApp = document.querySelector(_oSettings.target);
+    nApp.innerHTML = `<div id="ohnos" class="c-screen errors">
                 <h3><span aria-hidden="true">⥀.⥀</span><br>Oh Nooos!</h3>
                 <p class="sr-only">There has been a crittical error:</p>
                     <div class="errors-wrap">
                         ${err.stack ? '<code>' + err.stack + '</code>' : ''}
                         ${
                           err.status
-                            ? '<code>' +
-                              err.statusText +
-                              ': ' +
-                              err.status +
-                              '</code>'
+                            ? `<code>${err.status}: ${
+                                err.statusText ?? err.status_message
+                              }</code>`
                             : ''
                         }
                     </div>
                 <img alt="" class="screen-icon errors-icon" src="./svg/icons/weather/svg/wi-alien.svg"/>
-            </div>`
+            </div>`;
   };
 
   /**
@@ -1086,13 +1276,6 @@
   const fGetLocalStoreColorSchemeVal = function (oSettings = {}) {
     let sCurrentSetting = window.localStorage.getItem(oSettings.STORAGE_KEY);
 
-    // If nothing stored, check which style sheet is active
-    if (sCurrentSetting === null) {
-      sCurrentSetting =
-        fGetColorModeCSSpropVal(oSettings) === 'dark' ? 'dark' : 'light';
-      // Set to localStorage
-      window.localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting);
-    }
     if (oSettings.debug) {
       console.log(
         'ThemeToggle:fGetLocalStoreColorSchemeVal: sCurrentSetting:',
@@ -1100,11 +1283,19 @@
       );
     }
 
+    // If nothing stored, check which style sheet is active
+    if (sCurrentSetting === null) {
+      sCurrentSetting =
+        fGetColorModeCSSpropVal(oSettings) === 'dark' ? 'dark' : 'light';
+      // Set to window.localStorage
+      window.localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting);
+    }
+
     return sCurrentSetting
   };
 
   /**
-   * Save user perfered theme to localStorage
+   * Save user perfered theme to window.localStorage
    *
    * @param {string} sCurrentSetting 'light' || 'dark'
    * @param {obj} oSettings
@@ -1113,15 +1304,14 @@
     sCurrentSetting,
     oSettings = {}
   ) {
-    if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
-      window.localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting);
-    }
-
     if (oSettings.debug) {
       console.log(
-        'ThemeToggle:fSetLocalStoreColorSchemeVal: sCurrentSetting:',
+        'ThemeToggle:fSetLocalStoreColorSchemeVal: to sCurrentSetting:',
         sCurrentSetting
       );
+    }
+    if (sCurrentSetting === 'light' || sCurrentSetting === 'dark') {
+      window.localStorage.setItem(oSettings.STORAGE_KEY, sCurrentSetting);
     }
   };
 
@@ -1190,6 +1380,11 @@
     const sCurrentSetting =
       sColorSetting || fGetLocalStoreColorSchemeVal(oSettings);
 
+    if (oSettings.debug) {
+      console.log(
+        'ThemeToggle:fSetGlobalColorScheme: sCurrentSetting:', sCurrentSetting
+      );
+    }
     switch (sCurrentSetting) {
       case 'light':
         fSetHTMLdataAttr('light', oSettings);
@@ -1202,13 +1397,6 @@
         fSetLocalStoreColorSchemeVal('dark', oSettings);
         break
     }
-
-    if (oSettings.debug) {
-      console.log(
-        'ThemeToggle:fSetGlobalColorScheme: sCurrentSetting:',
-        sCurrentSetting
-      );
-    }
   };
 
   /**
@@ -1218,7 +1406,12 @@
    */
   const fToggleGlobalColorScheme = function (nThemeToggel, oSettings = {}) {
     const sCurrentSetting = fGetLocalStoreColorSchemeVal(oSettings);
-
+    if (oSettings.debug) {
+      console.log(
+        'ThemeToggle:fToggleGlobalColorScheme: sCurrentSetting:',
+        sCurrentSetting
+      );
+    }
     switch (sCurrentSetting) {
       case 'light':
         fSetGlobalColorScheme('dark', nThemeToggel, oSettings);
@@ -1226,13 +1419,6 @@
       case 'dark':
         fSetGlobalColorScheme('light', nThemeToggel, oSettings);
         break
-    }
-
-    if (oSettings.debug) {
-      console.log(
-        'ThemeToggle:fToggleGlobalColorScheme: sCurrentSetting:',
-        sCurrentSetting
-      );
     }
   };
 
@@ -1262,13 +1448,12 @@
     // Capture clicks on the toggle
     document.addEventListener('click', function (e) {
       if (e.target.id === nThemeToggel.id) {
-        fToggleGlobalColorScheme(nThemeToggel, oSettings);
-
         if (oSettings.debug) {
           console.log(
             `ThemeToggle:fAddEventListeners: button "${e.target.id}" clicked.`
           );
         }
+        fToggleGlobalColorScheme(nThemeToggel, oSettings);
       }
     });
 
@@ -1281,7 +1466,7 @@
           );
           // Update button state to reflect change
           fSetButtonState(sHTMLcolorMode, nThemeToggel, oSettings);
-          // Update localStorage value to reflect change
+          // Update window.localStorage value to reflect change
           fSetLocalStoreColorSchemeVal(sHTMLcolorMode, oSettings);
 
           if (oSettings.debug) {
@@ -1338,19 +1523,19 @@
         nThemeToggel.removeAttribute('disabled');
       }
 
-      // Add event listeners
-      fAddEventListeners(nThemeToggel, oSettings);
-
-      // Establish toggle/theme state based on system and/or last pref saved in localStorage
+      // Establish toggle/theme state based on system and/or last pref saved in window.localStorage
       fSetGlobalColorScheme(
         fGetLocalStoreColorSchemeVal(oSettings),
         nThemeToggel,
         oSettings
       );
 
+      // Add event listeners
+      fAddEventListeners(nThemeToggel, oSettings);
+
       if (oSettings.debug) {
         console.log(
-          'ThemeToggle:Init,  current localStore setting: ',
+          'ThemeToggle:Init, current localStore setting: ',
           window.localStorage.getItem(oSettings.STORAGE_KEY)
         );
       }
@@ -1368,46 +1553,54 @@
   const weatherApp = function (_oSettings = {}) {
     document.documentElement.classList.remove('no-js');
 
+    /**
+     * Default params
+     *
+     * fBuildBaseWeatherApiQuery() returns the base url with def flags only.
+     * Location information is assembeled in Queries.fAssembleWeatherQuery()
+     */
     const _oDefaults = {
       target: '#app',
       units: 'M',
       debug: false,
-      dev: false
+      devFlags: false,
+      loc: {
+        longitude: '',
+        latitude: ''
+      },
+      api_retries: 3,
+      locApi: 'https://ipapi.co/json/',
+      weatherApi: 'https://weatherserv.bnjmnrsh.workers.dev/?',
+      fBuildBaseWeatherApiQuery() {
+        return this.devFlags
+          ? `${this.weatherApi}&DEV=${this.devFlags}`
+          : `${this.weatherApi}`
+      }
     };
 
     // Merge settings with defaults
     _oSettings = Object.assign(_oDefaults, _oSettings);
 
-    // API urls
-    const sIpapiLocationApi = 'https://ipapi.co/json/';
-    let sWeatherApi = 'https://weatherserv.bnjmnrsh.workers.dev/?';
-
-    if (_oSettings.dev) {
-      sWeatherApi = `${sWeatherApi}&DEV=${_oSettings.dev}`;
+    // Set debugging & dev flags via URL
+    const { searchParams } = new URL(document.URL);
+    _oSettings.debug = searchParams.has('DEBUG');
+    if (searchParams.has('DEV')) {
+      _oSettings.dev = searchParams.get('DEV');
     }
 
-    // DOM Target
-    const nApp = document.querySelector(_oSettings.target);
+    // Set location lat lon flags via URL
+    if (searchParams.has('lat') && searchParams.has('lon')) {
+      _oSettings.loc = {
+        longitude: searchParams.has('lat'),
+        latitude: searchParams.has('lon')
+      };
+    }
 
-    // SVGs are staged in HTML for details section,
-    // the remainder of images are inlined(except Cloudcover & Moon, loaded dynamically)
-    const nIcons = document.querySelector('#svgs');
-
-    _oSettings.icon = {
-      // degrees/compass inline
-      sWind: nIcons.querySelector('.svg-wi-strong-wind').outerHTML,
-      sThermometer: nIcons.querySelector('.svg-wi-thermometer').outerHTML,
-      sWindDirection: nIcons.querySelector('.svg-wi-wind-deg').outerHTML,
-      sSnow: nIcons.querySelector('.svg-wi-snow').outerHTML,
-
-      // cloud lodaded dynamically
-      sRaindrop: nIcons.querySelector('.svg-wi-raindrop').outerHTML,
-      sBinoculars: nIcons.querySelector('.svg-binoculars').outerHTML,
-      sSunrise: nIcons.querySelector('.svg-wi-sunrise').outerHTML,
-      sSunset: nIcons.querySelector('.svg-wi-sunset').outerHTML,
-      sSunnyDay: nIcons.querySelector('.svg-wi-day-sunny').outerHTML
-      // moon phases are loaded as img pathsL: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
-    };
+    /**
+     * SVG icons staged in index.html
+     * TODO: Moon phases loaded as img paths: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+     */
+    _oSettings.icon = floadIconObject();
 
     /**
      * Build the UI
@@ -1415,14 +1608,29 @@
      * @param {array} data
      */
     const fBuildUI = function (_oData) {
-      nApp.classList.remove('loading');
-      nApp.innerHTML =
-        fRenderHUD(_oData, _oSettings) +
-        fRenderDetails(_oData, _oSettings) +
-        fRenderForecast(_oData.DAILY.data, _oSettings);
+      const nApp = document.querySelector(_oSettings.target);
+      nApp.querySelector('#hud').outerHTML = fRenderHUD(_oData, _oSettings);
 
-      // Adjust the visibility 'fogg' bar in the details section
-      fSetVisabilityScale(_oData.CURRENT.data[0].vis);
+      if (_oData.CURRENT.error || _oData.CURRENT.status) {
+        nApp.querySelector('#details').classList.remove('loading');
+        nApp.querySelector('#details').classList.add('error');
+      } else {
+        nApp.querySelector('#details').outerHTML = fRenderDetails(
+          _oData.CURRENT.data[0],
+          _oData,
+          _oSettings
+        );
+      }
+
+      nApp.querySelector('#forecast').outerHTML = fRenderForecast(
+        _oData.DAILY,
+        _oSettings
+      );
+      if (!_oData.CURRENT.error && !_oData.CURRENT.status) {
+        // Adjust the visibility 'fogg' bar in the details section
+        fSetVisabilityScale(_oData.CURRENT.data[0].vis);
+      }
+      nApp.classList.remove('loading');
     };
 
     /**
@@ -1430,18 +1638,29 @@
      */
     const fInit = async function () {
       try {
-        const loc = await fGetLocation(sIpapiLocationApi, _oSettings);
-        const _oWeather = await fGetWeather(loc, sWeatherApi, _oSettings);
+        if (!_oSettings.loc) {
+          _oSettings.loc = await fGetLocation(
+            _oSettings.locApi,
+            _oSettings
+          );
+        }
+        const loc = await fGetLocation(_oSettings.locApi, _oSettings);
+        const _oWeather = await fGetWeather(
+          loc,
+          _oSettings.fBuildBaseWeatherApiQuery(),
+          _oSettings
+        );
 
         if (_oSettings.debug) {
           console.log('fGetLocation response:', loc);
           console.log('fGetWeather response:', _oWeather);
         }
-
-        fBuildUI(_oWeather);
+        if (_oWeather) {
+          fBuildUI(_oWeather);
+        }
       } catch (e) {
         console.error('init error: ', e);
-        nApp.innerHTML = fRenderErrors(e);
+        fRenderErrors(e, _oSettings);
       }
     };
     fInit();
@@ -1459,9 +1678,9 @@
 
   // with debugging and Imperial Units
   const settings = {
-    units: 'I',
+    units: 'I', // I, M
     debug: false,
-    dev: false // 5XX_FULL, 5XX_PARTIAL, DUMMY, NO_KEY, OVER_QUOTA, API_ERROR
+    devFlags: false // true (error screen, malformed json), '5XX_FULL', '5XX_PARTIAL', 'DUMMY', 'NO_KEY', 'OVER_QUOTA', 'API_ERROR'
   };
 
   weatherApp(settings);

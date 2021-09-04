@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en" class="js-disabled">
   <head>
     <meta charset="utf-8" />
     <title>The Weather Service</title>
@@ -37,17 +37,23 @@
       </a>
     </header>
     <main id="app" role="main" class="loading" aria-live="polite">
-      <header id="hud" class="c-hud">
-        <img
-          alt=""
-          class="loading-icon weather-icon"
-          src="./svg/icons/weather/svg/wi-day-sunny.svg"
-        />
+      <header id="hud" class="c-hud loading">
+        <h3>
+          <img
+            alt=""
+            class="loading-icon weather-icon"
+            src="./svg/icons/weather/svg/wi-day-sunny.svg"
+          />
+        </h3>
         <ul class="unstyled">
-          <li>Checking the weather near you...</li>
+          <li>           </li>
+          <li class="js-enabled">Checking the weather near you...</li>
+          <li class="error js-disabled">
+            Please enable JavaScript to use this app.
+          </li>
         </ul>
       </header>
-      <div id="details" class="c-details">
+      <div id="details" class="c-details loading">
         <ul class="local-data unstyled">
           <li class="loading-bg c-feels-like">
             <span class="left-col">           </span>
@@ -180,9 +186,7 @@
               viewBox="0 0 30 30"
               xmlns="http://www.w3.org/2000/svg"
             ></svg>
-            <p class="forecast-description" aria-hidden="true">
-                              
-            </p>
+            <p class="forecast-description" aria-hidden="true"></p>
             <span><stong>    &nbsp; </stong></span>
             <span>    &nbsp; </span>
           </li>
@@ -280,6 +284,7 @@
     <div id="svgs" style="display: none; visibility: hidden">
       <!--Strong Wind-->
       <svg
+        id="sStrongWind"
         class="svg-wi-strong-wind"
         height="26"
         width="26"
@@ -294,6 +299,7 @@
       </svg>
       <!--Wind Degrees-->
       <svg
+        id="sWindDirection"
         class="svg-wi-wind-deg"
         height="26"
         width="26"
@@ -306,21 +312,9 @@
           fill="var(--icon-fill-color)"
         />
       </svg>
-      <svg
-        class="svg-wi-wind-deg"
-        height="26"
-        width="26"
-        alt=""
-        viewBox="0 0 30 30"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M3.7,15c0-2,0.5-3.9,1.5-5.7s2.4-3.1,4.1-4.1S13,3.7,15,3.7c1.5,0,3,0.3,4.4,0.9S22,6,23,7s1.8,2.2,2.4,3.6s0.9,2.9,0.9,4.4 c0,1.5-0.3,3-0.9,4.4S24,22,23,23s-2.2,1.8-3.6,2.4s-2.8,0.9-4.4,0.9s-3-0.3-4.4-0.9S8,24,7,23s-1.8-2.2-2.4-3.6S3.7,16.5,3.7,15z M6.2,15c0,2.4,0.9,4.4,2.6,6.2c1.7,1.7,3.8,2.6,6.2,2.6c1.6,0,3-0.4,4.4-1.2s2.4-1.9,3.2-3.2s1.2-2.8,1.2-4.4s-0.4-3.1-1.2-4.4 s-1.9-2.4-3.2-3.2S16.6,6.2,15,6.2S12,6.6,10.6,7.4s-2.4,1.9-3.2,3.2S6.2,13.4,6.2,15z M11.1,20.9l3.8-13.1c0-0.1,0.1-0.2,0.1-0.2 s0.1,0.1,0.1,0.2l3.7,13.1c0,0.1,0,0.2,0,0.2s-0.1,0.1-0.2,0l-3.5-1.3c-0.1,0-0.2,0-0.3,0l-3.5,1.3c-0.1,0.1-0.2,0.1-0.2,0 S11.1,21,11.1,20.9z"
-          fill="var(--icon-fill-color)"
-        />
-      </svg>
       <!--Thermometer-->
       <svg
+        id="sThermometer"
         class="svg-wi-thermometer"
         height="26"
         width="26"
@@ -335,6 +329,7 @@
       </svg>
       <!--Sunrise-->
       <svg
+        id="sSunrise"
         class="svg-wi-sunrise inline-icon"
         height="26"
         width="26"
@@ -349,6 +344,7 @@
       </svg>
       <!--Sunset-->
       <svg
+        id="sSunset"
         class="svg-wi-sunset inline-icon"
         height="26"
         width="26"
@@ -362,6 +358,7 @@
       </svg>
       <!--Raindrop-->
       <svg
+        id="sRaindrop"
         class="svg-wi-raindrop inline-icon"
         height="26"
         width="26"
@@ -376,6 +373,7 @@
       </svg>
       <!--Binoculars-->
       <svg
+        id="sBinoculars"
         class="svg-binoculars inline-icon"
         height="26"
         width="26"
@@ -400,6 +398,7 @@
       </svg>
       <!--Snow-->
       <svg
+        id="sSnow"
         class="svg-wi-snow inline-icon"
         height="26"
         width="26"
@@ -414,6 +413,7 @@
       </svg>
       <!--day-sunny-->
       <svg
+        id="sSunnyDay"
         height="26"
         width="26"
         alt=""
@@ -430,6 +430,7 @@
       </svg>
       <!--night-clear-->
       <svg
+        id="sClearNight"
         height="26"
         width="26"
         alt=""
@@ -446,6 +447,7 @@
       </svg>
       <!--day-sunny-cloudy-high-->
       <svg
+        id="sSunnyCloudyHigh"
         height="26"
         width="26"
         alt=""
@@ -462,6 +464,7 @@
       </svg>
       <!--night-alt-cloudy-high-->
       <svg
+        id="sNightCloudyHigh"
         height="26"
         width="26"
         alt=""
@@ -478,6 +481,7 @@
       </svg>
       <!--day-sunny-overcast-->
       <svg
+        id="sDaySunnyOvercast"
         height="26"
         width="26"
         alt=""
@@ -494,6 +498,7 @@
       </svg>
       <!--night-partly-cloudy-->
       <svg
+        id="sNightPartlyCloudy"
         height="26"
         width="26"
         alt=""
@@ -510,6 +515,7 @@
       </svg>
       <!--cloud-->
       <svg
+        id="sCloud"
         height="26"
         width="26"
         alt=""
@@ -525,6 +531,7 @@
       </svg>
       <!--cloudy-->
       <svg
+        id="sCloudy"
         height="26"
         width="26"
         alt=""
@@ -540,6 +547,7 @@
       </svg>
       <!--dark-cloudy-->
       <svg
+        id="sDarkCloudy"
         height="26"
         width="26"
         alt=""
@@ -555,8 +563,9 @@
       </svg>
       <!--refresh-->
       <svg
+        id="sRefresh"
         alt=""
-        class="text-icon svg-refresh"
+        class="text-icon svg-wi-refresh"
         viewBox="0 0 30 30"
         xmlns="http://www.w3.org/2000/svg"
       >
