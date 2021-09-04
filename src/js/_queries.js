@@ -20,13 +20,13 @@ export const fIPapi = async function (sIpapiLocationApi, _oSettings) {
 }
 
 /**
- * Assembles the formatted query string for CF API requests
+ * Assembles the formatted weather API URL & query string
  *
  * @param {string} urlBase
  * @param {obj} oLoc Response from oLocation API
  * @returns {string} Assembled url with query (cleaned)
  */
-export const fAssembledQuery = function (urlBase, oLoc, _oSettings) {
+export const fAssembleWeatherQuery = function (urlBase, oLoc, _oSettings) {
   if (!oLoc) return
 
   let sApiQuery = `${urlBase}&lat=${oLoc.latitude}&lon=${oLoc.longitude}`
@@ -96,17 +96,16 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
       return await fGeoLocApi()
     } catch (oError) {
       if (_oSettings.debug) {
-        console.warn('fGetLocationL: failed using fGeoLocApi: ', oError)
+        console.warn(`fGetLocation: failed using fGeoLocApi: ${oError}`)
+        console.warn('Falling back to IP address lookup instead.')
       }
       try {
-        if (_oSettings.debug) {
-          console.warn('Falling back to IP address lookup instead.')
-        }
         return await fIPapi(sIpapiLocationApi, _oSettings)
       } catch (oError) {
         if (_oSettings.debug) {
-          console.warn('fGetLocation: failed sIpapiLocationApi: ', oError)
+          console.warn(`fGetLocation: failed sIpapiLocationApi: ${oError}`)
         }
+        throw new Error({ ...oError })
       }
     }
   }
@@ -120,7 +119,7 @@ export const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
  */
 export const fGetWeather = async function (oLoc, sWeatherApi, _oSettings) {
   const pResp = await RequestWithRetry(
-    fAssembledQuery(sWeatherApi, oLoc, _oSettings),
+    fAssembleWeatherQuery(sWeatherApi, oLoc, _oSettings),
     {},
     _oSettings.api_retries
   ).then(function (pResp) {
