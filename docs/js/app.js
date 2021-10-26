@@ -135,6 +135,32 @@
   };
 
   /**
+   * Browser based location API
+   *
+   * @returns {object} coordiantes object
+   */
+  const fGeoLocApi = async function () {
+    const oOptions = {
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    const pResp = new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(
+        function (pResp) {
+          resolve(pResp.coords);
+        },
+        function (pResp) {
+          reject(pResp);
+        },
+        oOptions
+      );
+    });
+    return await pResp
+  };
+
+  /**
    * IP address based location API
    *
    * @returns {object} coordiantes object
@@ -151,6 +177,35 @@
         throw pResp
       }
     })
+  };
+
+  /**
+   * Gets the user location first using locationAPI, or if the user rejects, fall back to IP address lookup.
+   *
+   * @param {string} [section='home']
+   */
+  const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
+    if (navigator.geolocation) {
+      try {
+        if (_oSettings.debug) {
+          console.log('fGetLocation: Checking geoLoccation API: fGeoLocApi.');
+        }
+        return await fGeoLocApi()
+      } catch (oError) {
+        if (_oSettings.debug) {
+          console.warn(`fGetLocation: failed using fGeoLocApi: ${oError}`);
+          console.warn('Falling back to IP address lookup instead.');
+        }
+        try {
+          return await fIPapi(sIpapiLocationApi, _oSettings)
+        } catch (oError) {
+          if (_oSettings.debug) {
+            console.warn(`fGetLocation: failed sIpapiLocationApi: ${oError}`);
+          }
+          throw new Error({ ...oError })
+        }
+      }
+    }
   };
 
   /**
@@ -191,61 +246,6 @@
   };
 
   /**
-   * Browser based location API
-   *
-   * @returns {object} coordiantes object
-   */
-  const fGeoLocApi = async function () {
-    const oOptions = {
-      enableHighAccuracy: false,
-      timeout: 5000,
-      maximumAge: 0
-    };
-
-    const pResp = new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(
-        function (pResp) {
-          resolve(pResp.coords);
-        },
-        function (pResp) {
-          reject(pResp);
-        },
-        oOptions
-      );
-    });
-    return await pResp
-  };
-
-  /**
-   * Gets the user location
-   *
-   * @param {string} [section='home']
-   */
-  const fGetLocation = async function (sIpapiLocationApi, _oSettings) {
-    if (navigator.geolocation) {
-      try {
-        if (_oSettings.debug) {
-          console.log('fGetLocation: Checking geoLoccation API: fGeoLocApi.');
-        }
-        return await fGeoLocApi()
-      } catch (oError) {
-        if (_oSettings.debug) {
-          console.warn(`fGetLocation: failed using fGeoLocApi: ${oError}`);
-          console.warn('Falling back to IP address lookup instead.');
-        }
-        try {
-          return await fIPapi(sIpapiLocationApi, _oSettings)
-        } catch (oError) {
-          if (_oSettings.debug) {
-            console.warn(`fGetLocation: failed sIpapiLocationApi: ${oError}`);
-          }
-          throw new Error({ ...oError })
-        }
-      }
-    }
-  };
-
-  /**
    * Fetch the weather for a user's location.
    *
    * @param {object} oLoc
@@ -264,88 +264,6 @@
       }
     });
     return await pResp
-  };
-
-  /**
-   * Generate a visual scale based on 5km
-   *
-  no * @param {float} vis (expects km units)
-   *
-   */
-  const fSetVisabilityScale = function (vis) {
-    const distance = (parseFloat(vis) / 5) * 100;
-    const nGraph = document.querySelector('.distance');
-    nGraph.style.setProperty('--distance', 100 - distance + '%');
-  };
-
-  /**
-   * Assigns a named string based on temperature in C
-   * 6 step scale for data-temp
-   *
-   * @param {float} nTemp
-   * @returns {string}   string
-   */
-  const fTempDataPt = function (nTemp) {
-    if (typeof nTemp !== 'number') return 0
-
-    nTemp = parseFloat(nTemp);
-
-    let sTempScale = 'none';
-    switch (nTemp) {
-      case nTemp <= 0 ? nTemp : null:
-        sTempScale = 0;
-        break
-      case nTemp >= 0 && nTemp < 10 ? nTemp : null:
-        sTempScale = 1;
-        break
-      case nTemp >= 10 && nTemp < 22 ? nTemp : null:
-        sTempScale = 2;
-        break
-      case nTemp >= 22 && nTemp < 27 ? nTemp : null:
-        sTempScale = 3;
-        break
-      case nTemp >= 27 && nTemp < 34 ? nTemp : null:
-        sTempScale = 4;
-        break
-      case nTemp >= 34 ? nTemp : null:
-        sTempScale = 5;
-        break
-    }
-    return sTempScale
-  };
-
-  /**
-   * Takes a UV float value and returns an int for CSS data-UV="*" selectors.
-   *
-   * @param {float} nUV
-   * @returns {int}  whole int value on  6 step scale
-   */
-  const fUvDataPt = function (nUV) {
-    if (!nUV) return
-    nUV = parseFloat(nUV);
-
-    let sUVclass = 'none';
-    switch (nUV) {
-      case nUV < 1 ? nUV : null:
-        sUVclass = '0';
-        break
-      case nUV >= 1 && nUV < 3 ? nUV : null:
-        sUVclass = '1';
-        break
-      case nUV >= 3 && nUV < 5 ? nUV : null:
-        sUVclass = '2';
-        break
-      case nUV >= 5 && nUV < 7 ? nUV : null:
-        sUVclass = '3';
-        break
-      case nUV >= 7 && nUV < 9 ? nUV : null:
-        sUVclass = '4';
-        break
-      case nUV >= 9 || nUV <= 10 ? nUV : null:
-        sUVclass = 5;
-        break
-    }
-    return sUVclass
   };
 
   const oWeather = {
@@ -512,12 +430,15 @@
   };
 
   /**
+   * Load DOM nodes into a refrence object, good for staging hidden SVGs on the DOM for later use in application.
    *
    * @param {string} parentNodeSelector
    * @param {string} nestedNodesSelector
    * @returns {object} An object of nodes strings with their ID as the object perameter
+   *
+   * TODO: Moon phases currently loaded as img paths: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
    */
-  const floadIconObject = function (
+  const fLoadIconObject = function (
     parentNodeSelector = '#svgs',
     nestedNodesSelector = 'svg'
   ) {
@@ -531,6 +452,119 @@
       object[node.id] = node.outerHTML;
     });
     return object
+  };
+
+  const fBuildAppSettingsObj = function (
+    _oDefaults = {},
+    _oSettings = {}
+  ) {
+    // Merge settings with defaults
+    _oSettings = Object.assign(_oDefaults, _oSettings);
+
+    // Set debugging & dev flags via URL
+    const { searchParams } = new URL(document.URL);
+    _oSettings.debug = searchParams.has('DEBUG');
+    if (searchParams.has('DEV')) {
+      _oSettings.dev = searchParams.get('DEV');
+    }
+
+    // Set location lat lon flags via URL
+    if (searchParams.has('lat') && searchParams.has('lon')) {
+      _oSettings.loc = {
+        longitude: searchParams.has('lat'),
+        latitude: searchParams.has('lon')
+      };
+    }
+
+    /**
+     * SVG icons staged in index.html
+     * TODO: Moon phases currently loaded as img paths: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
+     */
+    _oSettings.icon = fLoadIconObject();
+
+    return _oSettings
+  };
+
+  /**
+   * Generate a visual scale based on 5km
+   *
+  no * @param {float} vis (expects km units)
+   *
+   */
+  const fSetVisabilityScale = function (vis) {
+    const distance = (parseFloat(vis) / 5) * 100;
+    const nGraph = document.querySelector('.distance');
+    nGraph.style.setProperty('--distance', 100 - distance + '%');
+  };
+
+  /**
+   * Assigns a named string based on temperature in C
+   * 6 step scale for data-temp
+   *
+   * @param {float} nTemp
+   * @returns {string}   string
+   */
+  const fTempDataPt = function (nTemp) {
+    if (typeof nTemp !== 'number') return 0
+
+    nTemp = parseFloat(nTemp);
+
+    let sTempScale = 'none';
+    switch (nTemp) {
+      case nTemp <= 0 ? nTemp : null:
+        sTempScale = 0;
+        break
+      case nTemp >= 0 && nTemp < 10 ? nTemp : null:
+        sTempScale = 1;
+        break
+      case nTemp >= 10 && nTemp < 22 ? nTemp : null:
+        sTempScale = 2;
+        break
+      case nTemp >= 22 && nTemp < 27 ? nTemp : null:
+        sTempScale = 3;
+        break
+      case nTemp >= 27 && nTemp < 34 ? nTemp : null:
+        sTempScale = 4;
+        break
+      case nTemp >= 34 ? nTemp : null:
+        sTempScale = 5;
+        break
+    }
+    return sTempScale
+  };
+
+  /**
+   * Takes a UV float value and returns an int for CSS data-UV="*" selectors.
+   *
+   * @param {float} nUV
+   * @returns {int}  whole int value on  6 step scale
+   */
+  const fUvDataPt = function (nUV) {
+    if (!nUV) return
+    nUV = parseFloat(nUV);
+
+    let sUVclass = 'none';
+    switch (nUV) {
+      case nUV < 1 ? nUV : null:
+        sUVclass = '0';
+        break
+      case nUV >= 1 && nUV < 3 ? nUV : null:
+        sUVclass = '1';
+        break
+      case nUV >= 3 && nUV < 5 ? nUV : null:
+        sUVclass = '2';
+        break
+      case nUV >= 5 && nUV < 7 ? nUV : null:
+        sUVclass = '3';
+        break
+      case nUV >= 7 && nUV < 9 ? nUV : null:
+        sUVclass = '4';
+        break
+      case nUV >= 9 || nUV <= 10 ? nUV : null:
+        sUVclass = 5;
+        break
+    }
+    return sUVclass
   };
 
   /**
@@ -1212,6 +1246,37 @@
   };
 
   /**
+   * Render the complete UI
+   *
+   * @param {array} data
+   */
+  const fRenderFullUI = function (_oData, _oSettings) {
+    const nApp = document.querySelector(_oSettings.target);
+    nApp.querySelector('#hud').outerHTML = fRenderHUD(_oData, _oSettings);
+
+    if (_oData.CURRENT.error || _oData.CURRENT.status) {
+      nApp.querySelector('#details').classList.remove('loading');
+      nApp.querySelector('#details').classList.add('error');
+    } else {
+      nApp.querySelector('#details').outerHTML = fRenderDetails(
+        _oData.CURRENT.data[0],
+        _oData,
+        _oSettings
+      );
+    }
+
+    nApp.querySelector('#forecast').outerHTML = fRenderForecast(
+      _oData.DAILY,
+      _oSettings
+    );
+    if (!_oData.CURRENT.error && !_oData.CURRENT.status) {
+      // Adjust the visibility 'fogg' bar in the details section
+      fSetVisabilityScale(_oData.CURRENT.data[0].vis);
+    }
+    nApp.classList.remove('loading');
+  };
+
+  /**
    * Render errors to the user
    *
    * @param {obj} err
@@ -1551,6 +1616,7 @@
    */
 
   const weatherApp = function (_oSettings = {}) {
+    // We have JS so remove the flag from the css class from the document element
     document.documentElement.classList.remove('no-js');
 
     /**
@@ -1568,6 +1634,8 @@
         longitude: '',
         latitude: ''
       },
+      stale: 20 * 60000, // minutes to milliseconds, localSorage stale value
+      key: 'WEATHERLOC', // localSorage for localSorage
       api_retries: 3,
       locApi: 'https://ipapi.co/json/',
       weatherApi: 'https://weatherserv.bnjmnrsh.workers.dev/?',
@@ -1578,60 +1646,11 @@
       }
     };
 
-    // Merge settings with defaults
-    _oSettings = Object.assign(_oDefaults, _oSettings);
+    // Build _oSettings object
+    _oSettings = fBuildAppSettingsObj(_oDefaults, _oSettings);
 
-    // Set debugging & dev flags via URL
-    const { searchParams } = new URL(document.URL);
-    _oSettings.debug = searchParams.has('DEBUG');
-    if (searchParams.has('DEV')) {
-      _oSettings.dev = searchParams.get('DEV');
-    }
-
-    // Set location lat lon flags via URL
-    if (searchParams.has('lat') && searchParams.has('lon')) {
-      _oSettings.loc = {
-        longitude: searchParams.has('lat'),
-        latitude: searchParams.has('lon')
-      };
-    }
-
-    /**
-     * SVG icons staged in index.html
-     * TODO: Moon phases loaded as img paths: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
-     */
-    _oSettings.icon = floadIconObject();
-
-    /**
-     * Build the UI
-     *
-     * @param {array} data
-     */
-    const fBuildUI = function (_oData) {
-      const nApp = document.querySelector(_oSettings.target);
-      nApp.querySelector('#hud').outerHTML = fRenderHUD(_oData, _oSettings);
-
-      if (_oData.CURRENT.error || _oData.CURRENT.status) {
-        nApp.querySelector('#details').classList.remove('loading');
-        nApp.querySelector('#details').classList.add('error');
-      } else {
-        nApp.querySelector('#details').outerHTML = fRenderDetails(
-          _oData.CURRENT.data[0],
-          _oData,
-          _oSettings
-        );
-      }
-
-      nApp.querySelector('#forecast').outerHTML = fRenderForecast(
-        _oData.DAILY,
-        _oSettings
-      );
-      if (!_oData.CURRENT.error && !_oData.CURRENT.status) {
-        // Adjust the visibility 'fogg' bar in the details section
-        fSetVisabilityScale(_oData.CURRENT.data[0].vis);
-      }
-      nApp.classList.remove('loading');
-    };
+    // Prep for saving to localstore or WebDB for PWA
+    // const _oLocWeather = fGetLocWeatherObj(_oSettings)
 
     /**
      * Init
@@ -1656,7 +1675,7 @@
           console.log('fGetWeather response:', _oWeather);
         }
         if (_oWeather) {
-          fBuildUI(_oWeather);
+          fRenderFullUI(_oWeather, _oSettings);
         }
       } catch (e) {
         console.error('init error: ', e);
@@ -1669,6 +1688,7 @@
     const themeToggle = new ThemeToggle({ debug: _oSettings.debug });
     themeToggle.init();
 
+    // Example of multiple toggles
     // const themeToggle2 = new ThemeToggle({
     //   debug: true,
     //   buttonID: '#theme-toggler-2'
@@ -1676,14 +1696,15 @@
     // themeToggle2.init()
   };
 
-  // with debugging and Imperial Units
+  // With debugging and Imperial Units
   const settings = {
     units: 'I', // I, M
     debug: false,
     devFlags: false // true (error screen, malformed json), '5XX_FULL', '5XX_PARTIAL', 'DUMMY', 'NO_KEY', 'OVER_QUOTA', 'API_ERROR'
   };
 
+  // Kick off our application
   weatherApp(settings);
 
-}());
+})();
 //# sourceMappingURL=app.js.map

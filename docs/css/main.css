@@ -1123,7 +1123,7 @@ span.inline-icon {
 .c-details .c-visibility .scale .distance {
 	position: absolute;
 	z-index: 0;
-	width: calc(100% - (10px + -0.6rem));
+	width: calc(100% - (10px - 0.6rem));
 	height: 200%;
 	padding-left: 10px;
 	overflow: hidden;
@@ -1137,7 +1137,7 @@ span.inline-icon {
 	.c-details .c-visibility .scale .distance {
 		position: absolute;
 		z-index: 0;
-		width: calc(100% - (10px + -0.6rem));
+		width: calc(100% - (10px - 0.6rem));
 		height: 200%;
 		padding-left: 10px;
 		overflow: hidden;
