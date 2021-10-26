@@ -57,13 +57,18 @@ const nFetchRetry = 3
 // Usefull for testing: https://httpstat.us/
 const aToFetch = [
   // [
-  //   'USEAGE',
-  //   `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`
+  //     'USEAGE',
+  //     `https://api.weatherbit.io/v2.0/subscription/usage?key=${WB_KEY}&`,
   // ],
-  ['CURRENT', `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`],
+  [
+    'CURRENT',
+    `https://api.weatherbit.io/v2.0/current?key=${WB_KEY}&`
+    // 'http://httpstat.us/426'
+  ],
   [
     'DAILY',
     `https://api.weatherbit.io/v2.0/forecast/daily?key=${WB_KEY}&days=16&`
+    // 'http://httpstat.us/524'
   ]
 ]
 
@@ -94,7 +99,7 @@ const oInit = {
  * @return {object}         The parsed JSON, status from the response
  */
 
-/* eslint-disable prefer-promise-reject-errors
+/* eslint prefer-promise-reject-errors: "off"
   ----
   We want to return error object with our API response rather then thowing a new Error.
 */
@@ -125,13 +130,15 @@ const fParseJSONresponse = async function (oResponse) {
 
 /**
  * Fetch replacement with better error handeling.
- * https://github.com/github/fetch/issues/203#issuecomment-266034180
+ * inspired by: https://github.com/github/fetch/issues/203#issuecomment-266034180
  *
  *
  * @param {string} sUrl
  * @param {object} oOptions
  * @returns Promise
  */
+
+/* eslint prefer-promise-reject-errors: "off" */
 const fRequest = async function (sUrl, oOptions) {
   return new Promise((resolve, reject) => {
     fetch(sUrl, oOptions)
@@ -154,7 +161,6 @@ const fRequest = async function (sUrl, oOptions) {
       })
   })
 }
-/* eslint-enable prefer-promise-reject-errors */
 
 /**
  * Fetch with retry n times on failure
@@ -237,6 +243,25 @@ const fHandleRequest = async function (oEvent) {
     })
   }
 
+  // Is there a request for a specific API?
+  if (searchParams.get('QUERY')) {
+    // Nope! instead break our aResponses into its own function, and then create a new array FROM QUERY, and feed it that instaed.
+    // see if the key is in our API array
+    // if (aToFetch.indexOf(searchParams.get('QUERY')) !== -1){
+    //   try{
+    //     const sUrl = aToFetch[searchParams.get('QUERY')] +
+    //     const query = fFetchWithRetry(`${}`)
+    //   }
+    // Break out early
+    // return new Response(
+    //   await DUMMYRESPONSE.get(`${searchParams.get('DEV')}`),
+    //   oInit
+    // )
+    // }
+  }
+
+  // TODO: Eric Elliot: are you in fact fetching our api's in parallel?
+  // https://www.youtube.com/watch?v=lpDwfwhFuPQ
   // Fetch from all the APIs
   const aResponses = await Promise.all(
     aToFetch.map(function (aURL, i) {
