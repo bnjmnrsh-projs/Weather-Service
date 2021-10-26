@@ -164,12 +164,15 @@ export const fSetStringElAttrs = function (sEl, props = {}) {
 }
 
 /**
+ * Load DOM nodes into a refrence object, good for staging hidden SVGs on the DOM for later use in application.
  *
  * @param {string} parentNodeSelector
  * @param {string} nestedNodesSelector
  * @returns {object} An object of nodes strings with their ID as the object perameter
+ *
+ * TODO: Moon phases currently loaded as img paths: <img src="./svg/icons/moon/svg/${oMoon.phase}.svg">
  */
-export const floadIconObject = function (
+export const fLoadIconObject = function (
   parentNodeSelector = '#svgs',
   nestedNodesSelector = 'svg'
 ) {
